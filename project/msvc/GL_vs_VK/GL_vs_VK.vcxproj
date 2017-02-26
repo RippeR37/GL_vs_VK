@@ -51,13 +51,15 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../../third_party/glew-win/include/;../../../third_party/glfw/include/;../../../third_party/glm/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../third_party/glew-win/include/;../../../third_party/glfw/include/;../../../third_party/glm/;$(VULKAN_SDK)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <DisableSpecificWarnings>4290;4996;4018;4611;4098;4099;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../../../third_party/glew-win/lib/Release/Win32/;../../../third_party/glfw/src/Debug/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenGL32.lib;glew32s.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../../third_party/glew-win/lib/Release/Win32/;../../../third_party/glfw/src/Debug/;%(AdditionalLibraryDirectories);$(VULKAN_SDK)\Bin32</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenGL32.lib;vulkan-1.lib;glew32s.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <BuildLog>
       <Path>$(IntDir)\logs\$(MSBuildProjectName).log</Path>
@@ -70,15 +72,17 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../../third_party/glew-win/include/;../../../third_party/glfw/include/;../../../third_party/glm/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../third_party/glew-win/include/;../../../third_party/glfw/include/;../../../third_party/glm/;$(VULKAN_SDK)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <DisableSpecificWarnings>4290;4996;4018;4611;4098;4099;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>../../../third_party/glew-win/lib/Release/Win32/;../../../third_party/glfw/src/Release/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenGL32.lib;glew32s.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../../third_party/glew-win/lib/Release/Win32/;../../../third_party/glfw/src/Release/;%(AdditionalLibraryDirectories);$(VULKAN_SDK)\Bin32</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenGL32.lib;vulkan-1.lib;glew32s.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <BuildLog>
       <Path>$(IntDir)\logs\$(MSBuildProjectName).log</Path>

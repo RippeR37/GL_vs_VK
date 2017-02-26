@@ -12,4 +12,4 @@
 personal/*
 project/msvc/build/*
 
-third_party/glew-win/include/*
+third_party/glew-win/*
