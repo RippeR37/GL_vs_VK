@@ -9,11 +9,29 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Header Files\Framework">
+    <Filter Include="Header Files\base">
+      <UniqueIdentifier>{cef5237d-b192-4e34-b6a2-cba05ac19630}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\framework">
       <UniqueIdentifier>{74a8ed56-da31-4987-ba31-8776b5b504f5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Framework">
+    <Filter Include="Source Files\base">
+      <UniqueIdentifier>{60d7c880-5cdb-4dd7-b835-b29fb887d538}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\framework">
       <UniqueIdentifier>{010c2b1e-4396-4be0-9f5f-615b19b49ecf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\base\gl">
+      <UniqueIdentifier>{44266d8e-2f23-4c04-80b3-dcb3bbb45ce9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\base\vk">
+      <UniqueIdentifier>{b51f1e3e-e98e-4ef5-8a03-82fea3a0987c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\base\gl">
+      <UniqueIdentifier>{42bbfe67-5bcb-419e-8039-0b703f65696f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\base\vk">
+      <UniqueIdentifier>{c684efc7-5736-462a-9ece-7339b59e2c37}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -24,5 +42,73 @@
     <ClCompile Include="..\..\..\src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\base\gl\Buffer.cpp">
+      <Filter>Source Files\base\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\base\gl\Program.cpp">
+      <Filter>Source Files\base\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\base\gl\Shader.cpp">
+      <Filter>Source Files\base\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\base\gl\Uniform.cpp">
+      <Filter>Source Files\base\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\base\gl\VertexArray.cpp">
+      <Filter>Source Files\base\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\base\gl\VertexAttrib.cpp">
+      <Filter>Source Files\base\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\base\gl\VertexBuffer.cpp">
+      <Filter>Source Files\base\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\base\gl\Window.cpp">
+      <Filter>Source Files\base\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\base\Clock.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\base\File.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\base\String.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\base\gl\Buffer.h">
+      <Filter>Header Files\base\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\base\gl\Program.h">
+      <Filter>Header Files\base\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\base\gl\Shader.h">
+      <Filter>Header Files\base\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\base\gl\Uniform.h">
+      <Filter>Header Files\base\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\base\gl\VertexArray.h">
+      <Filter>Header Files\base\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\base\gl\VertexAttrib.h">
+      <Filter>Header Files\base\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\base\gl\VertexBuffer.h">
+      <Filter>Header Files\base\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\base\gl\Window.h">
+      <Filter>Header Files\base\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\base\Clock.h">
+      <Filter>Header Files\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\base\File.h">
+      <Filter>Header Files\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\base\String.h">
+      <Filter>Header Files\base</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

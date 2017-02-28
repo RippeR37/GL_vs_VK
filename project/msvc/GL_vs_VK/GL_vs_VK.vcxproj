@@ -51,10 +51,10 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../../third_party/glew-win/include/;../../../third_party/glfw/include/;../../../third_party/glm/;$(VULKAN_SDK)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../include/;../../../third_party/glew-win/include/;../../../third_party/glfw/include/;../../../third_party/glm/;$(VULKAN_SDK)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>4290;4996;4018;4611;4098;4099;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4290;4996;4018;4611;4098;4099;4201;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -72,10 +72,10 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../../third_party/glew-win/include/;../../../third_party/glfw/include/;../../../third_party/glm/;$(VULKAN_SDK)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../include/;../../../third_party/glew-win/include/;../../../third_party/glfw/include/;../../../third_party/glm/;$(VULKAN_SDK)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>4290;4996;4018;4611;4098;4099;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4290;4996;4018;4611;4098;4099;4201;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -93,7 +93,31 @@
     <None Include="..\..\..\README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\base\Clock.cpp" />
+    <ClCompile Include="..\..\..\src\base\File.cpp" />
+    <ClCompile Include="..\..\..\src\base\gl\Buffer.cpp" />
+    <ClCompile Include="..\..\..\src\base\gl\Program.cpp" />
+    <ClCompile Include="..\..\..\src\base\gl\Shader.cpp" />
+    <ClCompile Include="..\..\..\src\base\gl\Uniform.cpp" />
+    <ClCompile Include="..\..\..\src\base\gl\VertexArray.cpp" />
+    <ClCompile Include="..\..\..\src\base\gl\VertexAttrib.cpp" />
+    <ClCompile Include="..\..\..\src\base\gl\VertexBuffer.cpp" />
+    <ClCompile Include="..\..\..\src\base\gl\Window.cpp" />
+    <ClCompile Include="..\..\..\src\base\String.cpp" />
     <ClCompile Include="..\..\..\src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\base\Clock.h" />
+    <ClInclude Include="..\..\..\include\base\File.h" />
+    <ClInclude Include="..\..\..\include\base\gl\Buffer.h" />
+    <ClInclude Include="..\..\..\include\base\gl\Program.h" />
+    <ClInclude Include="..\..\..\include\base\gl\Shader.h" />
+    <ClInclude Include="..\..\..\include\base\gl\Uniform.h" />
+    <ClInclude Include="..\..\..\include\base\gl\VertexArray.h" />
+    <ClInclude Include="..\..\..\include\base\gl\VertexAttrib.h" />
+    <ClInclude Include="..\..\..\include\base\gl\VertexBuffer.h" />
+    <ClInclude Include="..\..\..\include\base\gl\Window.h" />
+    <ClInclude Include="..\..\..\include\base\String.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
