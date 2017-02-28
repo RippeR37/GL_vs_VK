@@ -75,6 +75,12 @@
     <ClCompile Include="..\..\..\src\base\String.cpp">
       <Filter>Source Files\base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\base\ArgumentParser.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\framework\TestRunner.cpp">
+      <Filter>Source Files\framework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\base\gl\Buffer.h">
@@ -109,6 +115,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\base\String.h">
       <Filter>Header Files\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\base\ArgumentParser.h">
+      <Filter>Header Files\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\framework\TestRunner.h">
+      <Filter>Header Files\framework</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
