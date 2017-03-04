@@ -21,8 +21,8 @@
     <None Include="..\..\..\LICENSE" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\framework\main.cpp">
-      <Filter>Source Files\Framework</Filter>
+    <ClCompile Include="..\..\..\src\main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
