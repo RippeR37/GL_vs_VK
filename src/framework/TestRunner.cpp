@@ -3,6 +3,7 @@
 #include <tests/test1/SimpleBallsSceneTest.h>
 
 #include <iostream>
+#include <stdexcept>
 
 namespace framework {
 TestRunner::TestRunner(base::ArgumentParser argumentParser)
@@ -93,8 +94,18 @@ int TestRunner::run_any(std::unique_ptr<TestInterface> test)
         test->run();
         test->teardown();
 
-    } catch (...) {
+    } catch(const std::runtime_error& exception) {
+        std::cerr << "Caught runtime exception during test execution!" << std::endl;
+        std::cerr << exception.what() << std::endl;
+        return -1;
+
+    } catch(const std::exception& exception) {
         std::cerr << "Caught exception during test execution!" << std::endl;
+        std::cerr << exception.what() << std::endl;
+        return -1;
+
+    } catch (...) {
+        std::cerr << "Caught unknown exception during test execution!" << std::endl;
         return -1;
     }
 

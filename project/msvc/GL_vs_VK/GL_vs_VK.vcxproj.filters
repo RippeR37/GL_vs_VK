@@ -182,5 +182,11 @@
     <ClInclude Include="..\..\..\include\framework\VKTest.h">
       <Filter>Header Files\framework</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\common\Ball.h">
+      <Filter>Header Files\tests\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\base\Random.h">
+      <Filter>Header Files\base</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

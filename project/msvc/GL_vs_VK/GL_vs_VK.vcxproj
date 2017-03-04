@@ -126,11 +126,13 @@
     <ClInclude Include="..\..\..\include\base\gl\VertexAttrib.h" />
     <ClInclude Include="..\..\..\include\base\gl\VertexBuffer.h" />
     <ClInclude Include="..\..\..\include\base\gl\Window.h" />
+    <ClInclude Include="..\..\..\include\base\Random.h" />
     <ClInclude Include="..\..\..\include\base\String.h" />
     <ClInclude Include="..\..\..\include\framework\GLTest.h" />
     <ClInclude Include="..\..\..\include\framework\TestInterface.h" />
     <ClInclude Include="..\..\..\include\framework\TestRunner.h" />
     <ClInclude Include="..\..\..\include\framework\VKTest.h" />
+    <ClInclude Include="..\..\..\include\tests\common\Ball.h" />
     <ClInclude Include="..\..\..\include\tests\test1\gl\SimpleBallsSceneTest.h" />
     <ClInclude Include="..\..\..\include\tests\test1\SimpleBallsSceneTest.h" />
     <ClInclude Include="..\..\..\include\tests\test1\vk\SimpleBallsSceneTest.h" />
