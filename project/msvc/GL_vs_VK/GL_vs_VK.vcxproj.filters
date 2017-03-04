@@ -33,6 +33,36 @@
     <Filter Include="Source Files\base\vk">
       <UniqueIdentifier>{c684efc7-5736-462a-9ece-7339b59e2c37}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\tests">
+      <UniqueIdentifier>{24d130d5-1b86-4dbf-a2f1-318eabb9c987}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\tests\common">
+      <UniqueIdentifier>{1ad6fad7-ee21-4e86-a4d5-f034639a7bde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\tests">
+      <UniqueIdentifier>{422ea7bd-5629-4a97-819a-80d9150f39a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\tests\common">
+      <UniqueIdentifier>{ca4621b9-d3aa-4b66-9b75-93ea7d35f014}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\tests\test1">
+      <UniqueIdentifier>{b376176a-3914-46ee-940d-80a42686c1d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\tests\test1">
+      <UniqueIdentifier>{537470f5-5a89-4f3e-8224-f51c678c4a73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\tests\test1\gl">
+      <UniqueIdentifier>{dcf9e37d-f189-44ef-a413-8442a5f33a3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\tests\test1\vk">
+      <UniqueIdentifier>{30588002-5e6d-46f8-b7ae-6b7f1c6a8703}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\tests\test1\gl">
+      <UniqueIdentifier>{f7038916-1710-4e99-8888-86a0448161d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\tests\test1\vk">
+      <UniqueIdentifier>{f19cec59-9298-4024-8976-a408b6faa143}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\README.md" />
@@ -81,6 +111,18 @@
     <ClCompile Include="..\..\..\src\framework\TestRunner.cpp">
       <Filter>Source Files\framework</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\tests\test1\gl\SimpleBallsSceneTest.cpp">
+      <Filter>Source Files\tests\test1\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\tests\test1\vk\SimpleBallsSceneTest.cpp">
+      <Filter>Source Files\tests\test1\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\framework\VKTest.cpp">
+      <Filter>Source Files\framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\framework\GLTest.cpp">
+      <Filter>Source Files\framework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\base\gl\Buffer.h">
@@ -120,6 +162,24 @@
       <Filter>Header Files\base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\framework\TestRunner.h">
+      <Filter>Header Files\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\framework\GLTest.h">
+      <Filter>Header Files\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\framework\TestInterface.h">
+      <Filter>Header Files\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\test1\SimpleBallsSceneTest.h">
+      <Filter>Header Files\tests\test1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\test1\vk\SimpleBallsSceneTest.h">
+      <Filter>Header Files\tests\test1\vk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\test1\gl\SimpleBallsSceneTest.h">
+      <Filter>Header Files\tests\test1\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\framework\VKTest.h">
       <Filter>Header Files\framework</Filter>
     </ClInclude>
   </ItemGroup>

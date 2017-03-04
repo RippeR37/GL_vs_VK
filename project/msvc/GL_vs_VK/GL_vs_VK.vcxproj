@@ -55,6 +55,7 @@
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>4290;4996;4018;4611;4098;4099;4201;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ObjectFileName>$(IntDir)\obj\x\x\x\%(RelativeDir)\</ObjectFileName>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -76,6 +77,7 @@
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>4290;4996;4018;4611;4098;4099;4201;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ObjectFileName>$(IntDir)\obj\x\x\x\%(RelativeDir)\</ObjectFileName>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -105,8 +107,12 @@
     <ClCompile Include="..\..\..\src\base\gl\VertexBuffer.cpp" />
     <ClCompile Include="..\..\..\src\base\gl\Window.cpp" />
     <ClCompile Include="..\..\..\src\base\String.cpp" />
+    <ClCompile Include="..\..\..\src\framework\GLTest.cpp" />
     <ClCompile Include="..\..\..\src\framework\TestRunner.cpp" />
+    <ClCompile Include="..\..\..\src\framework\VKTest.cpp" />
     <ClCompile Include="..\..\..\src\main.cpp" />
+    <ClCompile Include="..\..\..\src\tests\test1\gl\SimpleBallsSceneTest.cpp" />
+    <ClCompile Include="..\..\..\src\tests\test1\vk\SimpleBallsSceneTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\base\ArgumentParser.h" />
@@ -121,7 +127,13 @@
     <ClInclude Include="..\..\..\include\base\gl\VertexBuffer.h" />
     <ClInclude Include="..\..\..\include\base\gl\Window.h" />
     <ClInclude Include="..\..\..\include\base\String.h" />
+    <ClInclude Include="..\..\..\include\framework\GLTest.h" />
+    <ClInclude Include="..\..\..\include\framework\TestInterface.h" />
     <ClInclude Include="..\..\..\include\framework\TestRunner.h" />
+    <ClInclude Include="..\..\..\include\framework\VKTest.h" />
+    <ClInclude Include="..\..\..\include\tests\test1\gl\SimpleBallsSceneTest.h" />
+    <ClInclude Include="..\..\..\include\tests\test1\SimpleBallsSceneTest.h" />
+    <ClInclude Include="..\..\..\include\tests\test1\vk\SimpleBallsSceneTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
