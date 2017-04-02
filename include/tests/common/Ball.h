@@ -4,10 +4,11 @@
 
 namespace tests {
 namespace common {
-    struct Ball {
-        glm::vec4 position;
-        glm::vec4 color;
-        glm::vec4 speed;
-    };
+struct Ball
+{
+    glm::vec4 position;
+    glm::vec4 color;
+    glm::vec4 speed;
+};
 }
 }

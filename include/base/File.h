@@ -3,8 +3,9 @@
 #include <string>
 
 namespace base {
-class File {
-public:
+class File
+{
+  public:
     static bool exists(const std::string& path);
 
     static std::string readText(const std::string& path, bool throwException = false);

@@ -1,8 +1,7 @@
 #include <framework/VKTest.h>
 
 namespace framework {
-VKTest::VKTest(std::string /*testName*/)
-    : TestInterface()
+VKTest::VKTest(std::string /*testName*/) : TestInterface()
 {
 }
 

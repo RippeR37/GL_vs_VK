@@ -8,7 +8,10 @@
 
 namespace base {
 
-std::vector<std::string>& String::split(std::vector<std::string>& input, const std::string& data, char delimiter, bool skipEmpty)
+std::vector<std::string>& String::split(std::vector<std::string>& input,
+                                        const std::string& data,
+                                        char delimiter,
+                                        bool skipEmpty)
 {
     std::stringstream stream(data);
     std::string token;
@@ -36,24 +39,15 @@ std::string& String::trim(std::string& string)
 
 std::string& String::ltrim(std::string& string)
 {
-    string.erase(
-        string.begin(),
-        std::find_if(
-            string.begin(),
-            string.end(),
-            std::not1(std::ptr_fun<int, int>(std::isspace))));
+    string.erase(string.begin(),
+                 std::find_if(string.begin(), string.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
     return string;
 }
 
 std::string& String::rtrim(std::string& string)
 {
-    string.erase(
-        std::find_if(
-            string.rbegin(),
-            string.rend(),
-            std::not1(std::ptr_fun<int, int>(std::isspace)))
-            .base(),
-        string.end());
+    string.erase(std::find_if(string.rbegin(), string.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(),
+                 string.end());
     return string;
 }
 

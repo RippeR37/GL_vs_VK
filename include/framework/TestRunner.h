@@ -6,13 +6,14 @@
 #include <memory>
 
 namespace framework {
-class TestRunner {
-public:
+class TestRunner
+{
+  public:
     TestRunner(base::ArgumentParser argumentParser);
 
     int run();
 
-private:
+  private:
     int run_gl(int testNumber);
     int run_vk(int testNumber);
     int run_any(std::unique_ptr<TestInterface> test);

@@ -1,8 +1,9 @@
 #pragma once
 
 namespace framework {
-class TestInterface {
-public:
+class TestInterface
+{
+  public:
     static const unsigned int WINDOW_WIDTH = 800;
     static const unsigned int WINDOW_HEIGHT = 600;
 

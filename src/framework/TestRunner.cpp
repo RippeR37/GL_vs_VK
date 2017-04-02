@@ -6,8 +6,7 @@
 #include <stdexcept>
 
 namespace framework {
-TestRunner::TestRunner(base::ArgumentParser argumentParser)
-    : arguments(std::move(argumentParser))
+TestRunner::TestRunner(base::ArgumentParser argumentParser) : arguments(std::move(argumentParser))
 {
 }
 
@@ -94,12 +93,12 @@ int TestRunner::run_any(std::unique_ptr<TestInterface> test)
         test->run();
         test->teardown();
 
-    } catch(const std::runtime_error& exception) {
+    } catch (const std::runtime_error& exception) {
         std::cerr << "Caught runtime exception during test execution!" << std::endl;
         std::cerr << exception.what() << std::endl;
         return -1;
 
-    } catch(const std::exception& exception) {
+    } catch (const std::exception& exception) {
         std::cerr << "Caught exception during test execution!" << std::endl;
         std::cerr << exception.what() << std::endl;
         return -1;

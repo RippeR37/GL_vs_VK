@@ -4,8 +4,9 @@
 #include <unordered_map>
 
 namespace base {
-class ArgumentParser {
-public:
+class ArgumentParser
+{
+  public:
     ArgumentParser(int argc, char* argv[]);
 
     bool hasArgument(const std::string& argumentName) const;
@@ -14,7 +15,7 @@ public:
 
     const std::string& getPath() const;
 
-private:
+  private:
     std::string path;
     std::unordered_map<std::string, std::string> arguments;
 };

@@ -4,11 +4,12 @@
 #include <vector>
 
 namespace base {
-class String {
-public:
+class String
+{
+  public:
     typedef std::vector<std::string> stringVector;
 
-public:
+  public:
     static stringVector& split(stringVector& input, const std::string& data, char delimiter, bool skipEmpty = true);
     static stringVector split(const std::string& data, char delimiter, bool skipEmpty = true);
 

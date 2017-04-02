@@ -4,11 +4,12 @@
 
 namespace tests {
 namespace vk {
-    class SimpleBallsSceneTest : public framework::VKTest {
-    public:
-        SimpleBallsSceneTest();
+class SimpleBallsSceneTest : public framework::VKTest
+{
+  public:
+    SimpleBallsSceneTest();
 
-        void run() override;
-    };
+    void run() override;
+};
 }
 }
