@@ -9,6 +9,7 @@
 *.suo
 *.exp
 
+bin/GL_vs_VK*
 build/*
 personal/*
 project/msvc/build/*

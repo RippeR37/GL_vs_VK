@@ -79,5 +79,5 @@ target_link_libraries(GLvsVK_EXAMPLE_2D
 
 set_target_properties(GLvsVK_EXAMPLE_2D PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/"
-    RUNTIME_OUTPUT_NAME "GLvsVK"
+    RUNTIME_OUTPUT_NAME "GL_vs_VK"
 )
