@@ -199,7 +199,7 @@ void SimpleBallsSceneTest::initTestData()
     balls_.clear();
     balls_.reserve(N);
 
-    for (int i = 0; i < N; ++i) {
+    for (size_t i = 0; i < N; ++i) {
         auto position = getRandomVec4({-1.0, -1.0, -1.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
         auto color = getRandomVec4({0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
         auto speed = getRandomVec4({-1.0, -1.0, -1.0, 0.0}, {1.0, 1.0, 1.0, 0.0});

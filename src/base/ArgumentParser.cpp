@@ -14,7 +14,7 @@ ArgumentParser::ArgumentParser(int argc, char* argv[]) : path(argv[0])
     }
 
     // Parse strings
-    for (int i = 0; i < args.size(); ++i) {
+    for (std::size_t i = 0; i < args.size(); ++i) {
         if (args[i].empty() || args[i][0] != '-')
             continue; // skip invalid arguments
 

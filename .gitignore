@@ -9,6 +9,7 @@
 *.suo
 *.exp
 
+build/*
 personal/*
 project/msvc/build/*
 

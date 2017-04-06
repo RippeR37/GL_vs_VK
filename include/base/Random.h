@@ -18,7 +18,7 @@ template <typename T>
 T getRandomInteger()
 {
     static_assert(std::is_integral<T>::value, "base::getRandom<T> - T must be an integral type!");
-    static_assert(!std::is_same<std::make_unsigned<T>::type, char>::value,
+    static_assert(!std::is_same<typename std::make_unsigned<T>::type, char>::value,
                   "base::getRandom<T> - T must not be character type");
 
     std::uniform_int_distribution<T> distribution;
@@ -38,7 +38,7 @@ template <typename T>
 T getRandomIntegerFromRange(const T& min, const T& max)
 {
     static_assert(std::is_integral<T>::value, "base::getRandom<T> - T must be an integral type!");
-    static_assert(!std::is_same<std::make_unsigned<T>::type, char>::value,
+    static_assert(!std::is_same<typename std::make_unsigned<T>::type, char>::value,
                   "base::getRandom<T> - T must not be character type");
 
     std::uniform_int_distribution<T> distribution{min, max};
