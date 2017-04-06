@@ -54,7 +54,7 @@
       <AdditionalIncludeDirectories>../../../include/;../../../third_party/glew-win/include/;../../../third_party/glfw/include/;../../../third_party/glm/;$(VULKAN_SDK)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>4018;4098;4099;4201;4290;4611;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4714;4018;4098;4099;4201;4290;4611;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ObjectFileName>$(IntDir)\obj\x\x\x\%(RelativeDir)\</ObjectFileName>
     </ClCompile>
     <Link>
@@ -76,7 +76,7 @@
       <AdditionalIncludeDirectories>../../../include/;../../../third_party/glew-win/include/;../../../third_party/glfw/include/;../../../third_party/glm/;$(VULKAN_SDK)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>4018;4098;4099;4201;4290;4611;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4714;4018;4098;4099;4201;4290;4611;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ObjectFileName>$(IntDir)\obj\x\x\x\%(RelativeDir)\</ObjectFileName>
     </ClCompile>
     <Link>

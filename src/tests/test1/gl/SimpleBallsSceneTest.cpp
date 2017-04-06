@@ -8,7 +8,7 @@
 #include <cmath>
 
 namespace tests {
-namespace gl {
+namespace test_gl {
 SimpleBallsSceneTest::SimpleBallsSceneTest() : GLTest("SimpleBallsSceneTest")
 {
 }

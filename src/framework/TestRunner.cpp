@@ -56,7 +56,7 @@ int TestRunner::run_gl(int testNumber)
 
     switch (testNumber) {
     case 1:
-        test = std::unique_ptr<TestInterface>(new tests::gl::SimpleBallsSceneTest());
+        test = std::unique_ptr<TestInterface>(new tests::test_gl::SimpleBallsSceneTest());
         break;
     }
 
@@ -74,7 +74,7 @@ int TestRunner::run_vk(int testNumber)
 
     switch (testNumber) {
     case 1:
-        test = std::unique_ptr<TestInterface>(new tests::vk::SimpleBallsSceneTest());
+        test = std::unique_ptr<TestInterface>(new tests::test_vk::SimpleBallsSceneTest());
         break;
     }
 

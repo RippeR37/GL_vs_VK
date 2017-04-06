@@ -7,7 +7,7 @@
 #include <tests/common/Ball.h>
 
 namespace tests {
-namespace gl {
+namespace test_gl {
 class SimpleBallsSceneTest : public framework::GLTest
 {
   public:

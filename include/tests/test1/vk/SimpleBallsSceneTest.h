@@ -3,7 +3,7 @@
 #include <framework/VKTest.h>
 
 namespace tests {
-namespace vk {
+namespace test_vk {
 class SimpleBallsSceneTest : public framework::VKTest
 {
   public:
