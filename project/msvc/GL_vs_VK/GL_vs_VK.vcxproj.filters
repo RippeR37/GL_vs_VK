@@ -24,14 +24,8 @@
     <Filter Include="Header Files\base\gl">
       <UniqueIdentifier>{44266d8e-2f23-4c04-80b3-dcb3bbb45ce9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\base\vk">
-      <UniqueIdentifier>{b51f1e3e-e98e-4ef5-8a03-82fea3a0987c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\base\gl">
       <UniqueIdentifier>{42bbfe67-5bcb-419e-8039-0b703f65696f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\base\vk">
-      <UniqueIdentifier>{c684efc7-5736-462a-9ece-7339b59e2c37}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\tests">
       <UniqueIdentifier>{24d130d5-1b86-4dbf-a2f1-318eabb9c987}</UniqueIdentifier>
@@ -62,6 +56,12 @@
     </Filter>
     <Filter Include="Source Files\tests\test1\vk">
       <UniqueIdentifier>{f19cec59-9298-4024-8976-a408b6faa143}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\base\vkx">
+      <UniqueIdentifier>{c684efc7-5736-462a-9ece-7339b59e2c37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\base\vkx">
+      <UniqueIdentifier>{b51f1e3e-e98e-4ef5-8a03-82fea3a0987c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -123,6 +123,15 @@
     <ClCompile Include="..\..\..\src\framework\GLTest.cpp">
       <Filter>Source Files\framework</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\base\vkx\Application.cpp">
+      <Filter>Source Files\base\vkx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\base\vkx\DeviceInfo.cpp">
+      <Filter>Source Files\base\vkx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\base\vkx\QueueManager.cpp">
+      <Filter>Source Files\base\vkx</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\base\gl\Buffer.h">
@@ -170,9 +179,6 @@
     <ClInclude Include="..\..\..\include\framework\TestInterface.h">
       <Filter>Header Files\framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tests\test1\SimpleBallsSceneTest.h">
-      <Filter>Header Files\tests\test1</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\tests\test1\vk\SimpleBallsSceneTest.h">
       <Filter>Header Files\tests\test1\vk</Filter>
     </ClInclude>
@@ -187,6 +193,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\base\Random.h">
       <Filter>Header Files\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\base\vkx\Application.h">
+      <Filter>Header Files\base\vkx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\base\vkx\DeviceInfo.h">
+      <Filter>Header Files\base\vkx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\base\vkx\QueueManager.h">
+      <Filter>Header Files\base\vkx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\test1\SimpleBallsSceneTestIncludes.h">
+      <Filter>Header Files\tests\test1</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

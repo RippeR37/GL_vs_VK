@@ -13,7 +13,8 @@ Program::Program()
     _programID = 0;
 }
 
-Program::Program(Program&& program) : Program()
+Program::Program(Program&& program)
+    : Program()
 {
     std::swap(_isLinked, program._isLinked);
     std::swap(_isCreated, program._isCreated);

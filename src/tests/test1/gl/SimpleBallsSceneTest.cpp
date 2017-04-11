@@ -9,7 +9,8 @@
 
 namespace tests {
 namespace test_gl {
-SimpleBallsSceneTest::SimpleBallsSceneTest() : GLTest("SimpleBallsSceneTest")
+SimpleBallsSceneTest::SimpleBallsSceneTest()
+    : GLTest("SimpleBallsSceneTest")
 {
 }
 

@@ -2,7 +2,8 @@
 
 namespace base {
 namespace gl {
-Buffer::Buffer() : Buffer(Target::Array, Usage::StaticDraw)
+Buffer::Buffer()
+    : Buffer(Target::Array, Usage::StaticDraw)
 {
 }
 

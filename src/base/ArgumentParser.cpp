@@ -3,7 +3,8 @@
 #include <vector>
 
 namespace base {
-ArgumentParser::ArgumentParser(int argc, char* argv[]) : path(argv[0])
+ArgumentParser::ArgumentParser(int argc, char* argv[])
+    : path(argv[0])
 {
     std::vector<std::string> args;
 

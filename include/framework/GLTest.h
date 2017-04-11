@@ -7,7 +7,7 @@ namespace framework {
 class GLTest : public TestInterface
 {
   public:
-    GLTest(std::string testName);
+    GLTest(const std::string& testName);
 
     virtual void setup() override;
     virtual void teardown() override;

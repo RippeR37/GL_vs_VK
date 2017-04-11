@@ -1,0 +1,114 @@
+#include <base/vkx/Application.h>
+
+#include <algorithm>
+
+namespace {
+const std::vector<const char*> kInstanceLayers{};
+const std::vector<const char*> kDebugInstanceLayers{{"VK_LAYER_LUNARG_standard_validation"}};
+}
+
+namespace vkx {
+Application::Application(const std::string& name, bool debugMode)
+    : _name(name)
+    , _instance(createInstance((debugMode ? kDebugInstanceLayers : kInstanceLayers)))
+    , _deviceInfo(selectPhysicalDevice(instance().enumeratePhysicalDevices()))
+    , _device(createDevice())
+    , _queueManager(physicalDevice(), device())
+{
+}
+
+Application::~Application()
+{
+    destroyDevice();
+    destroyInstance();
+}
+
+const std::string& Application::name() const
+{
+    return _name;
+}
+
+const vk::Instance& Application::instance() const
+{
+    return _instance;
+}
+
+const vk::PhysicalDevice& Application::physicalDevice() const
+{
+    return deviceInfo().device;
+}
+
+const vk::Device& Application::device() const
+{
+    return _device;
+}
+
+const vkx::DeviceInfo& Application::deviceInfo() const
+{
+    return _deviceInfo;
+}
+
+const vkx::QueueManager& Application::queues() const
+{
+    return _queueManager;
+}
+
+vk::Instance Application::createInstance(const std::vector<const char*>& layers)
+{
+    vk::ApplicationInfo applicationInfo{name().c_str(), VK_MAKE_VERSION(0, 1, 0), "LunarG SDK",
+                                        VK_MAKE_VERSION(1, 0, 0), VK_API_VERSION_1_0};
+    vk::InstanceCreateInfo instanceInfo{{}, &applicationInfo, layers.size(), layers.data(), 0, nullptr};
+
+    return vk::createInstance(instanceInfo);
+}
+
+vkx::DeviceInfo Application::selectPhysicalDevice(const std::vector<vk::PhysicalDevice>& physicalDevices)
+{
+    const auto deviceScore = [](const vk::PhysicalDevice& device) {
+        switch (device.getProperties().deviceType) {
+        case vk::PhysicalDeviceType::eOther:
+            return 0;
+            break;
+        case vk::PhysicalDeviceType::eIntegratedGpu:
+            return 100;
+            break;
+        case vk::PhysicalDeviceType::eDiscreteGpu:
+            return 1000;
+            break;
+        case vk::PhysicalDeviceType::eVirtualGpu:
+            return 50;
+            break;
+        case vk::PhysicalDeviceType::eCpu:
+            return 10;
+            break;
+        }
+        return -1;
+    };
+
+    const auto deviceComparator = [&deviceScore](const vk::PhysicalDevice& lhs, const vk::PhysicalDevice& rhs) {
+        return deviceScore(lhs) < deviceScore(rhs);
+    };
+
+    return {*std::max_element(std::begin(physicalDevices), std::end(physicalDevices), deviceComparator)};
+}
+
+vk::Device Application::createDevice()
+{
+    std::vector<vk::DeviceQueueCreateInfo> queueCreateInfos = vkx::QueueManager::createInfos(physicalDevice());
+    vk::DeviceCreateInfo deviceCreateInfo{{},      queueCreateInfos.size(), queueCreateInfos.data(), 0, nullptr, 0,
+                                          nullptr, &deviceInfo().features};
+
+    return physicalDevice().createDevice(deviceCreateInfo);
+}
+
+void Application::destroyDevice()
+{
+    _device.waitIdle();
+    _device.destroy();
+}
+
+void Application::destroyInstance()
+{
+    _instance.destroy();
+}
+}

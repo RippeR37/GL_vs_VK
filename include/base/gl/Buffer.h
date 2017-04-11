@@ -46,9 +46,17 @@ class Buffer
     class Data
     {
       public:
-        Data() : data(nullptr), size(0) {}
+        Data()
+            : data(nullptr)
+            , size(0)
+        {
+        }
 
-        Data(GLvoid* data_, GLsizeiptr size_) : data(data_), size(size_) {}
+        Data(GLvoid* data_, GLsizeiptr size_)
+            : data(data_)
+            , size(size_)
+        {
+        }
 
         GLvoid* data;
         GLsizeiptr size;

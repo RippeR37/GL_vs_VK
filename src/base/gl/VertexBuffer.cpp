@@ -2,15 +2,18 @@
 
 namespace base {
 namespace gl {
-VertexBuffer::VertexBuffer() : Buffer(Target::Array)
+VertexBuffer::VertexBuffer()
+    : Buffer(Target::Array)
 {
 }
 
-VertexBuffer::VertexBuffer(Usage usage) : Buffer(Target::Array, usage)
+VertexBuffer::VertexBuffer(Usage usage)
+    : Buffer(Target::Array, usage)
 {
 }
 
-VertexBuffer::VertexBuffer(VertexBuffer&& vbo) : Buffer(std::move(vbo))
+VertexBuffer::VertexBuffer(VertexBuffer&& vbo)
+    : Buffer(std::move(vbo))
 {
     std::swap(_attributePointers, vbo._attributePointers);
 }

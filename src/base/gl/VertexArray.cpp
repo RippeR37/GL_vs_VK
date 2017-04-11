@@ -16,7 +16,8 @@ VertexArray::VertexArray()
     _drawTarget = DrawTarget::Triangles;
 }
 
-VertexArray::VertexArray(VertexArray&& vao) : VertexArray()
+VertexArray::VertexArray(VertexArray&& vao)
+    : VertexArray()
 {
     std::swap(_vaoID, vao._vaoID);
     std::swap(_isCreated, vao._isCreated);

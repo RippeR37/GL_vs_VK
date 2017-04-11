@@ -14,9 +14,15 @@ class Clock
     class Duration : _NativeDuration
     {
       public:
-        Duration() : _NativeDuration() {}
+        Duration()
+            : _NativeDuration()
+        {
+        }
 
-        Duration(const _NativeDuration& duration) : _NativeDuration(duration) {}
+        Duration(const _NativeDuration& duration)
+            : _NativeDuration(duration)
+        {
+        }
 
         inline operator double() const { return asSeconds<double>(); }
         inline operator long long() const { return asSeconds<long long>(); }
@@ -61,9 +67,15 @@ class Clock
     class TimePoint : _NativeTimePoint
     {
       public:
-        TimePoint() : _NativeTimePoint() {}
+        TimePoint()
+            : _NativeTimePoint()
+        {
+        }
 
-        TimePoint(const _NativeTimePoint& tp) : _NativeTimePoint(tp) {}
+        TimePoint(const _NativeTimePoint& tp)
+            : _NativeTimePoint(tp)
+        {
+        }
 
         Duration operator-(const TimePoint& tp_other) const
         {

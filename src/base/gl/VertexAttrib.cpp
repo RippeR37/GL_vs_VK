@@ -2,7 +2,8 @@
 
 namespace base {
 namespace gl {
-VertexAttrib::VertexAttrib() : VertexAttrib(0, 0, GL_FLOAT, 0, nullptr)
+VertexAttrib::VertexAttrib()
+    : VertexAttrib(0, 0, GL_FLOAT, 0, nullptr)
 {
     normalized = GL_FALSE;
 }

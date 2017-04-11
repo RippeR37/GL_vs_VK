@@ -1,7 +1,9 @@
 #include <framework/VKTest.h>
 
 namespace framework {
-VKTest::VKTest(std::string /*testName*/) : TestInterface()
+VKTest::VKTest(const std::string& testName)
+    : TestInterface()
+    , vkx::Application("[VK] " + testName, true)
 {
 }
 

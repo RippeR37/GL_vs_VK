@@ -1,12 +1,13 @@
 #include <base/gl/Window.h>
 #include <framework/TestRunner.h>
-#include <tests/test1/SimpleBallsSceneTest.h>
+#include <tests/test1/SimpleBallsSceneTestIncludes.h>
 
 #include <iostream>
 #include <stdexcept>
 
 namespace framework {
-TestRunner::TestRunner(base::ArgumentParser argumentParser) : arguments(std::move(argumentParser))
+TestRunner::TestRunner(base::ArgumentParser argumentParser)
+    : arguments(std::move(argumentParser))
 {
 }
 

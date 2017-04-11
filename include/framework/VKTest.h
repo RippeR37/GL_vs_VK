@@ -1,14 +1,15 @@
 #pragma once
 
+#include <base/vkx/Application.h>
 #include <framework/TestInterface.h>
 
 #include <string>
 
 namespace framework {
-class VKTest : public TestInterface
+class VKTest : public TestInterface, vkx::Application
 {
   public:
-    VKTest(std::string testName);
+    VKTest(const std::string& testName);
 
     virtual void setup() override;
     virtual void teardown() override;

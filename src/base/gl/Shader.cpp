@@ -14,12 +14,14 @@ Shader::Shader(Type type)
     _shaderID = 0;
 }
 
-Shader::Shader(const std::string& path, Type type) : Shader(type)
+Shader::Shader(const std::string& path, Type type)
+    : Shader(type)
 {
     load(path);
 }
 
-Shader::Shader(Shader&& shader) : Shader(shader._type)
+Shader::Shader(Shader&& shader)
+    : Shader(shader._type)
 {
     std::swap(_type, shader._type);
     std::swap(_shaderID, shader._shaderID);
