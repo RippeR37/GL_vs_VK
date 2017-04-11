@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 
+namespace base {
 namespace vkx {
 class Application
 {
@@ -46,4 +47,5 @@ class Application
     vkx::QueueManager _queueManager;
     vkx::Window _window;
 };
+}
 }

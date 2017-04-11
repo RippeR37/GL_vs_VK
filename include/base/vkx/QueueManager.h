@@ -6,6 +6,7 @@
 
 #include <vector>
 
+namespace base {
 namespace vkx {
 class QueueManager
 {
@@ -28,4 +29,5 @@ class QueueManager
     uint32_t _familyIndex;
     vk::Queue _queue;
 };
+}
 }

@@ -8,6 +8,7 @@
 
 struct GLFWwindow;
 
+namespace base {
 namespace vkx {
 class Window
 {
@@ -39,4 +40,5 @@ class Window
     GLFWwindow* _handle;
     vk::SurfaceKHR _surface;
 };
+}
 }

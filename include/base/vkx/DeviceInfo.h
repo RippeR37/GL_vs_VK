@@ -2,6 +2,7 @@
 
 #include <vulkan/vulkan.hpp>
 
+namespace base {
 namespace vkx {
 struct DeviceInfo
 {
@@ -11,4 +12,5 @@ struct DeviceInfo
     vk::PhysicalDeviceProperties properties;
     vk::PhysicalDeviceFeatures features;
 };
+}
 }

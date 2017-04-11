@@ -10,6 +10,7 @@ const std::vector<const char*> kInstanceLayers{};
 const std::vector<const char*> kDebugInstanceLayers{{"VK_LAYER_LUNARG_standard_validation"}};
 }
 
+namespace base {
 namespace vkx {
 Application::Application(const std::string& name, const glm::vec2& windowSize, bool debugMode)
     : _name(name)
@@ -138,5 +139,6 @@ void Application::initialize()
 void Application::deinitialize()
 {
     glfwTerminate();
+}
 }
 }

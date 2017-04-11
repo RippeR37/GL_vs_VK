@@ -2,6 +2,7 @@
 
 #include <GLFW/glfw3.h>
 
+namespace base {
 namespace vkx {
 Window::Window(const vk::Instance& instance, const glm::uvec2& size, const std::string& windowTitle)
     : _instance(instance)
@@ -72,5 +73,6 @@ void Window::destroySurface()
 void Window::destroyWindow()
 {
     glfwDestroyWindow(_handle);
+}
 }
 }

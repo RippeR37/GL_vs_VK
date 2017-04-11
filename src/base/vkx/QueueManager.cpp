@@ -2,6 +2,7 @@
 
 #include <GLFW/glfw3.h>
 
+namespace base {
 namespace vkx {
 std::vector<vk::DeviceQueueCreateInfo> QueueManager::createInfos(const vk::Instance& instance,
                                                                  const vk::PhysicalDevice& device)
@@ -63,5 +64,6 @@ uint32_t QueueManager::chooseFamilyIndex(const vk::Instance& instance, const vk:
 vk::Queue QueueManager::createQueue(const vk::Device& device)
 {
     return device.getQueue(familyIndex(), 0);
+}
 }
 }

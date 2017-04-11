@@ -6,7 +6,7 @@
 #include <string>
 
 namespace framework {
-class VKTest : public TestInterface, vkx::Application
+class VKTest : public TestInterface, base::vkx::Application
 {
   public:
     VKTest(const std::string& testName);
