@@ -16,9 +16,11 @@ SimpleBallsSceneTest::SimpleBallsSceneTest()
 
 void SimpleBallsSceneTest::run()
 {
-    // Logic
-    //
-    // ...
+    while (!window().shouldClose()) {
+        // rendering
+
+        window().update();
+    }
 }
 }
 }

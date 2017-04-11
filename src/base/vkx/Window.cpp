@@ -19,6 +19,15 @@ Window::~Window()
     destroyWindow();
 }
 
+void Window::update()
+{
+    if (shouldClose()) {
+        return;
+    }
+
+    glfwPollEvents();
+}
+
 bool Window::shouldClose() const
 {
     return (glfwWindowShouldClose(_handle) != 0);

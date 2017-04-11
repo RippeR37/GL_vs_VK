@@ -29,6 +29,8 @@ class Application
     const vkx::QueueManager& queues() const;
     const vkx::Window& window() const;
 
+    vkx::Window& window();
+
   private:
     vk::Instance createInstance(const std::vector<const char*>& layers);
     vkx::DeviceInfo selectPhysicalDevice(const std::vector<vk::PhysicalDevice>& physicalDevices);

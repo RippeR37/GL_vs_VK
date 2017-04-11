@@ -19,6 +19,7 @@ class Window
 
     Window& operator=(const Window&) = delete;
 
+    void update();
     bool shouldClose() const;
 
     const std::string& title() const;

@@ -48,14 +48,24 @@ const vk::Device& Application::device() const
     return _device;
 }
 
-const vkx::DeviceInfo& Application::deviceInfo() const
+const DeviceInfo& Application::deviceInfo() const
 {
     return _deviceInfo;
 }
 
-const vkx::QueueManager& Application::queues() const
+const QueueManager& Application::queues() const
 {
     return _queueManager;
+}
+
+const Window& Application::window() const
+{
+    return _window;
+}
+
+Window& Application::window()
+{
+    return _window;
 }
 
 vk::Instance Application::createInstance(const std::vector<const char*>& layers)
@@ -72,12 +82,12 @@ vk::Instance Application::createInstance(const std::vector<const char*>& layers)
     vk::ApplicationInfo applicationInfo{name().c_str(), VK_MAKE_VERSION(0, 1, 0), "LunarG SDK",
                                         VK_MAKE_VERSION(1, 0, 0), VK_API_VERSION_1_0};
     vk::InstanceCreateInfo instanceInfo{
-        {}, &applicationInfo, layers.size(), layers.data(), glfwExtensionCount, glfwExtensions};
+        {}, &applicationInfo, static_cast<uint32_t>(layers.size()), layers.data(), glfwExtensionCount, glfwExtensions};
 
     return vk::createInstance(instanceInfo);
 }
 
-vkx::DeviceInfo Application::selectPhysicalDevice(const std::vector<vk::PhysicalDevice>& physicalDevices)
+DeviceInfo Application::selectPhysicalDevice(const std::vector<vk::PhysicalDevice>& physicalDevices)
 {
     const auto deviceScore = [](const vk::PhysicalDevice& device) {
         switch (device.getProperties().deviceType) {
@@ -109,10 +119,15 @@ vkx::DeviceInfo Application::selectPhysicalDevice(const std::vector<vk::Physical
 
 vk::Device Application::createDevice()
 {
-    std::vector<vk::DeviceQueueCreateInfo> queueCreateInfos =
-        vkx::QueueManager::createInfos(instance(), physicalDevice());
-    vk::DeviceCreateInfo deviceCreateInfo{{},      queueCreateInfos.size(), queueCreateInfos.data(), 0, nullptr, 0,
-                                          nullptr, &deviceInfo().features};
+    std::vector<vk::DeviceQueueCreateInfo> queueCreateInfos = QueueManager::createInfos(instance(), physicalDevice());
+    vk::DeviceCreateInfo deviceCreateInfo{{},
+                                          static_cast<uint32_t>(queueCreateInfos.size()),
+                                          queueCreateInfos.data(),
+                                          0,
+                                          nullptr,
+                                          0,
+                                          nullptr,
+                                          &deviceInfo().features};
 
     return physicalDevice().createDevice(deviceCreateInfo);
 }
