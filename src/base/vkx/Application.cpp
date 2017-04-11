@@ -1,6 +1,9 @@
 #include <base/vkx/Application.h>
 
+#include <GLFW/glfw3.h>
+
 #include <algorithm>
+#include <iostream>
 
 namespace {
 const std::vector<const char*> kInstanceLayers{};
@@ -8,12 +11,13 @@ const std::vector<const char*> kDebugInstanceLayers{{"VK_LAYER_LUNARG_standard_v
 }
 
 namespace vkx {
-Application::Application(const std::string& name, bool debugMode)
+Application::Application(const std::string& name, const glm::vec2& windowSize, bool debugMode)
     : _name(name)
     , _instance(createInstance((debugMode ? kDebugInstanceLayers : kInstanceLayers)))
     , _deviceInfo(selectPhysicalDevice(instance().enumeratePhysicalDevices()))
     , _device(createDevice())
-    , _queueManager(physicalDevice(), device())
+    , _queueManager(instance(), physicalDevice(), device())
+    , _window(instance(), windowSize, name)
 {
 }
 
@@ -55,9 +59,19 @@ const vkx::QueueManager& Application::queues() const
 
 vk::Instance Application::createInstance(const std::vector<const char*>& layers)
 {
+    initialize();
+
+    // GLFW-required extensions
+    uint32_t glfwExtensionCount = 0;
+    const char** glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+    if (!glfwExtensions) {
+        throw std::system_error(vk::Result::eErrorExtensionNotPresent, "GLFW could not resolve needed extensions");
+    }
+
     vk::ApplicationInfo applicationInfo{name().c_str(), VK_MAKE_VERSION(0, 1, 0), "LunarG SDK",
                                         VK_MAKE_VERSION(1, 0, 0), VK_API_VERSION_1_0};
-    vk::InstanceCreateInfo instanceInfo{{}, &applicationInfo, layers.size(), layers.data(), 0, nullptr};
+    vk::InstanceCreateInfo instanceInfo{
+        {}, &applicationInfo, layers.size(), layers.data(), glfwExtensionCount, glfwExtensions};
 
     return vk::createInstance(instanceInfo);
 }
@@ -94,7 +108,8 @@ vkx::DeviceInfo Application::selectPhysicalDevice(const std::vector<vk::Physical
 
 vk::Device Application::createDevice()
 {
-    std::vector<vk::DeviceQueueCreateInfo> queueCreateInfos = vkx::QueueManager::createInfos(physicalDevice());
+    std::vector<vk::DeviceQueueCreateInfo> queueCreateInfos =
+        vkx::QueueManager::createInfos(instance(), physicalDevice());
     vk::DeviceCreateInfo deviceCreateInfo{{},      queueCreateInfos.size(), queueCreateInfos.data(), 0, nullptr, 0,
                                           nullptr, &deviceInfo().features};
 
@@ -110,5 +125,18 @@ void Application::destroyDevice()
 void Application::destroyInstance()
 {
     _instance.destroy();
+    deinitialize();
+}
+
+void Application::initialize()
+{
+    if (!glfwInit()) {
+        throw std::system_error(vk::Result::eErrorInitializationFailed, "Could not initialize GLFW");
+    }
+}
+
+void Application::deinitialize()
+{
+    glfwTerminate();
 }
 }

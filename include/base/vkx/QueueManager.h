@@ -10,17 +10,18 @@ namespace vkx {
 class QueueManager
 {
   public:
-    static std::vector<vk::DeviceQueueCreateInfo> createInfos(const vk::PhysicalDevice& device);
+    static std::vector<vk::DeviceQueueCreateInfo> createInfos(const vk::Instance& instance,
+                                                              const vk::PhysicalDevice& device);
 
   public:
-    QueueManager(const vk::PhysicalDevice& physicalDevice, const vk::Device& device);
+    QueueManager(const vk::Instance& instance, const vk::PhysicalDevice& physicalDevice, const vk::Device& device);
     ~QueueManager();
 
     uint32_t familyIndex() const;
     const vk::Queue& queue() const;
 
   private:
-    uint32_t chooseFamilyIndex(const vk::PhysicalDevice& physicalDevice) const;
+    uint32_t chooseFamilyIndex(const vk::Instance& instance, const vk::PhysicalDevice& physicalDevice) const;
     vk::Queue createQueue(const vk::Device& device);
 
   private:

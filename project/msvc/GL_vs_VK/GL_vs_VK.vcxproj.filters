@@ -132,6 +132,9 @@
     <ClCompile Include="..\..\..\src\base\vkx\QueueManager.cpp">
       <Filter>Source Files\base\vkx</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\base\vkx\Window.cpp">
+      <Filter>Source Files\base\vkx</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\base\gl\Buffer.h">
@@ -205,6 +208,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\tests\test1\SimpleBallsSceneTestIncludes.h">
       <Filter>Header Files\tests\test1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\base\vkx\Window.h">
+      <Filter>Header Files\base\vkx</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

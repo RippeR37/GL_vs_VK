@@ -6,8 +6,8 @@
 int main(int argc, char* argv[])
 {
     try {
-        base::ArgumentParser argParser{ argc, argv };
-        framework::TestRunner testRunner{ std::move(argParser) };
+        base::ArgumentParser argParser{argc, argv};
+        framework::TestRunner testRunner{std::move(argParser)};
 
         testRunner.run();
 

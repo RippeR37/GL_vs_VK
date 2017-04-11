@@ -110,6 +110,7 @@
     <ClCompile Include="..\..\..\src\base\vkx\Application.cpp" />
     <ClCompile Include="..\..\..\src\base\vkx\DeviceInfo.cpp" />
     <ClCompile Include="..\..\..\src\base\vkx\QueueManager.cpp" />
+    <ClCompile Include="..\..\..\src\base\vkx\Window.cpp" />
     <ClCompile Include="..\..\..\src\framework\GLTest.cpp" />
     <ClCompile Include="..\..\..\src\framework\TestRunner.cpp" />
     <ClCompile Include="..\..\..\src\framework\VKTest.cpp" />
@@ -134,6 +135,7 @@
     <ClInclude Include="..\..\..\include\base\vkx\Application.h" />
     <ClInclude Include="..\..\..\include\base\vkx\DeviceInfo.h" />
     <ClInclude Include="..\..\..\include\base\vkx\QueueManager.h" />
+    <ClInclude Include="..\..\..\include\base\vkx\Window.h" />
     <ClInclude Include="..\..\..\include\framework\GLTest.h" />
     <ClInclude Include="..\..\..\include\framework\TestInterface.h" />
     <ClInclude Include="..\..\..\include\framework\TestRunner.h" />
