@@ -97,6 +97,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\src\base\ArgumentParser.cpp" />
     <ClCompile Include="..\..\..\src\base\Clock.cpp" />
+    <ClCompile Include="..\..\..\src\base\ContainerUtils.cpp" />
     <ClCompile Include="..\..\..\src\base\File.cpp" />
     <ClCompile Include="..\..\..\src\base\gl\Buffer.cpp" />
     <ClCompile Include="..\..\..\src\base\gl\Program.cpp" />
@@ -121,6 +122,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\include\base\ArgumentParser.h" />
     <ClInclude Include="..\..\..\include\base\Clock.h" />
+    <ClInclude Include="..\..\..\include\base\ContainerUtils.h" />
     <ClInclude Include="..\..\..\include\base\File.h" />
     <ClInclude Include="..\..\..\include\base\gl\Buffer.h" />
     <ClInclude Include="..\..\..\include\base\gl\Program.h" />

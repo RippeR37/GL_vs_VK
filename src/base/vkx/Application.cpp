@@ -1,9 +1,12 @@
 #include <base/vkx/Application.h>
 
+#include <base/ContainerUtils.h>
+
 #include <GLFW/glfw3.h>
 
 #include <algorithm>
 #include <iostream>
+#include <set>
 
 namespace {
 const std::vector<const char*> kInstanceLayers{};
@@ -18,7 +21,7 @@ Application::Application(const std::string& name, const glm::vec2& windowSize, b
     , _deviceInfo(selectPhysicalDevice(instance().enumeratePhysicalDevices()))
     , _device(createDevice())
     , _queueManager(instance(), physicalDevice(), device())
-    , _window(instance(), windowSize, name)
+    , _window(*this, windowSize, name)
 {
 }
 
@@ -72,17 +75,16 @@ vk::Instance Application::createInstance(const std::vector<const char*>& layers)
 {
     initialize();
 
-    // GLFW-required extensions
-    uint32_t glfwExtensionCount = 0;
-    const char** glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-    if (!glfwExtensions) {
-        throw std::system_error(vk::Result::eErrorExtensionNotPresent, "GLFW could not resolve needed extensions");
-    }
-
+    std::vector<std::string> extensions = getRequiredExtensions();
+    std::vector<const char*> extensionsView = viewOf(extensions);
     vk::ApplicationInfo applicationInfo{name().c_str(), VK_MAKE_VERSION(0, 1, 0), "LunarG SDK",
                                         VK_MAKE_VERSION(1, 0, 0), VK_API_VERSION_1_0};
-    vk::InstanceCreateInfo instanceInfo{
-        {}, &applicationInfo, static_cast<uint32_t>(layers.size()), layers.data(), glfwExtensionCount, glfwExtensions};
+    vk::InstanceCreateInfo instanceInfo{{},
+                                        &applicationInfo,
+                                        static_cast<uint32_t>(layers.size()),
+                                        layers.data(),
+                                        extensionsView.size(),
+                                        extensionsView.data()};
 
     return vk::createInstance(instanceInfo);
 }
@@ -119,14 +121,17 @@ DeviceInfo Application::selectPhysicalDevice(const std::vector<vk::PhysicalDevic
 
 vk::Device Application::createDevice()
 {
+    std::vector<std::string> extensions = {{VK_KHR_SWAPCHAIN_EXTENSION_NAME}};
+    std::vector<const char*> extensionsView = viewOf(extensions);
+
     std::vector<vk::DeviceQueueCreateInfo> queueCreateInfos = QueueManager::createInfos(instance(), physicalDevice());
     vk::DeviceCreateInfo deviceCreateInfo{{},
                                           static_cast<uint32_t>(queueCreateInfos.size()),
                                           queueCreateInfos.data(),
                                           0,
                                           nullptr,
-                                          0,
-                                          nullptr,
+                                          extensionsView.size(),
+                                          extensionsView.data(),
                                           &deviceInfo().features};
 
     return physicalDevice().createDevice(deviceCreateInfo);
@@ -142,6 +147,23 @@ void Application::destroyInstance()
 {
     _instance.destroy();
     deinitialize();
+}
+
+std::vector<std::string> Application::getRequiredExtensions() const
+{
+    std::set<std::string> extensions;
+
+    // GLFW-required extensions
+    uint32_t glfwExtensionCount = 0;
+    const char** glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+    if (!glfwExtensions) {
+        throw std::system_error(vk::Result::eErrorExtensionNotPresent, "GLFW could not resolve needed extensions");
+    }
+    for (uint32_t extension = 0; extension < glfwExtensionCount; ++extension) {
+        extensions.insert(glfwExtensions[extension]);
+    }
+
+    return std::vector<std::string>{extensions.begin(), extensions.end()};
 }
 
 void Application::initialize()

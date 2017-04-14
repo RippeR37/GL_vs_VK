@@ -39,6 +39,8 @@ class Application
     void destroyDevice();
     void destroyInstance();
 
+    std::vector<std::string> getRequiredExtensions() const;
+
     static void initialize();
     static void deinitialize();
 
