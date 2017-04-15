@@ -19,7 +19,10 @@ void SimpleBallsSceneTest::setup()
     GLTest::setup();
 
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    // glFrontFace(GL_CCW);
+    // glEnable(GL_CULL_FACE);
+    // glCullFace(GL_BACK);
 
     initProgram();
     initVBO();
@@ -65,83 +68,35 @@ void SimpleBallsSceneTest::initProgram()
                   {"resources/test1/shaders/shader.fp", base::gl::Shader::Type::FragmentShader});
 }
 
-/*
-std::vector<glm::vec4> initSphereVertices2()
+std::vector<glm::vec4> initSphereVertices(std::size_t thetaSteps, std::size_t phiSteps)
 {
     const double PI = 3.141592653589793;
-
-    double phiStep = 2 * PI / 5;
-    double tettaStep = PI / 5;
-    double mR = 1.0;
-    std::vector<glm::vec4> vertices;
-
-    for (double tetta = 0; tetta <= (PI - tettaStep) + tettaStep / 2; tetta += tettaStep) {
-        for (double phi = 0; phi <= 2 * PI + phiStep / 2; phi += phiStep) {
-            auto x1 = (float)(mR * std::sin(tetta) * std::cos(phi));
-            auto y1 = (float)(mR * std::cos(tetta));
-            auto z1 = (float)(mR * std::sin(tetta) * std::sin(phi));
-            vertices.push_back({ x1, y1, z1, 1.0 });
-
-            auto x2 = (float)(mR * std::sin(tetta + tettaStep) * std::cos(phi));
-            auto y2 = (float)(mR * std::cos(tetta + tettaStep));
-            auto z2 = (float)(mR * std::sin(tetta + tettaStep) * std::sin(phi));
-            vertices.push_back({ x2, y2, z2, 1.0 });
-
-            auto x3 = (float)(mR * std::sin(tetta) * std::cos(phi + phiStep));
-            auto y3 = (float)(mR * std::cos(tetta));
-            auto z3 = (float)(mR * std::sin(tetta) * std::sin(phi + phiStep));
-            vertices.push_back({ x3, y3, z3, 1.0 });
-        }
-    }
-
-    return vertices;
-}
-*/
-
-std::vector<glm::vec4> initSphereVertices()
-{
-    int rings = 4;
-    int sectors = 4;
-    float const R = 1.0f / (float)(rings - 1);
-    float const S = 1.0f / (float)(sectors - 1);
-    int r, s;
-
-    const double PI = 3.141592653589793;
-    const double PI_2 = 0.5 * PI;
-
-    std::vector<glm::vec4> vertices;
+    const double thetaStep = 180.0 / (double)thetaSteps;
+    const double phiStep = 360.0 / (double)phiSteps;
     std::vector<glm::vec4> result;
-    vertices.resize(rings * sectors);
 
-    std::vector<glm::vec4>::iterator v = vertices.begin();
+    auto degToRad = [PI](double deg) { return (PI / 180.0) * deg; };
 
-    for (r = 0; r < rings; r++)
-        for (s = 0; s < sectors; s++) {
-            float const y = (float)std::sin(-PI_2 + PI * r * R);
-            float const x = (float)(std::cos(2 * PI * s * S) * std::sin(PI * r * R));
-            float const z = (float)(std::sin(2 * PI * s * S) * std::sin(PI * r * R));
+    auto pointOf = [degToRad](double theta, double phi) {
+        return glm::vec4{std::cos(degToRad(theta)) * std::cos(degToRad(phi)),
+                         std::cos(degToRad(theta)) * std::sin(degToRad(phi)), std::sin(degToRad(theta)), 1.0};
+    };
 
-            *v++ = glm::vec4{x, y, z, 1.0};
-        }
+    for (std::size_t thetaIt = 0; thetaIt < thetaSteps; ++thetaIt) {
+        double theta = -90.0 + thetaIt * thetaStep;
+        double thetaNext = -90.0 + (thetaIt + 1) * thetaStep;
 
-    result.resize(rings * sectors * 6);
-    std::vector<glm::vec4>::iterator i = result.begin();
+        for (std::size_t phiIt = 0; phiIt < phiSteps; ++phiIt) {
+            double phi = phiIt * phiStep;
+            double phiNext = (phiIt + 1) * phiStep;
 
-    for (r = 0; r < rings; r++) {
-        for (s = 0; s < sectors; s++) {
-            auto i1_1 = r * sectors + s;
-            auto i1_2 = r * sectors + (s + 1);
-            auto i1_3 = (r + 1) * sectors + (s + 1);
-            *i++ = vertices[i1_1];
-            *i++ = vertices[i1_2];
-            *i++ = vertices[i1_3];
+            result.push_back(pointOf(theta, phi));
+            result.push_back(pointOf(thetaNext, phi));
+            result.push_back(pointOf(theta, phiNext));
 
-            auto i2_1 = r * sectors + s;
-            auto i2_2 = (r + 1) * sectors + (s + 1);
-            auto i2_3 = (r + 1) * sectors + s;
-            *i++ = vertices[i2_1];
-            *i++ = vertices[i2_2];
-            *i++ = vertices[i2_3];
+            result.push_back(pointOf(theta, phiNext));
+            result.push_back(pointOf(thetaNext, phi));
+            result.push_back(pointOf(thetaNext, phiNext));
         }
     }
 
@@ -151,11 +106,7 @@ std::vector<glm::vec4> initSphereVertices()
 void SimpleBallsSceneTest::initVBO()
 {
     // Vertices
-    if (vertices_.empty()) {
-        vertices_ = {{-0.03f, -0.03f, 0.0f, 1.0f}, {0.03f, -0.03f, 0.0f, 1.0f}, {0.0f, 0.03f, 0.0f, 1.0f}};
-    }
-
-    vertices_ = initSphereVertices();
+    vertices_ = initSphereVertices(15, 15);
 
     // VertexData
     base::gl::VertexBuffer::Data vertexData;
@@ -194,7 +145,7 @@ glm::vec4 getRandomVec4(glm::vec4 min, glm::vec4 max)
 
 void SimpleBallsSceneTest::initTestData()
 {
-    static const size_t N = 1;
+    static const size_t N = 10000;
     static const float SPEED_SCALE = 0.3f;
 
     balls_.clear();
