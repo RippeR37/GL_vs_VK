@@ -78,9 +78,15 @@ const std::vector<vk::ImageView> Window::swapchainImageViews() const
     return _swapchainImageViews;
 }
 
+const vk::Format Window::swapchainImageFormat() const
+{
+    return _swapchainSurfaceFormat.format;
+}
+
 GLFWwindow* Window::createWindow()
 {
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     GLFWwindow* handle = glfwCreateWindow(size().x, size().y, title().c_str(), nullptr, nullptr);
 
     if (!handle) {

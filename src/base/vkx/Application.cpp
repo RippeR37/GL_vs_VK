@@ -9,7 +9,7 @@
 #include <set>
 
 namespace {
-const std::vector<const char*> kInstanceLayers{};
+const std::vector<const char*> kInstanceLayers{{"VK_LAYER_LUNARG_monitor"}};
 const std::vector<const char*> kDebugInstanceLayers{{"VK_LAYER_LUNARG_standard_validation"}};
 }
 
