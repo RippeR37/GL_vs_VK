@@ -6,6 +6,7 @@ DeviceInfo::DeviceInfo(vk::PhysicalDevice physicalDevice)
     : device(physicalDevice)
     , properties(device.getProperties())
     , features(device.getFeatures())
+    , memory(device.getMemoryProperties())
 {
 }
 }

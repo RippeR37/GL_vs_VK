@@ -9,6 +9,7 @@ class File
     static bool exists(const std::string& path);
 
     static std::string readText(const std::string& path, bool throwException = false);
+    static std::string readBinary(const std::string& path, bool throwExceptions = false);
 
     static std::string getPath(const std::string& path);
     static std::string getFilename(const std::string& path);

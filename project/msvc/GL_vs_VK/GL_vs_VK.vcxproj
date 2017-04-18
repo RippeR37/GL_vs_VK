@@ -111,11 +111,13 @@
     <ClCompile Include="..\..\..\src\base\vkx\Application.cpp" />
     <ClCompile Include="..\..\..\src\base\vkx\DeviceInfo.cpp" />
     <ClCompile Include="..\..\..\src\base\vkx\QueueManager.cpp" />
+    <ClCompile Include="..\..\..\src\base\vkx\ShaderModule.cpp" />
     <ClCompile Include="..\..\..\src\base\vkx\Window.cpp" />
     <ClCompile Include="..\..\..\src\framework\GLTest.cpp" />
     <ClCompile Include="..\..\..\src\framework\TestRunner.cpp" />
     <ClCompile Include="..\..\..\src\framework\VKTest.cpp" />
     <ClCompile Include="..\..\..\src\main.cpp" />
+    <ClCompile Include="..\..\..\src\tests\common\SphereVerticesGenerator.cpp" />
     <ClCompile Include="..\..\..\src\tests\test1\gl\SimpleBallsSceneTest.cpp" />
     <ClCompile Include="..\..\..\src\tests\test1\vk\SimpleBallsSceneTest.cpp" />
   </ItemGroup>
@@ -137,12 +139,14 @@
     <ClInclude Include="..\..\..\include\base\vkx\Application.h" />
     <ClInclude Include="..\..\..\include\base\vkx\DeviceInfo.h" />
     <ClInclude Include="..\..\..\include\base\vkx\QueueManager.h" />
+    <ClInclude Include="..\..\..\include\base\vkx\ShaderModule.h" />
     <ClInclude Include="..\..\..\include\base\vkx\Window.h" />
     <ClInclude Include="..\..\..\include\framework\GLTest.h" />
     <ClInclude Include="..\..\..\include\framework\TestInterface.h" />
     <ClInclude Include="..\..\..\include\framework\TestRunner.h" />
     <ClInclude Include="..\..\..\include\framework\VKTest.h" />
     <ClInclude Include="..\..\..\include\tests\common\Ball.h" />
+    <ClInclude Include="..\..\..\include\tests\common\SphereVerticesGenerator.h" />
     <ClInclude Include="..\..\..\include\tests\test1\gl\SimpleBallsSceneTest.h" />
     <ClInclude Include="..\..\..\include\tests\test1\SimpleBallsSceneTestIncludes.h" />
     <ClInclude Include="..\..\..\include\tests\test1\vk\SimpleBallsSceneTest.h" />

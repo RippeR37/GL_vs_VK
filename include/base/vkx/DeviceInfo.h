@@ -11,6 +11,7 @@ struct DeviceInfo
     vk::PhysicalDevice device;
     vk::PhysicalDeviceProperties properties;
     vk::PhysicalDeviceFeatures features;
+    vk::PhysicalDeviceMemoryProperties memory;
 };
 }
 }

@@ -10,7 +10,8 @@
 
 namespace {
 const std::vector<const char*> kInstanceLayers{{"VK_LAYER_LUNARG_monitor"}};
-const std::vector<const char*> kDebugInstanceLayers{{"VK_LAYER_LUNARG_standard_validation"}};
+const std::vector<const char*> kDebugInstanceLayers{{"VK_LAYER_LUNARG_standard_validation"},
+                                                    {"VK_LAYER_LUNARG_monitor"}};
 }
 
 namespace base {

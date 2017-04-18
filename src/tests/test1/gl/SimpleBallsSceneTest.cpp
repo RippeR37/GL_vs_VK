@@ -1,5 +1,7 @@
-#include <base/Random.h>
 #include <tests/test1/gl/SimpleBallsSceneTest.h>
+
+#include <base/Random.h>
+#include <tests/common/SphereVerticesGenerator.h>
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
@@ -64,49 +66,15 @@ void SimpleBallsSceneTest::teardown()
 
 void SimpleBallsSceneTest::initProgram()
 {
-    program_.load({"resources/test1/shaders/shader.vp", base::gl::Shader::Type::VertexShader},
-                  {"resources/test1/shaders/shader.fp", base::gl::Shader::Type::FragmentShader});
-}
-
-std::vector<glm::vec4> initSphereVertices(std::size_t thetaSteps, std::size_t phiSteps)
-{
-    const double PI = 3.141592653589793;
-    const double thetaStep = 180.0 / (double)thetaSteps;
-    const double phiStep = 360.0 / (double)phiSteps;
-    std::vector<glm::vec4> result;
-
-    auto degToRad = [PI](double deg) { return (PI / 180.0) * deg; };
-
-    auto pointOf = [degToRad](double theta, double phi) {
-        return glm::vec4{std::cos(degToRad(theta)) * std::cos(degToRad(phi)),
-                         std::cos(degToRad(theta)) * std::sin(degToRad(phi)), std::sin(degToRad(theta)), 1.0};
-    };
-
-    for (std::size_t thetaIt = 0; thetaIt < thetaSteps; ++thetaIt) {
-        double theta = -90.0 + thetaIt * thetaStep;
-        double thetaNext = -90.0 + (thetaIt + 1) * thetaStep;
-
-        for (std::size_t phiIt = 0; phiIt < phiSteps; ++phiIt) {
-            double phi = phiIt * phiStep;
-            double phiNext = (phiIt + 1) * phiStep;
-
-            result.push_back(pointOf(theta, phi));
-            result.push_back(pointOf(thetaNext, phi));
-            result.push_back(pointOf(theta, phiNext));
-
-            result.push_back(pointOf(theta, phiNext));
-            result.push_back(pointOf(thetaNext, phi));
-            result.push_back(pointOf(thetaNext, phiNext));
-        }
-    }
-
-    return result;
+    program_.load({"resources/test1/shaders/gl_shader.vert", base::gl::Shader::Type::VertexShader},
+                  {"resources/test1/shaders/gl_shader.frag", base::gl::Shader::Type::FragmentShader});
 }
 
 void SimpleBallsSceneTest::initVBO()
 {
     // Vertices
-    vertices_ = initSphereVertices(15, 15);
+    common::SphereVerticesGenerator verticesGenerator{15, 15};
+    vertices_ = verticesGenerator.vertices;
 
     // VertexData
     base::gl::VertexBuffer::Data vertexData;

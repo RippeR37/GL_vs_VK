@@ -18,12 +18,11 @@ bool File::exists(const std::string& path)
 
 std::string File::readText(const std::string& path, bool throwException)
 {
-    std::ifstream fileStream;
-    std::string result = "";
-    std::string line = "";
-
-    fileStream.open(path, std::fstream::in);
+    std::string result;
+    std::ifstream fileStream(path, std::fstream::in);
     if (fileStream.is_open()) {
+        std::string line = "";
+
         while (std::getline(fileStream, line)) {
             result += line;
 
@@ -41,7 +40,26 @@ std::string File::readText(const std::string& path, bool throwException)
             throw std::runtime_error(errorMsg);
         }
     }
+    return result;
+}
 
+std::string File::readBinary(const std::string& path, bool throwException)
+{
+    std::string result;
+    std::ifstream file(path, std::ios::in | std::ios::binary);
+    if (file) {
+        file.seekg(0, std::ios::end);
+        result.resize(static_cast<std::size_t>(file.tellg()));
+        file.seekg(0, std::ios::beg);
+        file.read(&result.front(), result.size());
+        file.close();
+    } else {
+        std::cerr << "base::File::readBinary > Couldn't open file: " << path << std::endl;
+
+        if (throwException) {
+            throw std::runtime_error("Couldn't open file: '" + path + "'");
+        }
+    }
     return result;
 }
 
