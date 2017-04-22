@@ -28,8 +28,6 @@ Application::Application(const std::string& name, const glm::vec2& windowSize, b
 
 Application::~Application()
 {
-    destroyDevice();
-    destroyInstance();
 }
 
 const std::string& Application::name() const
@@ -39,7 +37,7 @@ const std::string& Application::name() const
 
 const vk::Instance& Application::instance() const
 {
-    return _instance;
+    return *_instance;
 }
 
 const vk::PhysicalDevice& Application::physicalDevice() const
@@ -49,7 +47,7 @@ const vk::PhysicalDevice& Application::physicalDevice() const
 
 const vk::Device& Application::device() const
 {
-    return _device;
+    return *_device;
 }
 
 const DeviceInfo& Application::deviceInfo() const
@@ -72,7 +70,7 @@ Window& Application::window()
     return _window;
 }
 
-vk::Instance Application::createInstance(const std::vector<const char*>& layers)
+vk::UniqueInstance Application::createInstance(const std::vector<const char*>& layers)
 {
     initialize();
 
@@ -87,7 +85,7 @@ vk::Instance Application::createInstance(const std::vector<const char*>& layers)
                                         static_cast<uint32_t>(extensionsView.size()),
                                         extensionsView.data()};
 
-    return vk::createInstance(instanceInfo);
+    return vk::createInstanceUnique(instanceInfo);
 }
 
 DeviceInfo Application::selectPhysicalDevice(const std::vector<vk::PhysicalDevice>& physicalDevices)
@@ -120,7 +118,7 @@ DeviceInfo Application::selectPhysicalDevice(const std::vector<vk::PhysicalDevic
     return {*std::max_element(std::begin(physicalDevices), std::end(physicalDevices), deviceComparator)};
 }
 
-vk::Device Application::createDevice()
+vk::UniqueDevice Application::createDevice()
 {
     std::vector<std::string> extensions = {{VK_KHR_SWAPCHAIN_EXTENSION_NAME}};
     std::vector<const char*> extensionsView = viewOf(extensions);
@@ -131,19 +129,7 @@ vk::Device Application::createDevice()
         {},      static_cast<uint32_t>(queueCreateInfos.size()), queueCreateInfos.data(), 0,
         nullptr, static_cast<uint32_t>(extensionsView.size()),   extensionsView.data(),   &emptyFeatures};
 
-    return physicalDevice().createDevice(deviceCreateInfo);
-}
-
-void Application::destroyDevice()
-{
-    _device.waitIdle();
-    _device.destroy();
-}
-
-void Application::destroyInstance()
-{
-    _instance.destroy();
-    deinitialize();
+    return physicalDevice().createDeviceUnique(deviceCreateInfo);
 }
 
 std::vector<std::string> Application::getRequiredExtensions() const

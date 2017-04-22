@@ -10,6 +10,7 @@ class VKTest : public TestInterface, public base::vkx::Application
 {
   public:
     VKTest(const std::string& testName);
+    virtual ~VKTest() = default;
 
     virtual void setup() override;
     virtual void teardown() override;

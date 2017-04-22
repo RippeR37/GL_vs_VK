@@ -32,12 +32,9 @@ class Application
     vkx::Window& window();
 
   private:
-    vk::Instance createInstance(const std::vector<const char*>& layers);
+    vk::UniqueInstance createInstance(const std::vector<const char*>& layers);
     vkx::DeviceInfo selectPhysicalDevice(const std::vector<vk::PhysicalDevice>& physicalDevices);
-    vk::Device createDevice();
-
-    void destroyDevice();
-    void destroyInstance();
+    vk::UniqueDevice createDevice();
 
     std::vector<std::string> getRequiredExtensions() const;
 
@@ -45,9 +42,9 @@ class Application
     static void deinitialize();
 
     std::string _name;
-    vk::Instance _instance;
+    vk::UniqueInstance _instance;
     vkx::DeviceInfo _deviceInfo;
-    vk::Device _device;
+    vk::UniqueDevice _device;
     vkx::QueueManager _queueManager;
     vkx::Window _window;
 };

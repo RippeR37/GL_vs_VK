@@ -8,6 +8,7 @@ class GLTest : public TestInterface
 {
   public:
     GLTest(const std::string& testName);
+    virtual ~GLTest() = default;
 
     virtual void setup() override;
     virtual void teardown() override;
