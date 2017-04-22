@@ -5,10 +5,11 @@
 #include <base/gl/VertexBuffer.h>
 #include <framework/GLTest.h>
 #include <tests/common/Ball.h>
+#include <tests/test1/BaseSimpleBallsSceneTest.h>
 
 namespace tests {
 namespace test_gl {
-class SimpleBallsSceneTest : public framework::GLTest
+class SimpleBallsSceneTest : public BaseSimpleBallsSceneTest, public framework::GLTest
 {
   public:
     SimpleBallsSceneTest();
@@ -23,14 +24,9 @@ class SimpleBallsSceneTest : public framework::GLTest
     void initVBO();
     void initVAO();
 
-    void initState();
-    void updateState();
-
     base::gl::Program program_;
     base::gl::VertexArray vao_;
     base::gl::VertexBuffer vbo_;
-    std::vector<glm::vec4> vertices_;
-    std::vector<common::Ball> balls_;
 };
 }
 }

@@ -4,12 +4,13 @@
 
 #include <base/vkx/ShaderModule.h>
 #include <tests/common/Ball.h>
+#include <tests/test1/BaseSimpleBallsSceneTest.h>
 
 #include <tuple>
 
 namespace tests {
 namespace test_vk {
-class SimpleBallsSceneTest : public framework::VKTest
+class SimpleBallsSceneTest : public BaseSimpleBallsSceneTest, public framework::VKTest
 {
   public:
     SimpleBallsSceneTest();
@@ -47,13 +48,8 @@ class SimpleBallsSceneTest : public framework::VKTest
     void submitCommandBuffer(std::size_t frameIndex) const;
     void presentFrame(std::size_t frameIndex) const;
 
-    void initState();
-    void updateState();
-
-    std::vector<common::Ball> _balls;
     vk::Buffer _vbo;
     vk::DeviceMemory _vboMemory;
-    uint32_t _vertexCount;
     vk::CommandPool _cmdPool;
     std::vector<vk::CommandBuffer> _cmdBuffers;
     std::vector<vk::Fence> _fences;

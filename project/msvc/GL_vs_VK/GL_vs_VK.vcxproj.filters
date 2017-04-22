@@ -147,6 +147,9 @@
     <ClCompile Include="..\..\..\src\base\Random.cpp">
       <Filter>Source Files\base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\tests\test1\BaseSimpleBallsSceneTest.cpp">
+      <Filter>Source Files\tests\test1</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\base\gl\Buffer.h">
@@ -232,6 +235,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\tests\common\SphereVerticesGenerator.h">
       <Filter>Header Files\tests\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\test1\BaseSimpleBallsSceneTest.h">
+      <Filter>Header Files\tests\test1</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

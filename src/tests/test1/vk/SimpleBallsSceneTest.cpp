@@ -1,21 +1,17 @@
 #include <tests/test1/vk/SimpleBallsSceneTest.h>
 
-#include <base/Random.h>
-#include <tests/common/SphereVerticesGenerator.h>
-
-#include <glm/glm.hpp>
 #include <glm/vec4.hpp>
 #include <vulkan/vulkan.hpp>
 
 #include <array>
-#include <iostream>
 #include <stdexcept>
 #include <vector>
 
 namespace tests {
 namespace test_vk {
 SimpleBallsSceneTest::SimpleBallsSceneTest()
-    : VKTest("SimpleBallsSceneTest")
+    : BaseSimpleBallsSceneTest()
+    , VKTest("SimpleBallsSceneTest")
     , _semaphoreIndex(0u)
 {
 }
@@ -23,6 +19,7 @@ SimpleBallsSceneTest::SimpleBallsSceneTest()
 void SimpleBallsSceneTest::setup()
 {
     VKTest::setup();
+    initTestState();
 
     createCommandBuffers();
     createVbo();
@@ -33,8 +30,6 @@ void SimpleBallsSceneTest::setup()
     createShaders();
     createPipelineLayout();
     createPipeline();
-
-    initState();
 }
 
 void SimpleBallsSceneTest::run()
@@ -42,7 +37,7 @@ void SimpleBallsSceneTest::run()
     while (!window().shouldClose()) {
         auto frameIndex = getNextFrameIndex();
 
-        updateState();
+        updateTestState(static_cast<float>(window().frameTime()));
         {
             prepareCommandBuffer(frameIndex);
             submitCommandBuffer(frameIndex);
@@ -67,6 +62,7 @@ void SimpleBallsSceneTest::teardown()
     destroyVbo();
     destroyCommandBuffers();
 
+    destroyTestState();
     VKTest::teardown();
 }
 
@@ -81,11 +77,7 @@ void SimpleBallsSceneTest::createCommandBuffers()
 // TODO: move code to VK-common (staging buffer module)
 void SimpleBallsSceneTest::createVbo()
 {
-    // Create VBO data
-    // TODO: move to TC-common
-    common::SphereVerticesGenerator verticesGenerator{4, 4};
-    _vertexCount = static_cast<uint32_t>(verticesGenerator.vertices.size());
-    vk::DeviceSize vboSize = verticesGenerator.vertices.size() * sizeof(verticesGenerator.vertices.front());
+    vk::DeviceSize vboSize = vertices().size() * sizeof(vertices().front());
 
     // Create VBO object
     vk::BufferUsageFlags usage = vk::BufferUsageFlagBits::eTransferSrc;
@@ -116,7 +108,7 @@ void SimpleBallsSceneTest::createVbo()
 
     // Write VBO's memory
     void* vboMemory = device().mapMemory(hostLocalVboMemory, 0, vboSize, {});
-    std::memcpy(vboMemory, verticesGenerator.vertices.data(), static_cast<std::size_t>(vboSize));
+    std::memcpy(vboMemory, vertices().data(), static_cast<std::size_t>(vboSize));
     device().unmapMemory(hostLocalVboMemory);
 
     // Copy VBO to device local memory and use it there
@@ -413,12 +405,13 @@ void SimpleBallsSceneTest::prepareCommandBuffer(std::size_t frameIndex) const
         cmdBuffer.beginRenderPass(renderPassInfo, vk::SubpassContents::eInline);
         cmdBuffer.bindVertexBuffers(0, {{_vbo}}, {{0}});
 
-        for (const auto& ball : _balls) {
+        uint32_t vertexCount = static_cast<uint32_t>(vertices().size()); // Much slower if this is in the loop!
+        for (const auto& ball : balls()) {
             cmdBuffer.pushConstants(_pipelineLayout, vk::ShaderStageFlagBits::eVertex, 0, sizeof(glm::vec4),
                                     &ball.position);
             cmdBuffer.pushConstants(_pipelineLayout, vk::ShaderStageFlagBits::eFragment, sizeof(glm::vec4),
                                     sizeof(glm::vec4), &ball.color);
-            cmdBuffer.draw(_vertexCount, 1, 0, 0);
+            cmdBuffer.draw(vertexCount, 1, 0, 0);
         }
 
         cmdBuffer.endRenderPass();
@@ -440,64 +433,6 @@ void SimpleBallsSceneTest::presentFrame(std::size_t frameIndex) const
     vk::PresentInfoKHR presentInfo{1,      &_renderSemaphores[_semaphoreIndex], 1, &window().swapchain(), &imageIndex,
                                    nullptr};
     queues().queue().presentKHR(presentInfo);
-}
-
-// TODO: move to BASE-random module
-glm::vec4 getRandomVec4(glm::vec4 min, glm::vec4 max)
-{
-    glm::vec4 result;
-
-    result.x = base::random::getRandomRealFromRange(min.x, max.x);
-    result.y = base::random::getRandomRealFromRange(min.y, max.y);
-    result.z = base::random::getRandomRealFromRange(min.z, max.z);
-    result.w = base::random::getRandomRealFromRange(min.w, max.w);
-
-    return result;
-}
-
-// TODO: move to TC-common
-void SimpleBallsSceneTest::initState()
-{
-    static const size_t N = 50000; // TODO: move to TC-attribute
-    static const float SPEED_SCALE = 0.3f;
-
-    _balls.clear();
-    _balls.reserve(N);
-
-    for (size_t i = 0; i < N; ++i) {
-        auto position = getRandomVec4({-1.0, -1.0, -1.0, 0.0}, {1.0, 1.0, 1.0, 0.0});
-        auto color = getRandomVec4({0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
-        auto speed = getRandomVec4({-1.0, -1.0, -1.0, 0.0}, {1.0, 1.0, 1.0, 0.0});
-
-        _balls.push_back({position, color, (glm::normalize(speed) * SPEED_SCALE)});
-    }
-}
-
-// TODO: move to TC-common
-void SimpleBallsSceneTest::updateState()
-{
-    auto clampFloat = [](float& v, float min, float max) {
-        if (v < min) {
-            v = min;
-            return true;
-        } else if (v > max) {
-            v = max;
-            return true;
-        }
-        return false;
-    };
-
-    float deltaTime = static_cast<float>(window().frameTime());
-    for (auto& ball : _balls) {
-        ball.position += (deltaTime * ball.speed);
-
-        if (clampFloat(ball.position.x, -1.0, 1.0))
-            ball.speed.x *= (-1.0);
-        if (clampFloat(ball.position.y, -1.0, 1.0))
-            ball.speed.y *= (-1.0);
-        if (clampFloat(ball.position.z, 0.0, 1.0))
-            ball.speed.z *= (-1.0);
-    }
 }
 }
 }

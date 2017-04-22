@@ -120,6 +120,7 @@
     <ClCompile Include="..\..\..\src\main.cpp" />
     <ClCompile Include="..\..\..\src\tests\common\SphereVerticesGenerator.cpp" />
     <ClCompile Include="..\..\..\src\tests\test1\gl\SimpleBallsSceneTest.cpp" />
+    <ClCompile Include="..\..\..\src\tests\test1\BaseSimpleBallsSceneTest.cpp" />
     <ClCompile Include="..\..\..\src\tests\test1\vk\SimpleBallsSceneTest.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -149,6 +150,7 @@
     <ClInclude Include="..\..\..\include\tests\common\Ball.h" />
     <ClInclude Include="..\..\..\include\tests\common\SphereVerticesGenerator.h" />
     <ClInclude Include="..\..\..\include\tests\test1\gl\SimpleBallsSceneTest.h" />
+    <ClInclude Include="..\..\..\include\tests\test1\BaseSimpleBallsSceneTest.h" />
     <ClInclude Include="..\..\..\include\tests\test1\SimpleBallsSceneTestIncludes.h" />
     <ClInclude Include="..\..\..\include\tests\test1\vk\SimpleBallsSceneTest.h" />
   </ItemGroup>

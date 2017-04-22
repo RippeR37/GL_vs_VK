@@ -9,6 +9,8 @@ namespace base {
 namespace random {
 std::mt19937& getDefaultGenerator();
 
+glm::vec4 getRandomVec4(const glm::vec4& min, const glm::vec4& max);
+
 template <typename T>
 T getRandomInteger()
 {
