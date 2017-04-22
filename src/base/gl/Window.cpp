@@ -44,8 +44,7 @@ bool Window::create()
         glfwMakeContextCurrent(getHandle());
         initializeGLEW();
 
-        _lastFrame = glfwGetTime();
-        _fpsClock.reset();
+        _lastFpsMeasure = _thisFpsMeasure = glfwGetTime();
 
     } else {
         std::cerr << "base::gl::Window > Couldn't create OpenGL window.";
@@ -63,28 +62,27 @@ void Window::update()
         return;
     }
 
-    _thisFrame = glfwGetTime();
-    _frameTime = _thisFrame - _lastFrame;
-    _lastFrame = _thisFrame;
-
     glfwSwapBuffers(_handle);
     glfwPollEvents();
 
     if (isCountingFPS()) {
+        _frameTime = glfwGetTime() - _thisFpsMeasure;
+        _thisFpsMeasure = glfwGetTime();
         _framesCount += 1;
-        _fpsTime = _fpsClock.getTotalTime();
 
+        _fpsTime = _thisFpsMeasure - _lastFpsMeasure;
         if (_fpsTime > getFPSRefreshRate()) {
             setFPSCount(static_cast<unsigned int>(_framesCount * (1.0 / _fpsTime)));
 
             if (isDisplayingFPS())
-                appendTitle(std::string(" | FPS: ") + std::to_string(getFPS()));
+                appendTitle(std::string(" | ") + std::to_string((_fpsTime * 1000.0) / _framesCount) +
+                            std::string("ms | FPS: ") + std::to_string(getFPS()));
 
             if (_fpsCountCallback)
                 _fpsCountCallback(getFPS());
 
             _framesCount = 0;
-            _fpsClock.reset();
+            _lastFpsMeasure = _thisFpsMeasure;
         }
     }
 }

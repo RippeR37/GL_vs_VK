@@ -18,12 +18,13 @@ class SimpleBallsSceneTest : public framework::GLTest
     void teardown() override;
 
   private:
+    void initApplication();
     void initProgram();
     void initVBO();
     void initVAO();
-    void initTestData();
 
-    void updateBalls();
+    void initState();
+    void updateState();
 
     base::gl::Program program_;
     base::gl::VertexArray vao_;

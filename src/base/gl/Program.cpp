@@ -167,6 +167,12 @@ void Program::mapUniforms(const Shader& shader)
         stream >> uniformName;
         if (uniformName == "uniform") {
             stream >> uniformType;
+
+            // Ignore precision qualifiers
+            if (uniformType == "highp" || uniformType == "mediump" || uniformType == "lowp") {
+                stream >> uniformType;
+            }
+
             stream >> uniformName;
 
             // Semicolon

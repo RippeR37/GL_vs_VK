@@ -9,7 +9,7 @@
 #include <set>
 
 namespace {
-const std::vector<const char*> kInstanceLayers{{"VK_LAYER_LUNARG_monitor"}};
+const std::vector<const char*> kInstanceLayers{};
 const std::vector<const char*> kDebugInstanceLayers{{"VK_LAYER_LUNARG_standard_validation"},
                                                     {"VK_LAYER_LUNARG_monitor"}};
 }
@@ -78,7 +78,7 @@ vk::Instance Application::createInstance(const std::vector<const char*>& layers)
 
     std::vector<std::string> extensions = getRequiredExtensions();
     std::vector<const char*> extensionsView = viewOf(extensions);
-    vk::ApplicationInfo applicationInfo{name().c_str(), VK_MAKE_VERSION(0, 1, 0), "LunarG SDK",
+    vk::ApplicationInfo applicationInfo{name().c_str(), VK_MAKE_VERSION(1, 0, 0), "LunarG SDK",
                                         VK_MAKE_VERSION(1, 0, 0), VK_API_VERSION_1_0};
     vk::InstanceCreateInfo instanceInfo{{},
                                         &applicationInfo,
@@ -125,6 +125,7 @@ vk::Device Application::createDevice()
     std::vector<std::string> extensions = {{VK_KHR_SWAPCHAIN_EXTENSION_NAME}};
     std::vector<const char*> extensionsView = viewOf(extensions);
 
+    vk::PhysicalDeviceFeatures emptyFeatures{0u, 0u, 0u};
     std::vector<vk::DeviceQueueCreateInfo> queueCreateInfos = QueueManager::createInfos(instance(), physicalDevice());
     vk::DeviceCreateInfo deviceCreateInfo{{},
                                           static_cast<uint32_t>(queueCreateInfos.size()),
@@ -133,7 +134,7 @@ vk::Device Application::createDevice()
                                           nullptr,
                                           extensionsView.size(),
                                           extensionsView.data(),
-                                          &deviceInfo().features};
+                                          &emptyFeatures};
 
     return physicalDevice().createDevice(deviceCreateInfo);
 }

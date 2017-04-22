@@ -7,12 +7,7 @@
 
 namespace base {
 namespace random {
-std::mt19937& getDefaultGenerator()
-{
-    static std::random_device rd;
-    static std::mt19937 generator{rd()};
-    return generator;
-}
+std::mt19937& getDefaultGenerator();
 
 template <typename T>
 T getRandomInteger()
@@ -52,14 +47,6 @@ T getRandomRealFromRange(const T& min, const T& max)
 
     std::uniform_real_distribution<T> distribution{min, max};
     return distribution(getDefaultGenerator());
-}
-
-// Specializations
-
-template <>
-bool getRandomInteger<bool>()
-{
-    return getRandomIntegerFromRange<short>(0, 1) != 0;
 }
 }
 }

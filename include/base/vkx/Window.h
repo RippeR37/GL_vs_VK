@@ -27,7 +27,9 @@ class Window
 
     const std::string& title() const;
     void title(const std::string& title);
+    void appendTitle(const std::string& text);
 
+    double frameTime() const;
     const glm::uvec2& size() const;
     const vk::SurfaceKHR& surface() const;
     const vk::SwapchainKHR& swapchain() const;
@@ -49,6 +51,11 @@ class Window
 
     vk::SurfaceFormatKHR getSupportedSwapchainSurfaceFormat() const;
     vk::PresentModeKHR getSupportedSwapchainPresentMode() const;
+
+    double _lastFpsMeasure;
+    double _thisFpsMeasure;
+    double _frameTime;
+    unsigned int _framesCount;
 
     const Application& _application;
     glm::uvec2 _size;

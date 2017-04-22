@@ -7,7 +7,11 @@
 namespace base {
 namespace vkx {
 Window::Window(const Application& application, const glm::uvec2& size, const std::string& windowTitle)
-    : _application(application)
+    : _lastFpsMeasure(0.0)
+    , _thisFpsMeasure(0.0)
+    , _frameTime(1.0)
+    , _framesCount(0u)
+    , _application(application)
     , _size(size)
     , _title(windowTitle)
     , _handle(createWindow())
@@ -35,6 +39,23 @@ void Window::update()
     }
 
     glfwPollEvents();
+
+    static double _lastMeasure = glfwGetTime();
+    _thisFpsMeasure = glfwGetTime();
+    _frameTime = _thisFpsMeasure - _lastMeasure;
+    _lastMeasure = _thisFpsMeasure;
+
+    _framesCount += 1;
+    double fpsTime = _thisFpsMeasure - _lastFpsMeasure;
+    if (fpsTime > 1.0) {
+        unsigned int fps = static_cast<unsigned int>(_framesCount * (1.0 / fpsTime));
+
+        appendTitle(std::string(" | ") + std::to_string((fpsTime * 1000.0) / _framesCount) + std::string("ms | FPS: ") +
+                    std::to_string(fps));
+
+        _framesCount = 0;
+        _lastFpsMeasure = _thisFpsMeasure;
+    }
 }
 
 bool Window::shouldClose() const
@@ -51,6 +72,17 @@ void Window::title(const std::string& title)
 {
     _title = title;
     glfwSetWindowTitle(_handle, _title.c_str());
+}
+
+void Window::appendTitle(const std::string& text)
+{
+    std::string appendedTitle = title() + text;
+    glfwSetWindowTitle(_handle, appendedTitle.c_str());
+}
+
+double Window::frameTime() const
+{
+    return _frameTime;
 }
 
 const glm::uvec2& Window::size() const
@@ -93,6 +125,8 @@ GLFWwindow* Window::createWindow()
         throw std::system_error(vk::Result::eErrorInitializationFailed, "Could not create GLFW window");
     }
 
+    _lastFpsMeasure = _thisFpsMeasure = glfwGetTime();
+
     return handle;
 }
 
@@ -118,7 +152,7 @@ vk::SwapchainKHR Window::createSwapchain()
         throw std::system_error(vk::Result::eErrorFormatNotSupported, "surface doesn't support ColorAttachment usage");
     }
 
-    uint32_t minImageCount = std::min(3u, surfaceCapabilities.maxImageCount); // TODO: increase
+    uint32_t minImageCount = std::min(3u, surfaceCapabilities.maxImageCount);
     vk::PresentModeKHR presentMode = getSupportedSwapchainPresentMode();
     vk::Extent2D surfaceExtent = (surfaceCapabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()
                                       ? surfaceCapabilities.currentExtent
@@ -132,12 +166,12 @@ vk::SwapchainKHR Window::createSwapchain()
                                              1,
                                              vk::ImageUsageFlagBits::eColorAttachment,
                                              vk::SharingMode::eExclusive,
-                                             0,
+                                             _application.queues().familyIndex(),
                                              nullptr,
                                              surfaceCapabilities.currentTransform,
                                              vk::CompositeAlphaFlagBitsKHR::eOpaque,
                                              presentMode,
-                                             VK_TRUE,
+                                             VK_FALSE,
                                              VK_NULL_HANDLE};
 
     return _application.device().createSwapchainKHR(swapchainInfo);

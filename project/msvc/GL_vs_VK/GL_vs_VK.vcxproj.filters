@@ -144,6 +144,9 @@
     <ClCompile Include="..\..\..\src\tests\common\SphereVerticesGenerator.cpp">
       <Filter>Source Files\tests\common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\base\Random.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\base\gl\Buffer.h">

@@ -62,8 +62,8 @@ class Window
     unsigned int _framesCount;
     bool _isDisplayingFPS;
     bool _isCountingFPS;
-    double _lastFrame;
-    double _thisFrame;
+    double _lastFpsMeasure;
+    double _thisFpsMeasure;
     double _fpsTime;
     double _fpsRefreshRate;
     double _frameTime;
@@ -73,7 +73,6 @@ class Window
     glm::ivec2 _windowPosition;
     std::function<void(int)> _fpsCountCallback;
     std::function<void()> _destroyCallback;
-    Clock _fpsClock;
 
     static bool _hintsSet;
 

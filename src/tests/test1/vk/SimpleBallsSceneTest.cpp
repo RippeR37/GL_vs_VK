@@ -1,7 +1,9 @@
 #include <tests/test1/vk/SimpleBallsSceneTest.h>
 
+#include <base/Random.h>
 #include <tests/common/SphereVerticesGenerator.h>
 
+#include <glm/glm.hpp>
 #include <glm/vec4.hpp>
 #include <vulkan/vulkan.hpp>
 
@@ -14,6 +16,7 @@ namespace tests {
 namespace test_vk {
 SimpleBallsSceneTest::SimpleBallsSceneTest()
     : VKTest("SimpleBallsSceneTest")
+    , _semaphoreIndex(0u)
 {
 }
 
@@ -21,8 +24,8 @@ void SimpleBallsSceneTest::setup()
 {
     VKTest::setup();
 
-    createVbo();
     createCommandBuffers();
+    createVbo();
     createSemaphores();
     createFences();
     createRenderPass();
@@ -30,6 +33,8 @@ void SimpleBallsSceneTest::setup()
     createShaders();
     createPipelineLayout();
     createPipeline();
+
+    initState();
 }
 
 void SimpleBallsSceneTest::run()
@@ -37,9 +42,12 @@ void SimpleBallsSceneTest::run()
     while (!window().shouldClose()) {
         auto frameIndex = getNextFrameIndex();
 
-        prepareCommandBuffer(frameIndex);
-        submitCommandBuffer(frameIndex);
-        presentFrame(frameIndex);
+        updateState();
+        {
+            prepareCommandBuffer(frameIndex);
+            submitCommandBuffer(frameIndex);
+            presentFrame(frameIndex);
+        }
 
         window().update();
     }
@@ -56,28 +64,38 @@ void SimpleBallsSceneTest::teardown()
     destroyRenderPass();
     destroyFences();
     destroySemaphores();
-    destroyCommandBuffers();
     destroyVbo();
+    destroyCommandBuffers();
 
     VKTest::teardown();
 }
 
+void SimpleBallsSceneTest::createCommandBuffers()
+{
+    vk::CommandPoolCreateFlags cmdPoolFlags = vk::CommandPoolCreateFlagBits::eResetCommandBuffer;
+    _cmdPool = device().createCommandPool({cmdPoolFlags, queues().familyIndex()});
+    _cmdBuffers = device().allocateCommandBuffers(
+        {_cmdPool, vk::CommandBufferLevel::ePrimary, static_cast<uint32_t>(window().swapchainImages().size())});
+}
+
+// TODO: move code to VK-common (staging buffer module)
 void SimpleBallsSceneTest::createVbo()
 {
     // Create VBO data
-    common::SphereVerticesGenerator verticesGenerator{15, 15};
+    // TODO: move to TC-common
+    common::SphereVerticesGenerator verticesGenerator{4, 4};
     _vertexCount = static_cast<uint32_t>(verticesGenerator.vertices.size());
     vk::DeviceSize vboSize = verticesGenerator.vertices.size() * sizeof(verticesGenerator.vertices.front());
 
     // Create VBO object
-    vk::BufferUsageFlags usage = vk::BufferUsageFlagBits::eTransferSrc | vk::BufferUsageFlagBits::eTransferDst |
-                                 vk::BufferUsageFlagBits::eVertexBuffer;
+    vk::BufferUsageFlags usage = vk::BufferUsageFlagBits::eTransferSrc;
     vk::BufferCreateInfo vboInfo{{}, vboSize, usage, vk::SharingMode::eExclusive};
-    _vbo = device().createBuffer(vboInfo);
-    // TODO: move VBO to device-local memory with staging buffers!
+    vk::Buffer hostLocalVbo = device().createBuffer(vboInfo);
+    vk::DeviceMemory hostLocalVboMemory;
 
     // Allocate VBO device memory
     {
+        // TODO: move to VK-common
         uint32_t memoryTypeIndex = 0;
         vk::MemoryPropertyFlags requiredMemoryProperties =
             vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent;
@@ -91,37 +109,39 @@ void SimpleBallsSceneTest::createVbo()
 
         // TODO: fix this to get right ammount of necessary memory allocated!
         vk::MemoryAllocateInfo deviceMemoryInfo{vboSize * 2, memoryTypeIndex};
-        _vboMemory = device().allocateMemory(deviceMemoryInfo);
+        hostLocalVboMemory = device().allocateMemory(deviceMemoryInfo);
     }
 
+    device().bindBufferMemory(hostLocalVbo, hostLocalVboMemory, 0);
+
     // Write VBO's memory
-    void* memory = device().mapMemory(_vboMemory, 0, vboSize, {});
-    std::memcpy(memory, verticesGenerator.vertices.data(), static_cast<std::size_t>(vboSize));
-    device().unmapMemory(_vboMemory);
+    void* vboMemory = device().mapMemory(hostLocalVboMemory, 0, vboSize, {});
+    std::memcpy(vboMemory, verticesGenerator.vertices.data(), static_cast<std::size_t>(vboSize));
+    device().unmapMemory(hostLocalVboMemory);
 
-    // Bind VBO with it's memory
-    device().bindBufferMemory(_vbo, _vboMemory, 0);
-}
+    // Copy VBO to device local memory and use it there
+    auto deviceLocalVbo = copyToDeviceLocalMemory(hostLocalVbo, vboSize);
+    _vbo = std::get<0>(deviceLocalVbo);
+    _vboMemory = std::get<1>(deviceLocalVbo);
 
-void SimpleBallsSceneTest::createCommandBuffers()
-{
-    _cmdPool = device().createCommandPool({vk::CommandPoolCreateFlagBits::eResetCommandBuffer, queues().familyIndex()});
-    _cmdBuffers = device().allocateCommandBuffers(
-        {_cmdPool, vk::CommandBufferLevel::ePrimary, static_cast<uint32_t>(window().swapchainImages().size())});
+    // Cleanup
+    device().freeMemory(hostLocalVboMemory);
+    device().destroyBuffer(hostLocalVbo);
 }
 
 void SimpleBallsSceneTest::createSemaphores()
 {
-    _presentCompleteSemaphore = device().createSemaphore({});
-    _renderCompleteSemaphore = device().createSemaphore({});
+    for (std::size_t i = 0; i < window().swapchainImages().size(); ++i) {
+        _acquireSemaphores.push_back(device().createSemaphore({}));
+        _renderSemaphores.push_back(device().createSemaphore({}));
+    }
 }
 
 void SimpleBallsSceneTest::createFences()
 {
-    _fences.reserve(_cmdBuffers.size());
-    for (const vk::CommandBuffer& cmdBuff : _cmdBuffers) {
-        (void)cmdBuff; // unused
-        _fences.push_back(device().createFence({vk::FenceCreateFlagBits::eSignaled}));
+    _fences.resize(_cmdBuffers.size());
+    for (vk::Fence& fence : _fences) {
+        fence = device().createFence({vk::FenceCreateFlagBits::eSignaled});
     }
 }
 
@@ -139,9 +159,9 @@ void SimpleBallsSceneTest::createRenderPass()
     vk::AttachmentReference colorAttachment{0, vk::ImageLayout::eColorAttachmentOptimal};
     vk::SubpassDescription subpassDesc{
         {}, vk::PipelineBindPoint::eGraphics, 0, nullptr, 1, &colorAttachment, nullptr, nullptr, 0, nullptr};
-    // TODO: check if dependency doesn't have to be set here!
 
-    _renderPass = device().createRenderPass({{}, 1, &attachment, 1, &subpassDesc, 0, nullptr});
+    vk::RenderPassCreateInfo renderPassInfo{{}, 1, &attachment, 1, &subpassDesc, 0, nullptr};
+    _renderPass = device().createRenderPass(renderPassInfo);
 }
 
 void SimpleBallsSceneTest::createFramebuffers()
@@ -162,19 +182,16 @@ void SimpleBallsSceneTest::createShaders()
 
 void SimpleBallsSceneTest::createPipelineLayout()
 {
-    // Bindings
     std::vector<vk::DescriptorSetLayoutBinding> bindings;
-    {
-        // TODO: might want to use eUniformBufferDynamic to change this quickly?
-        // vk::DescriptorSetLayoutBinding uboPosition{0, vk::DescriptorType::eUniformBuffer, 1,
-        // vk::ShaderStageFlagBits::eVertex, nullptr}; bindings.push_back(uboPosition);
-    }
-
     vk::DescriptorSetLayoutCreateInfo setLayoutInfo{{}, bindings.size(), bindings.data()};
     _setLayout = device().createDescriptorSetLayout(setLayoutInfo);
 
-    // TODO: add push constants!
-    vk::PipelineLayoutCreateInfo pipelineLayoutInfo{{}, 1, &_setLayout, 0, nullptr};
+    vk::PushConstantRange pushConstantRanges[] = {
+        {vk::ShaderStageFlagBits::eVertex, 0, sizeof(glm::vec4)}, // position
+        {vk::ShaderStageFlagBits::eFragment, sizeof(glm::vec4), sizeof(glm::vec4)} // color
+    };
+
+    vk::PipelineLayoutCreateInfo pipelineLayoutInfo{{}, 1, &_setLayout, 2, &pushConstantRanges[0]};
     _pipelineLayout = device().createPipelineLayout(pipelineLayoutInfo);
 }
 
@@ -197,7 +214,7 @@ void SimpleBallsSceneTest::createPipeline()
                                                             vertexAttributeDescription.data()};
 
     // Input assembly state
-    vk::PipelineInputAssemblyStateCreateInfo inputAssemblyState{{}, vk::PrimitiveTopology::eTriangleList, VK_TRUE};
+    vk::PipelineInputAssemblyStateCreateInfo inputAssemblyState{{}, vk::PrimitiveTopology::eTriangleList, VK_FALSE};
 
     // Viewport state
     vk::Viewport viewport{0.0f, 0.0f, static_cast<float>(window().size().x), static_cast<float>(window().size().y),
@@ -210,7 +227,7 @@ void SimpleBallsSceneTest::createPipeline()
                                                                 VK_FALSE,
                                                                 VK_FALSE,
                                                                 vk::PolygonMode::eFill,
-                                                                vk::CullModeFlagBits::eNone, // TODO: add culling
+                                                                vk::CullModeFlagBits::eNone,
                                                                 vk::FrontFace::eCounterClockwise,
                                                                 VK_FALSE,
                                                                 0.0f,
@@ -227,7 +244,7 @@ void SimpleBallsSceneTest::createPipeline()
     colorBlendAttachmentState.colorWriteMask = vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG |
                                                vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eA;
     vk::PipelineColorBlendStateCreateInfo colorBlendState{
-        {}, VK_FALSE, vk::LogicOp::eNoOp, 1, &colorBlendAttachmentState};
+        {}, VK_FALSE, vk::LogicOp::eClear, 1, &colorBlendAttachmentState};
 
     // Pipeline creation
     vk::GraphicsPipelineCreateInfo pipelineInfo{{},
@@ -281,12 +298,25 @@ void SimpleBallsSceneTest::destroyFences()
     for (const vk::Fence& fence : _fences) {
         device().destroyFence(fence);
     }
+    _fences.clear();
 }
 
 void SimpleBallsSceneTest::destroySemaphores()
 {
-    device().destroySemaphore(_presentCompleteSemaphore);
-    device().destroySemaphore(_renderCompleteSemaphore);
+    for (const auto& acquireSemaphore : _acquireSemaphores) {
+        device().destroySemaphore(acquireSemaphore);
+    }
+    for (const auto& renderSemaphore : _renderSemaphores) {
+        device().destroySemaphore(renderSemaphore);
+    }
+    _acquireSemaphores.clear();
+    _renderSemaphores.clear();
+}
+
+void SimpleBallsSceneTest::destroyVbo()
+{
+    device().destroyBuffer(_vbo);
+    device().freeMemory(_vboMemory);
 }
 
 void SimpleBallsSceneTest::destroyCommandBuffers()
@@ -295,10 +325,46 @@ void SimpleBallsSceneTest::destroyCommandBuffers()
     _cmdBuffers.clear();
 }
 
-void SimpleBallsSceneTest::destroyVbo()
+// TODO: move to VK-common staging buffer module
+std::tuple<vk::Buffer, vk::DeviceMemory> SimpleBallsSceneTest::copyToDeviceLocalMemory(const vk::Buffer& srcBuffer,
+                                                                                       vk::DeviceSize size) const
 {
-    device().destroyBuffer(_vbo);
-    device().freeMemory(_vboMemory);
+    // Create destination buffer & allocate memory for it
+    vk::BufferUsageFlags dstUsage = vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer;
+    vk::Buffer dstBuffer = device().createBuffer(vk::BufferCreateInfo{{}, size, dstUsage, vk::SharingMode::eExclusive});
+    vk::DeviceMemory dstMemory;
+    {
+        uint32_t memoryTypeIndex = 0;
+        vk::MemoryPropertyFlags requiredMemoryProperties = vk::MemoryPropertyFlagBits::eDeviceLocal;
+        for (uint32_t i = 0; i < deviceInfo().memory.memoryTypeCount; ++i) {
+            if ((deviceInfo().memory.memoryTypes[i].propertyFlags & requiredMemoryProperties) ==
+                requiredMemoryProperties) {
+                memoryTypeIndex = i;
+                break;
+            }
+        }
+
+        vk::MemoryAllocateInfo deviceMemoryInfo{size * 2, memoryTypeIndex};
+        dstMemory = device().allocateMemory(deviceMemoryInfo);
+    }
+    device().bindBufferMemory(dstBuffer, dstMemory, 0);
+
+    // Create command buffer & fill it up
+    vk::CommandBufferAllocateInfo cmdBufferInfo{_cmdPool, vk::CommandBufferLevel::ePrimary, 1};
+    vk::CommandBuffer cmdBuffer = device().allocateCommandBuffers(cmdBufferInfo).front();
+
+    cmdBuffer.begin(vk::CommandBufferBeginInfo{vk::CommandBufferUsageFlagBits::eOneTimeSubmit, nullptr});
+    cmdBuffer.copyBuffer(srcBuffer, dstBuffer, {vk::BufferCopy{0, 0, size}});
+    cmdBuffer.end();
+
+    // Submit command buffer and wait for response (+ cleanup)
+    vk::Fence fence = device().createFence({});
+    queues().queue().submit(vk::SubmitInfo{0, nullptr, nullptr, 1, &cmdBuffer, 0, nullptr}, fence);
+    device().waitForFences({{fence}}, VK_TRUE, UINT64_MAX);
+    device().freeCommandBuffers(_cmdPool, {{cmdBuffer}});
+
+    // Return results
+    return std::make_tuple(dstBuffer, dstMemory);
 }
 
 std::vector<vk::PipelineShaderStageCreateInfo> SimpleBallsSceneTest::getShaderStages() const
@@ -317,8 +383,10 @@ std::vector<vk::PipelineShaderStageCreateInfo> SimpleBallsSceneTest::getShaderSt
 
 uint32_t SimpleBallsSceneTest::getNextFrameIndex() const
 {
+    _semaphoreIndex = (_semaphoreIndex + 1) % window().swapchainImages().size();
+
     auto nextFrameAcquireStatus =
-        device().acquireNextImageKHR(window().swapchain(), UINT64_MAX, _presentCompleteSemaphore, {});
+        device().acquireNextImageKHR(window().swapchain(), UINT64_MAX, _acquireSemaphores[_semaphoreIndex], {});
 
     if (nextFrameAcquireStatus.result != vk::Result::eSuccess) {
         throw std::system_error(nextFrameAcquireStatus.result, "Error during acquiring next frame index");
@@ -332,21 +400,24 @@ void SimpleBallsSceneTest::prepareCommandBuffer(std::size_t frameIndex) const
     static const vk::ClearValue clearValue = vk::ClearColorValue{std::array<float, 4>{{0.0f, 0.0f, 0.0f, 1.0f}}};
     const vk::CommandBuffer& cmdBuffer = _cmdBuffers[frameIndex];
 
-    device().waitForFences(1, &_fences[frameIndex], VK_TRUE, UINT64_MAX);
+    vk::RenderPassBeginInfo renderPassInfo{
+        _renderPass, _framebuffers[frameIndex], {{}, {window().size().x, window().size().y}}, 1, &clearValue};
+
+    device().waitForFences(1, &_fences[frameIndex], VK_FALSE, UINT64_MAX);
     device().resetFences(1, &_fences[frameIndex]);
 
     cmdBuffer.reset({});
-    cmdBuffer.begin({{}, nullptr});
+    cmdBuffer.begin({vk::CommandBufferUsageFlagBits::eOneTimeSubmit, nullptr});
     {
-        vk::RenderPassBeginInfo renderPassInfo{
-            _renderPass, _framebuffers[frameIndex], {{}, {window().size().x, window().size().y}}, 1, &clearValue};
-        cmdBuffer.beginRenderPass(renderPassInfo, vk::SubpassContents::eInline);
-
         cmdBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, _pipeline);
-        // cmdBuffer.bindDescriptorSets(bindPoint, _pipelineLayout, firstSet, descriptorSets, dynamicOffsts);
+        cmdBuffer.beginRenderPass(renderPassInfo, vk::SubpassContents::eInline);
         cmdBuffer.bindVertexBuffers(0, {{_vbo}}, {{0}});
 
-        for (int i = 0; i < 10000; ++i) {
+        for (const auto& ball : _balls) {
+            cmdBuffer.pushConstants(_pipelineLayout, vk::ShaderStageFlagBits::eVertex, 0, sizeof(glm::vec4),
+                                    &ball.position);
+            cmdBuffer.pushConstants(_pipelineLayout, vk::ShaderStageFlagBits::eFragment, sizeof(glm::vec4),
+                                    sizeof(glm::vec4), &ball.color);
             cmdBuffer.draw(_vertexCount, 1, 0, 0);
         }
 
@@ -358,19 +429,73 @@ void SimpleBallsSceneTest::prepareCommandBuffer(std::size_t frameIndex) const
 void SimpleBallsSceneTest::submitCommandBuffer(std::size_t frameIndex) const
 {
     vk::PipelineStageFlags waitStage = vk::PipelineStageFlagBits::eColorAttachmentOutput;
-    vk::SubmitInfo submits{1, &_presentCompleteSemaphore, &waitStage, 1, &_cmdBuffers[frameIndex],
-                           1, &_renderCompleteSemaphore};
+    vk::SubmitInfo submits{1, &_acquireSemaphores[_semaphoreIndex], &waitStage, 1, &_cmdBuffers[frameIndex],
+                           1, &_renderSemaphores[_semaphoreIndex]};
     queues().queue().submit(submits, _fences[frameIndex]);
 }
 
 void SimpleBallsSceneTest::presentFrame(std::size_t frameIndex) const
 {
-    vk::Result presentResult = vk::Result::eSuccess; // HACK: workaround for bug in unique_objects layer
-    vk::PresentInfoKHR presentInfo{1, &_renderCompleteSemaphore, 1, &window().swapchain(), &frameIndex, &presentResult};
-    vk::Result presentAllResults = queues().queue().presentKHR(presentInfo);
+    vk::PresentInfoKHR presentInfo{1,      &_renderSemaphores[_semaphoreIndex], 1, &window().swapchain(), &frameIndex,
+                                   nullptr};
+    queues().queue().presentKHR(presentInfo);
+}
 
-    if (presentAllResults != vk::Result::eSuccess) {
-        throw std::system_error(presentAllResults, "Error during queuing frame presentation");
+// TODO: move to BASE-random module
+glm::vec4 getRandomVec4(glm::vec4 min, glm::vec4 max)
+{
+    glm::vec4 result;
+
+    result.x = base::random::getRandomRealFromRange(min.x, max.x);
+    result.y = base::random::getRandomRealFromRange(min.y, max.y);
+    result.z = base::random::getRandomRealFromRange(min.z, max.z);
+    result.w = base::random::getRandomRealFromRange(min.w, max.w);
+
+    return result;
+}
+
+// TODO: move to TC-common
+void SimpleBallsSceneTest::initState()
+{
+    static const size_t N = 50000; // TODO: move to TC-attribute
+    static const float SPEED_SCALE = 0.3f;
+
+    _balls.clear();
+    _balls.reserve(N);
+
+    for (size_t i = 0; i < N; ++i) {
+        auto position = getRandomVec4({-1.0, -1.0, -1.0, 0.0}, {1.0, 1.0, 1.0, 0.0});
+        auto color = getRandomVec4({0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
+        auto speed = getRandomVec4({-1.0, -1.0, -1.0, 0.0}, {1.0, 1.0, 1.0, 0.0});
+
+        _balls.push_back({position, color, (glm::normalize(speed) * SPEED_SCALE)});
+    }
+}
+
+// TODO: move to TC-common
+void SimpleBallsSceneTest::updateState()
+{
+    auto clampFloat = [](float& v, float min, float max) {
+        if (v < min) {
+            v = min;
+            return true;
+        } else if (v > max) {
+            v = max;
+            return true;
+        }
+        return false;
+    };
+
+    float deltaTime = static_cast<float>(window().frameTime());
+    for (auto& ball : _balls) {
+        ball.position += (deltaTime * ball.speed);
+
+        if (clampFloat(ball.position.x, -1.0, 1.0))
+            ball.speed.x *= (-1.0);
+        if (clampFloat(ball.position.y, -1.0, 1.0))
+            ball.speed.y *= (-1.0);
+        if (clampFloat(ball.position.z, 0.0, 1.0))
+            ball.speed.z *= (-1.0);
     }
 }
 }

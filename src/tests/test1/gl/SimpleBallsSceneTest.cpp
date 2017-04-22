@@ -20,19 +20,11 @@ void SimpleBallsSceneTest::setup()
 {
     GLTest::setup();
 
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    // glFrontFace(GL_CCW);
-    // glEnable(GL_CULL_FACE);
-    // glCullFace(GL_BACK);
-
+    initApplication();
     initProgram();
     initVBO();
     initVAO();
-    initTestData();
-
-    window_.setDisplayingFPS(true);
-    window_.setFPSRefreshRate(1.0);
+    initState();
 }
 
 void SimpleBallsSceneTest::run()
@@ -50,7 +42,7 @@ void SimpleBallsSceneTest::run()
             vao_.drawArrays();
         }
 
-        updateBalls();
+        updateState();
 
         vao_.unbind();
         program_.unbind();
@@ -64,6 +56,14 @@ void SimpleBallsSceneTest::teardown()
     GLTest::teardown();
 }
 
+void SimpleBallsSceneTest::initApplication()
+{
+    window_.setDisplayingFPS(true);
+    window_.setFPSRefreshRate(1.0);
+
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+}
+
 void SimpleBallsSceneTest::initProgram()
 {
     program_.load({"resources/test1/shaders/gl_shader.vert", base::gl::Shader::Type::VertexShader},
@@ -73,7 +73,8 @@ void SimpleBallsSceneTest::initProgram()
 void SimpleBallsSceneTest::initVBO()
 {
     // Vertices
-    common::SphereVerticesGenerator verticesGenerator{15, 15};
+    // TODO: move to TC-common
+    common::SphereVerticesGenerator verticesGenerator{4, 4};
     vertices_ = verticesGenerator.vertices;
 
     // VertexData
@@ -111,16 +112,17 @@ glm::vec4 getRandomVec4(glm::vec4 min, glm::vec4 max)
     return result;
 }
 
-void SimpleBallsSceneTest::initTestData()
+// TODO: move to TC-common
+void SimpleBallsSceneTest::initState()
 {
-    static const size_t N = 10000;
+    static const size_t N = 50000; // TODO: move to TC-attribute
     static const float SPEED_SCALE = 0.3f;
 
     balls_.clear();
     balls_.reserve(N);
 
     for (size_t i = 0; i < N; ++i) {
-        auto position = getRandomVec4({-1.0, -1.0, -1.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
+        auto position = getRandomVec4({-1.0, -1.0, -1.0, 0.0}, {1.0, 1.0, 1.0, 0.0});
         auto color = getRandomVec4({0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
         auto speed = getRandomVec4({-1.0, -1.0, -1.0, 0.0}, {1.0, 1.0, 1.0, 0.0});
 
@@ -128,7 +130,8 @@ void SimpleBallsSceneTest::initTestData()
     }
 }
 
-void SimpleBallsSceneTest::updateBalls()
+// TODO: move to TC-common
+void SimpleBallsSceneTest::updateState()
 {
     float deltaTime = static_cast<float>(window_.getFrameTime());
 

@@ -9,6 +9,6 @@ uniform vec4 objColor;
 
 void main()
 {
-    gl_Position = objPosition + (vertexPosition * 0.01);
+    gl_Position = objPosition + vec4(vec3(vertexPosition) * 0.01, 1.0);
     vColor = objColor;
 }

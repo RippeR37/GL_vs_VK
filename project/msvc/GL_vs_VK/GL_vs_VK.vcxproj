@@ -107,6 +107,7 @@
     <ClCompile Include="..\..\..\src\base\gl\VertexAttrib.cpp" />
     <ClCompile Include="..\..\..\src\base\gl\VertexBuffer.cpp" />
     <ClCompile Include="..\..\..\src\base\gl\Window.cpp" />
+    <ClCompile Include="..\..\..\src\base\Random.cpp" />
     <ClCompile Include="..\..\..\src\base\String.cpp" />
     <ClCompile Include="..\..\..\src\base\vkx\Application.cpp" />
     <ClCompile Include="..\..\..\src\base\vkx\DeviceInfo.cpp" />
