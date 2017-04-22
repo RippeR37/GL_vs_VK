@@ -18,8 +18,8 @@ class BaseSimpleBallsSceneTest
     void updateTestState(float frameTime);
     void destroyTestState();
 
-    const std::vector<common::Ball> balls() const;
-    const std::vector<glm::vec4> vertices() const;
+    const std::vector<common::Ball>& balls() const;
+    const std::vector<glm::vec4>& vertices() const;
 
   private:
     std::vector<common::Ball> _balls;

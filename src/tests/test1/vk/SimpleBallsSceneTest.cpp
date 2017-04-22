@@ -405,13 +405,12 @@ void SimpleBallsSceneTest::prepareCommandBuffer(std::size_t frameIndex) const
         cmdBuffer.beginRenderPass(renderPassInfo, vk::SubpassContents::eInline);
         cmdBuffer.bindVertexBuffers(0, {{_vbo}}, {{0}});
 
-        uint32_t vertexCount = static_cast<uint32_t>(vertices().size()); // Much slower if this is in the loop!
         for (const auto& ball : balls()) {
             cmdBuffer.pushConstants(_pipelineLayout, vk::ShaderStageFlagBits::eVertex, 0, sizeof(glm::vec4),
                                     &ball.position);
             cmdBuffer.pushConstants(_pipelineLayout, vk::ShaderStageFlagBits::eFragment, sizeof(glm::vec4),
                                     sizeof(glm::vec4), &ball.color);
-            cmdBuffer.draw(vertexCount, 1, 0, 0);
+            cmdBuffer.draw(static_cast<uint32_t>(vertices().size()), 1, 0, 0);
         }
 
         cmdBuffer.endRenderPass();

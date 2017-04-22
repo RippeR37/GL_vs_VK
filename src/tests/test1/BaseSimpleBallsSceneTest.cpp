@@ -66,12 +66,12 @@ void BaseSimpleBallsSceneTest::destroyTestState()
     _vertices.clear();
 }
 
-const std::vector<common::Ball> BaseSimpleBallsSceneTest::balls() const
+const std::vector<common::Ball>& BaseSimpleBallsSceneTest::balls() const
 {
     return _balls;
 }
 
-const std::vector<glm::vec4> BaseSimpleBallsSceneTest::vertices() const
+const std::vector<glm::vec4>& BaseSimpleBallsSceneTest::vertices() const
 {
     return _vertices;
 }
