@@ -57,8 +57,8 @@ void ShaderModule::destroy()
     if (_handle) {
         _device.destroyShaderModule(_handle);
 
-        _device = {};
-        _handle = {};
+        _device = vk::Device{};
+        _handle = vk::ShaderModule{};
     }
 }
 }

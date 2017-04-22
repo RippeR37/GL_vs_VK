@@ -183,7 +183,7 @@ void SimpleBallsSceneTest::createShaders()
 void SimpleBallsSceneTest::createPipelineLayout()
 {
     std::vector<vk::DescriptorSetLayoutBinding> bindings;
-    vk::DescriptorSetLayoutCreateInfo setLayoutInfo{{}, bindings.size(), bindings.data()};
+    vk::DescriptorSetLayoutCreateInfo setLayoutInfo{{}, static_cast<uint32_t>(bindings.size()), bindings.data()};
     _setLayout = device().createDescriptorSetLayout(setLayoutInfo);
 
     vk::PushConstantRange pushConstantRanges[] = {
@@ -208,9 +208,9 @@ void SimpleBallsSceneTest::createPipeline()
         {0, 0, vk::Format::eR32G32B32A32Sfloat, 0} // Attribute #0 (from binding #0) - vec4
     };
     vk::PipelineVertexInputStateCreateInfo vertexInputState{{},
-                                                            vertexBindingDescriptions.size(),
+                                                            static_cast<uint32_t>(vertexBindingDescriptions.size()),
                                                             vertexBindingDescriptions.data(),
-                                                            vertexAttributeDescription.size(),
+                                                            static_cast<uint32_t>(vertexAttributeDescription.size()),
                                                             vertexAttributeDescription.data()};
 
     // Input assembly state
@@ -248,7 +248,7 @@ void SimpleBallsSceneTest::createPipeline()
 
     // Pipeline creation
     vk::GraphicsPipelineCreateInfo pipelineInfo{{},
-                                                shaderStages.size(),
+                                                static_cast<uint32_t>(shaderStages.size()),
                                                 shaderStages.data(),
                                                 &vertexInputState,
                                                 &inputAssemblyState,
@@ -436,7 +436,8 @@ void SimpleBallsSceneTest::submitCommandBuffer(std::size_t frameIndex) const
 
 void SimpleBallsSceneTest::presentFrame(std::size_t frameIndex) const
 {
-    vk::PresentInfoKHR presentInfo{1,      &_renderSemaphores[_semaphoreIndex], 1, &window().swapchain(), &frameIndex,
+    uint32_t imageIndex = static_cast<uint32_t>(frameIndex);
+    vk::PresentInfoKHR presentInfo{1,      &_renderSemaphores[_semaphoreIndex], 1, &window().swapchain(), &imageIndex,
                                    nullptr};
     queues().queue().presentKHR(presentInfo);
 }

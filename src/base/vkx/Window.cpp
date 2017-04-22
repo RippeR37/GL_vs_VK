@@ -105,12 +105,12 @@ const std::vector<vk::Image>& Window::swapchainImages() const
     return _swapchainImages;
 }
 
-const std::vector<vk::ImageView> Window::swapchainImageViews() const
+const std::vector<vk::ImageView>& Window::swapchainImageViews() const
 {
     return _swapchainImageViews;
 }
 
-const vk::Format Window::swapchainImageFormat() const
+const vk::Format& Window::swapchainImageFormat() const
 {
     return _swapchainSurfaceFormat.format;
 }
@@ -172,7 +172,7 @@ vk::SwapchainKHR Window::createSwapchain()
                                              vk::CompositeAlphaFlagBitsKHR::eOpaque,
                                              presentMode,
                                              VK_FALSE,
-                                             VK_NULL_HANDLE};
+                                             {}};
 
     return _application.device().createSwapchainKHR(swapchainInfo);
 }

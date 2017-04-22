@@ -1,5 +1,7 @@
 #include <tests/common/SphereVerticesGenerator.h>
 
+#include <cmath>
+
 namespace tests {
 namespace common {
 SphereVerticesGenerator::SphereVerticesGenerator(std::size_t slices, std::size_t stacks, float radius)

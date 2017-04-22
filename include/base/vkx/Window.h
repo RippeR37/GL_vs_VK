@@ -34,8 +34,8 @@ class Window
     const vk::SurfaceKHR& surface() const;
     const vk::SwapchainKHR& swapchain() const;
     const std::vector<vk::Image>& swapchainImages() const;
-    const std::vector<vk::ImageView> swapchainImageViews() const;
-    const vk::Format swapchainImageFormat() const;
+    const std::vector<vk::ImageView>& swapchainImageViews() const;
+    const vk::Format& swapchainImageFormat() const;
 
   private:
     GLFWwindow* createWindow();

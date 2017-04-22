@@ -84,7 +84,7 @@ vk::Instance Application::createInstance(const std::vector<const char*>& layers)
                                         &applicationInfo,
                                         static_cast<uint32_t>(layers.size()),
                                         layers.data(),
-                                        extensionsView.size(),
+                                        static_cast<uint32_t>(extensionsView.size()),
                                         extensionsView.data()};
 
     return vk::createInstance(instanceInfo);
@@ -127,14 +127,9 @@ vk::Device Application::createDevice()
 
     vk::PhysicalDeviceFeatures emptyFeatures{0u, 0u, 0u};
     std::vector<vk::DeviceQueueCreateInfo> queueCreateInfos = QueueManager::createInfos(instance(), physicalDevice());
-    vk::DeviceCreateInfo deviceCreateInfo{{},
-                                          static_cast<uint32_t>(queueCreateInfos.size()),
-                                          queueCreateInfos.data(),
-                                          0,
-                                          nullptr,
-                                          extensionsView.size(),
-                                          extensionsView.data(),
-                                          &emptyFeatures};
+    vk::DeviceCreateInfo deviceCreateInfo{
+        {},      static_cast<uint32_t>(queueCreateInfos.size()), queueCreateInfos.data(), 0,
+        nullptr, static_cast<uint32_t>(extensionsView.size()),   extensionsView.data(),   &emptyFeatures};
 
     return physicalDevice().createDevice(deviceCreateInfo);
 }
