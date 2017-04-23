@@ -23,6 +23,7 @@ Application::Application(const std::string& name, const glm::vec2& windowSize, b
     , _device(createDevice())
     , _queueManager(instance(), physicalDevice(), device())
     , _window(*this, windowSize, name)
+    , _memory(device(), deviceInfo())
 {
 }
 
@@ -63,6 +64,11 @@ const QueueManager& Application::queues() const
 const Window& Application::window() const
 {
     return _window;
+}
+
+const vkx::MemoryManager& Application::memory() const
+{
+    return _memory;
 }
 
 Window& Application::window()

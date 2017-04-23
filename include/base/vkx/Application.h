@@ -1,6 +1,7 @@
 #pragma once
 
 #include <base/vkx/DeviceInfo.h>
+#include <base/vkx/MemoryManager.h>
 #include <base/vkx/QueueManager.h>
 #include <base/vkx/Window.h>
 
@@ -28,6 +29,7 @@ class Application
     const vkx::DeviceInfo& deviceInfo() const;
     const vkx::QueueManager& queues() const;
     const vkx::Window& window() const;
+    const vkx::MemoryManager& memory() const;
 
     vkx::Window& window();
 
@@ -47,6 +49,7 @@ class Application
     vk::UniqueDevice _device;
     vkx::QueueManager _queueManager;
     vkx::Window _window;
+    vkx::MemoryManager _memory;
 };
 }
 }

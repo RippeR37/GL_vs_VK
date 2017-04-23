@@ -74,51 +74,21 @@ void SimpleBallsSceneTest::createCommandBuffers()
         {_cmdPool, vk::CommandBufferLevel::ePrimary, static_cast<uint32_t>(window().swapchainImages().size())});
 }
 
-// TODO: move code to VK-common (staging buffer module)
 void SimpleBallsSceneTest::createVbo()
 {
-    vk::DeviceSize vboSize = vertices().size() * sizeof(vertices().front());
+    vk::DeviceSize size = vertices().size() * sizeof(vertices().front());
+    vk::BufferUsageFlags usage = vk::BufferUsageFlagBits::eVertexBuffer;
 
-    // Create VBO object
-    vk::BufferUsageFlags usage = vk::BufferUsageFlagBits::eTransferSrc;
-    vk::BufferCreateInfo vboInfo{{}, vboSize, usage, vk::SharingMode::eExclusive};
-    vk::Buffer hostLocalVbo = device().createBuffer(vboInfo);
-    vk::DeviceMemory hostLocalVboMemory;
-
-    // Allocate VBO device memory
+    base::vkx::Buffer stagingBuffer = memory().createStagingBuffer(size);
     {
-        // TODO: move to VK-common
-        uint32_t memoryTypeIndex = 0;
-        vk::MemoryPropertyFlags requiredMemoryProperties =
-            vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent;
-        for (uint32_t i = 0; i < deviceInfo().memory.memoryTypeCount; ++i) {
-            if ((deviceInfo().memory.memoryTypes[i].propertyFlags & requiredMemoryProperties) ==
-                requiredMemoryProperties) {
-                memoryTypeIndex = i;
-                break;
-            }
-        }
-
-        // TODO: fix this to get right ammount of necessary memory allocated!
-        vk::MemoryAllocateInfo deviceMemoryInfo{vboSize * 2, memoryTypeIndex};
-        hostLocalVboMemory = device().allocateMemory(deviceMemoryInfo);
+        auto vboMemory = device().mapMemory(stagingBuffer.memory, stagingBuffer.offset, stagingBuffer.size, {});
+        std::memcpy(vboMemory, vertices().data(), static_cast<std::size_t>(stagingBuffer.size));
+        device().unmapMemory(stagingBuffer.memory);
     }
+    _vbo = memory().copyToDeviceLocalMemory(stagingBuffer, usage, _cmdBuffers.front(), queues().queue());
 
-    device().bindBufferMemory(hostLocalVbo, hostLocalVboMemory, 0);
-
-    // Write VBO's memory
-    void* vboMemory = device().mapMemory(hostLocalVboMemory, 0, vboSize, {});
-    std::memcpy(vboMemory, vertices().data(), static_cast<std::size_t>(vboSize));
-    device().unmapMemory(hostLocalVboMemory);
-
-    // Copy VBO to device local memory and use it there
-    auto deviceLocalVbo = copyToDeviceLocalMemory(hostLocalVbo, vboSize);
-    _vbo = std::get<0>(deviceLocalVbo);
-    _vboMemory = std::get<1>(deviceLocalVbo);
-
-    // Cleanup
-    device().freeMemory(hostLocalVboMemory);
-    device().destroyBuffer(hostLocalVbo);
+    _cmdBuffers.front().reset(vk::CommandBufferResetFlagBits::eReleaseResources);
+    memory().destroyBuffer(stagingBuffer);
 }
 
 void SimpleBallsSceneTest::createSemaphores()
@@ -307,56 +277,13 @@ void SimpleBallsSceneTest::destroySemaphores()
 
 void SimpleBallsSceneTest::destroyVbo()
 {
-    device().destroyBuffer(_vbo);
-    device().freeMemory(_vboMemory);
+    memory().destroyBuffer(_vbo);
 }
 
 void SimpleBallsSceneTest::destroyCommandBuffers()
 {
     device().destroyCommandPool(_cmdPool);
     _cmdBuffers.clear();
-}
-
-// TODO: move to VK-common staging buffer module
-std::tuple<vk::Buffer, vk::DeviceMemory> SimpleBallsSceneTest::copyToDeviceLocalMemory(const vk::Buffer& srcBuffer,
-                                                                                       vk::DeviceSize size) const
-{
-    // Create destination buffer & allocate memory for it
-    vk::BufferUsageFlags dstUsage = vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer;
-    vk::Buffer dstBuffer = device().createBuffer(vk::BufferCreateInfo{{}, size, dstUsage, vk::SharingMode::eExclusive});
-    vk::DeviceMemory dstMemory;
-    {
-        uint32_t memoryTypeIndex = 0;
-        vk::MemoryPropertyFlags requiredMemoryProperties = vk::MemoryPropertyFlagBits::eDeviceLocal;
-        for (uint32_t i = 0; i < deviceInfo().memory.memoryTypeCount; ++i) {
-            if ((deviceInfo().memory.memoryTypes[i].propertyFlags & requiredMemoryProperties) ==
-                requiredMemoryProperties) {
-                memoryTypeIndex = i;
-                break;
-            }
-        }
-
-        vk::MemoryAllocateInfo deviceMemoryInfo{size * 2, memoryTypeIndex};
-        dstMemory = device().allocateMemory(deviceMemoryInfo);
-    }
-    device().bindBufferMemory(dstBuffer, dstMemory, 0);
-
-    // Create command buffer & fill it up
-    vk::CommandBufferAllocateInfo cmdBufferInfo{_cmdPool, vk::CommandBufferLevel::ePrimary, 1};
-    vk::CommandBuffer cmdBuffer = device().allocateCommandBuffers(cmdBufferInfo).front();
-
-    cmdBuffer.begin(vk::CommandBufferBeginInfo{vk::CommandBufferUsageFlagBits::eOneTimeSubmit, nullptr});
-    cmdBuffer.copyBuffer(srcBuffer, dstBuffer, {vk::BufferCopy{0, 0, size}});
-    cmdBuffer.end();
-
-    // Submit command buffer and wait for response (+ cleanup)
-    vk::Fence fence = device().createFence({});
-    queues().queue().submit(vk::SubmitInfo{0, nullptr, nullptr, 1, &cmdBuffer, 0, nullptr}, fence);
-    device().waitForFences({{fence}}, VK_TRUE, UINT64_MAX);
-    device().freeCommandBuffers(_cmdPool, {{cmdBuffer}});
-
-    // Return results
-    return std::make_tuple(dstBuffer, dstMemory);
 }
 
 std::vector<vk::PipelineShaderStageCreateInfo> SimpleBallsSceneTest::getShaderStages() const
@@ -403,7 +330,7 @@ void SimpleBallsSceneTest::prepareCommandBuffer(std::size_t frameIndex) const
     {
         cmdBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, _pipeline);
         cmdBuffer.beginRenderPass(renderPassInfo, vk::SubpassContents::eInline);
-        cmdBuffer.bindVertexBuffers(0, {{_vbo}}, {{0}});
+        cmdBuffer.bindVertexBuffers(0, {{_vbo.buffer}}, {{0}});
 
         for (const auto& ball : balls()) {
             cmdBuffer.pushConstants(_pipelineLayout, vk::ShaderStageFlagBits::eVertex, 0, sizeof(glm::vec4),

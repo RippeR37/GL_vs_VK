@@ -111,6 +111,7 @@
     <ClCompile Include="..\..\..\src\base\String.cpp" />
     <ClCompile Include="..\..\..\src\base\vkx\Application.cpp" />
     <ClCompile Include="..\..\..\src\base\vkx\DeviceInfo.cpp" />
+    <ClCompile Include="..\..\..\src\base\vkx\MemoryManager.cpp" />
     <ClCompile Include="..\..\..\src\base\vkx\QueueManager.cpp" />
     <ClCompile Include="..\..\..\src\base\vkx\ShaderModule.cpp" />
     <ClCompile Include="..\..\..\src\base\vkx\Window.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="..\..\..\include\base\String.h" />
     <ClInclude Include="..\..\..\include\base\vkx\Application.h" />
     <ClInclude Include="..\..\..\include\base\vkx\DeviceInfo.h" />
+    <ClInclude Include="..\..\..\include\base\vkx\MemoryManager.h" />
     <ClInclude Include="..\..\..\include\base\vkx\QueueManager.h" />
     <ClInclude Include="..\..\..\include\base\vkx\ShaderModule.h" />
     <ClInclude Include="..\..\..\include\base\vkx\Window.h" />

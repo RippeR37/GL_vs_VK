@@ -6,8 +6,6 @@
 #include <tests/common/Ball.h>
 #include <tests/test1/BaseSimpleBallsSceneTest.h>
 
-#include <tuple>
-
 namespace tests {
 namespace test_vk {
 class SimpleBallsSceneTest : public BaseSimpleBallsSceneTest, public framework::VKTest
@@ -40,16 +38,13 @@ class SimpleBallsSceneTest : public BaseSimpleBallsSceneTest, public framework::
     void destroyCommandBuffers();
     void destroyVbo();
 
-    std::tuple<vk::Buffer, vk::DeviceMemory> copyToDeviceLocalMemory(const vk::Buffer& srcBuffer,
-                                                                     vk::DeviceSize size) const;
     std::vector<vk::PipelineShaderStageCreateInfo> getShaderStages() const;
     uint32_t getNextFrameIndex() const;
     void prepareCommandBuffer(std::size_t frameIndex) const;
     void submitCommandBuffer(std::size_t frameIndex) const;
     void presentFrame(std::size_t frameIndex) const;
 
-    vk::Buffer _vbo;
-    vk::DeviceMemory _vboMemory;
+    base::vkx::Buffer _vbo;
     vk::CommandPool _cmdPool;
     std::vector<vk::CommandBuffer> _cmdBuffers;
     std::vector<vk::Fence> _fences;
