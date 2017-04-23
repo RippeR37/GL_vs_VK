@@ -5,18 +5,24 @@
 
 #include <glm/glm.hpp>
 
+namespace {
+const std::size_t kBallCount = 200000;
+const std::size_t kSphereSlices = 3;
+const std::size_t kSphereStacks = 3;
+const std::size_t kUpdateRuns = 10;
+}
+
 namespace tests {
 void BaseSimpleBallsSceneTest::initTestState()
 {
     // Balls
     {
-        const std::size_t BALL_COUNT = 50000;
         const float SPEED_SCALE = 0.3f;
 
         _balls = std::vector<common::Ball>{};
-        _balls.reserve(BALL_COUNT);
+        _balls.reserve(kBallCount);
 
-        for (size_t i = 0; i < BALL_COUNT; ++i) {
+        for (size_t i = 0; i < kBallCount; ++i) {
             auto position = base::random::getRandomVec4({-1.0, -1.0, -1.0, 0.0}, {1.0, 1.0, 1.0, 0.0});
             auto color = base::random::getRandomVec4({0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
             auto speed = base::random::getRandomVec4({-1.0, -1.0, -1.0, 0.0}, {1.0, 1.0, 1.0, 0.0});
@@ -27,15 +33,17 @@ void BaseSimpleBallsSceneTest::initTestState()
 
     // Vertices
     {
-        const std::size_t SPHERE_SLICES = 4;
-        const std::size_t SPHERE_STACKS = 4;
-
-        common::SphereVerticesGenerator verticesGenerator{SPHERE_SLICES, SPHERE_STACKS};
+        common::SphereVerticesGenerator verticesGenerator{kSphereSlices, kSphereStacks};
         _vertices = verticesGenerator.vertices;
     }
 }
 
 void BaseSimpleBallsSceneTest::updateTestState(float frameTime)
+{
+    updateTestState(frameTime, 0, _balls.size());
+}
+
+void BaseSimpleBallsSceneTest::updateTestState(float frameTime, std::size_t rangeFrom, std::size_t rangeTo)
 {
     auto clampFloat = [](float& v, float min, float max) -> bool {
         if (v < min) {
@@ -48,15 +56,19 @@ void BaseSimpleBallsSceneTest::updateTestState(float frameTime)
         return false;
     };
 
-    for (auto& ball : _balls) {
-        ball.position += (frameTime * ball.speed);
+    for (std::size_t run = 0; run < kUpdateRuns; ++run) {
+        for (std::size_t ballIndex = rangeFrom; ballIndex < rangeTo; ++ballIndex) {
+            common::Ball& ball = _balls[ballIndex];
 
-        if (clampFloat(ball.position.x, -1.0, 1.0))
-            ball.speed.x *= (-1.0);
-        if (clampFloat(ball.position.y, -1.0, 1.0))
-            ball.speed.y *= (-1.0);
-        if (clampFloat(ball.position.z, -1.0, 1.0))
-            ball.speed.z *= (-1.0);
+            ball.position += (frameTime * ball.speed);
+
+            if (clampFloat(ball.position.x, -1.0, 1.0))
+                ball.speed.x *= (-1.0);
+            if (clampFloat(ball.position.y, -1.0, 1.0))
+                ball.speed.y *= (-1.0);
+            if (clampFloat(ball.position.z, -1.0, 1.0))
+                ball.speed.z *= (-1.0);
+        }
     }
 }
 

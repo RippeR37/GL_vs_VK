@@ -108,6 +108,7 @@
     <ClCompile Include="..\..\..\src\base\gl\VertexBuffer.cpp" />
     <ClCompile Include="..\..\..\src\base\gl\Window.cpp" />
     <ClCompile Include="..\..\..\src\base\Random.cpp" />
+    <ClCompile Include="..\..\..\src\base\ScopedTimer.cpp" />
     <ClCompile Include="..\..\..\src\base\String.cpp" />
     <ClCompile Include="..\..\..\src\base\vkx\Application.cpp" />
     <ClCompile Include="..\..\..\src\base\vkx\DeviceInfo.cpp" />
@@ -122,6 +123,7 @@
     <ClCompile Include="..\..\..\src\tests\common\SphereVerticesGenerator.cpp" />
     <ClCompile Include="..\..\..\src\tests\test1\gl\SimpleBallsSceneTest.cpp" />
     <ClCompile Include="..\..\..\src\tests\test1\BaseSimpleBallsSceneTest.cpp" />
+    <ClCompile Include="..\..\..\src\tests\test1\vk\MultithreadedBallsSceneTest.cpp" />
     <ClCompile Include="..\..\..\src\tests\test1\vk\SimpleBallsSceneTest.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -138,6 +140,7 @@
     <ClInclude Include="..\..\..\include\base\gl\VertexBuffer.h" />
     <ClInclude Include="..\..\..\include\base\gl\Window.h" />
     <ClInclude Include="..\..\..\include\base\Random.h" />
+    <ClInclude Include="..\..\..\include\base\ScopedTimer.h" />
     <ClInclude Include="..\..\..\include\base\String.h" />
     <ClInclude Include="..\..\..\include\base\vkx\Application.h" />
     <ClInclude Include="..\..\..\include\base\vkx\DeviceInfo.h" />
@@ -154,6 +157,7 @@
     <ClInclude Include="..\..\..\include\tests\test1\gl\SimpleBallsSceneTest.h" />
     <ClInclude Include="..\..\..\include\tests\test1\BaseSimpleBallsSceneTest.h" />
     <ClInclude Include="..\..\..\include\tests\test1\SimpleBallsSceneTestIncludes.h" />
+    <ClInclude Include="..\..\..\include\tests\test1\vk\MultithreadedBallsSceneTest.h" />
     <ClInclude Include="..\..\..\include\tests\test1\vk\SimpleBallsSceneTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

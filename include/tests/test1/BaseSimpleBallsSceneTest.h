@@ -16,6 +16,7 @@ class BaseSimpleBallsSceneTest
   protected:
     void initTestState();
     void updateTestState(float frameTime);
+    void updateTestState(float frameTime, std::size_t rangeFrom, std::size_t rangeTo);
     void destroyTestState();
 
     const std::vector<common::Ball>& balls() const;

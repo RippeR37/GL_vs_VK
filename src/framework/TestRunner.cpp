@@ -17,9 +17,10 @@ int TestRunner::run()
 
     auto errorCallback = [&](const std::string& msg) -> int {
         std::cerr << "Invalid usage! " << msg << std::endl;
-        std::cerr << "Usage: `" << arguments.getPath() << " -t T -api API`" << std::endl;
-        std::cerr << "  T     - test number (in range [1, " << TESTS << "])" << std::endl;
-        std::cerr << "  API   - API (`gl` or `vk`)" << std::endl;
+        std::cerr << "Usage: `" << arguments.getPath() << " -t T -api API [-m]`" << std::endl;
+        std::cerr << "  -t T       - test number (in range [1, " << TESTS << "])" << std::endl;
+        std::cerr << "  -api API   - API (`gl` or `vk`)" << std::endl;
+        std::cerr << "  -m         - run multithreaded version (if exists)" << std::endl;
         return -1;
     };
 
@@ -29,6 +30,7 @@ int TestRunner::run()
     if (!arguments.hasArgument("api"))
         return errorCallback("Missing `-api` argument!");
 
+    bool multithreaded = arguments.hasArgument("m");
     int testNum = -1;
     try {
         testNum = arguments.getIntArgument("t");
@@ -47,7 +49,7 @@ int TestRunner::run()
     if (api == "gl") {
         return run_gl(testNum);
     } else {
-        return run_vk(testNum);
+        return run_vk(testNum, multithreaded);
     }
 }
 
@@ -69,13 +71,17 @@ int TestRunner::run_gl(int testNumber)
     }
 }
 
-int TestRunner::run_vk(int testNumber)
+int TestRunner::run_vk(int testNumber, bool multithreaded)
 {
     std::unique_ptr<TestInterface> test;
 
     switch (testNumber) {
     case 1:
-        test = std::unique_ptr<TestInterface>(new tests::test_vk::SimpleBallsSceneTest());
+        if (multithreaded) {
+            test = std::unique_ptr<TestInterface>(new tests::test_vk::MultithreadedBallsSceneTest());
+        } else {
+            test = std::unique_ptr<TestInterface>(new tests::test_vk::SimpleBallsSceneTest());
+        }
         break;
     }
 

@@ -153,6 +153,12 @@
     <ClCompile Include="..\..\..\src\base\vkx\MemoryManager.cpp">
       <Filter>Source Files\base\vkx</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\tests\test1\vk\MultithreadedBallsSceneTest.cpp">
+      <Filter>Source Files\tests\test1\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\base\ScopedTimer.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\base\gl\Buffer.h">
@@ -244,6 +250,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\base\vkx\MemoryManager.h">
       <Filter>Header Files\base\vkx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\test1\vk\MultithreadedBallsSceneTest.h">
+      <Filter>Header Files\tests\test1\vk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\base\ScopedTimer.h">
+      <Filter>Header Files\base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-#include <tests/test1/vk/SimpleBallsSceneTest.h>
+#include <tests/test1/vk/MultithreadedBallsSceneTest.h>
 
 #include <base/ScopedTimer.h>
 
@@ -7,23 +7,25 @@
 
 #include <array>
 #include <stdexcept>
+#include <thread>
 #include <vector>
 
 namespace tests {
 namespace test_vk {
-SimpleBallsSceneTest::SimpleBallsSceneTest()
+MultithreadedBallsSceneTest::MultithreadedBallsSceneTest()
     : BaseSimpleBallsSceneTest()
-    , VKTest("SimpleBallsSceneTest")
+    , VKTest("MultithreadedBallsSceneTest")
     , _semaphoreIndex(0u)
 {
 }
 
-void SimpleBallsSceneTest::setup()
+void MultithreadedBallsSceneTest::setup()
 {
     VKTest::setup();
     initTestState();
 
     createCommandBuffers();
+    createSecondaryCommandBuffers();
     createVbo();
     createSemaphores();
     createFences();
@@ -34,16 +36,13 @@ void SimpleBallsSceneTest::setup()
     createPipeline();
 }
 
-void SimpleBallsSceneTest::run()
+void MultithreadedBallsSceneTest::run()
 {
     while (!window().shouldClose()) {
         TIME_RESET("Frame times:");
 
         auto frameIndex = getNextFrameIndex();
-        {
-            TIME_IT("State update");
-            updateTestState(static_cast<float>(window().frameTime()));
-        }
+
         prepareCommandBuffer(frameIndex);
         submitCommandBuffer(frameIndex);
         presentFrame(frameIndex);
@@ -52,7 +51,7 @@ void SimpleBallsSceneTest::run()
     }
 }
 
-void SimpleBallsSceneTest::teardown()
+void MultithreadedBallsSceneTest::teardown()
 {
     device().waitIdle();
 
@@ -64,13 +63,14 @@ void SimpleBallsSceneTest::teardown()
     destroyFences();
     destroySemaphores();
     destroyVbo();
+    destroySecondaryCommandBuffers();
     destroyCommandBuffers();
 
     destroyTestState();
     VKTest::teardown();
 }
 
-void SimpleBallsSceneTest::createCommandBuffers()
+void MultithreadedBallsSceneTest::createCommandBuffers()
 {
     vk::CommandPoolCreateFlags cmdPoolFlags = vk::CommandPoolCreateFlagBits::eResetCommandBuffer;
     _cmdPool = device().createCommandPool({cmdPoolFlags, queues().familyIndex()});
@@ -78,7 +78,21 @@ void SimpleBallsSceneTest::createCommandBuffers()
         {_cmdPool, vk::CommandBufferLevel::ePrimary, static_cast<uint32_t>(window().swapchainImages().size())});
 }
 
-void SimpleBallsSceneTest::createVbo()
+void MultithreadedBallsSceneTest::createSecondaryCommandBuffers()
+{
+    static const std::size_t threads = 4; // std::thread::hardware_concurrency();
+
+    _threadCmdPools.resize(threads);
+    for (auto& sndCmdPool : _threadCmdPools) {
+        vk::CommandPoolCreateFlags cmdPoolFlags = vk::CommandPoolCreateFlagBits::eResetCommandBuffer;
+        sndCmdPool.cmdPool = device().createCommandPool({cmdPoolFlags, queues().familyIndex()});
+        sndCmdPool.cmdBuffers =
+            device().allocateCommandBuffers({sndCmdPool.cmdPool, vk::CommandBufferLevel::eSecondary,
+                                             static_cast<uint32_t>(window().swapchainImages().size())});
+    }
+}
+
+void MultithreadedBallsSceneTest::createVbo()
 {
     vk::DeviceSize size = vertices().size() * sizeof(vertices().front());
     vk::BufferUsageFlags usage = vk::BufferUsageFlagBits::eVertexBuffer;
@@ -95,7 +109,7 @@ void SimpleBallsSceneTest::createVbo()
     memory().destroyBuffer(stagingBuffer);
 }
 
-void SimpleBallsSceneTest::createSemaphores()
+void MultithreadedBallsSceneTest::createSemaphores()
 {
     for (std::size_t i = 0; i < window().swapchainImages().size(); ++i) {
         _acquireSemaphores.push_back(device().createSemaphore({}));
@@ -103,7 +117,7 @@ void SimpleBallsSceneTest::createSemaphores()
     }
 }
 
-void SimpleBallsSceneTest::createFences()
+void MultithreadedBallsSceneTest::createFences()
 {
     _fences.resize(_cmdBuffers.size());
     for (vk::Fence& fence : _fences) {
@@ -111,7 +125,7 @@ void SimpleBallsSceneTest::createFences()
     }
 }
 
-void SimpleBallsSceneTest::createRenderPass()
+void MultithreadedBallsSceneTest::createRenderPass()
 {
     vk::AttachmentDescription attachment{{},
                                          window().swapchainImageFormat(),
@@ -130,7 +144,7 @@ void SimpleBallsSceneTest::createRenderPass()
     _renderPass = device().createRenderPass(renderPassInfo);
 }
 
-void SimpleBallsSceneTest::createFramebuffers()
+void MultithreadedBallsSceneTest::createFramebuffers()
 {
     _framebuffers.reserve(window().swapchainImages().size());
     for (const vk::ImageView& imageView : window().swapchainImageViews()) {
@@ -140,13 +154,13 @@ void SimpleBallsSceneTest::createFramebuffers()
     }
 }
 
-void SimpleBallsSceneTest::createShaders()
+void MultithreadedBallsSceneTest::createShaders()
 {
     _vertexModule = base::vkx::ShaderModule{device(), "resources/test1/shaders/vk_shader.vert.spv"};
     _fragmentModule = base::vkx::ShaderModule{device(), "resources/test1/shaders/vk_shader.frag.spv"};
 }
 
-void SimpleBallsSceneTest::createPipelineLayout()
+void MultithreadedBallsSceneTest::createPipelineLayout()
 {
     std::vector<vk::DescriptorSetLayoutBinding> bindings;
     vk::DescriptorSetLayoutCreateInfo setLayoutInfo{{}, static_cast<uint32_t>(bindings.size()), bindings.data()};
@@ -161,7 +175,7 @@ void SimpleBallsSceneTest::createPipelineLayout()
     _pipelineLayout = device().createPipelineLayout(pipelineLayoutInfo);
 }
 
-void SimpleBallsSceneTest::createPipeline()
+void MultithreadedBallsSceneTest::createPipeline()
 {
     // Shader stages
     std::vector<vk::PipelineShaderStageCreateInfo> shaderStages = getShaderStages();
@@ -231,36 +245,36 @@ void SimpleBallsSceneTest::createPipeline()
     _pipeline = device().createGraphicsPipeline({}, pipelineInfo);
 }
 
-void SimpleBallsSceneTest::destroyPipeline()
+void MultithreadedBallsSceneTest::destroyPipeline()
 {
     device().destroyPipeline(_pipeline);
-}
-
-void SimpleBallsSceneTest::destroyPipelineLayout()
-{
-    device().destroyPipelineLayout(_pipelineLayout);
     device().destroyDescriptorSetLayout(_setLayout);
 }
 
-void SimpleBallsSceneTest::destroyShaders()
+void MultithreadedBallsSceneTest::destroyPipelineLayout()
+{
+    device().destroyPipelineLayout(_pipelineLayout);
+}
+
+void MultithreadedBallsSceneTest::destroyShaders()
 {
     _vertexModule = {};
     _fragmentModule = {};
 }
 
-void SimpleBallsSceneTest::destroyFramebuffers()
+void MultithreadedBallsSceneTest::destroyFramebuffers()
 {
     for (const vk::Framebuffer& framebuffer : _framebuffers) {
         device().destroyFramebuffer(framebuffer);
     }
 }
 
-void SimpleBallsSceneTest::destroyRenderPass()
+void MultithreadedBallsSceneTest::destroyRenderPass()
 {
     device().destroyRenderPass(_renderPass);
 }
 
-void SimpleBallsSceneTest::destroyFences()
+void MultithreadedBallsSceneTest::destroyFences()
 {
     for (const vk::Fence& fence : _fences) {
         device().destroyFence(fence);
@@ -268,7 +282,7 @@ void SimpleBallsSceneTest::destroyFences()
     _fences.clear();
 }
 
-void SimpleBallsSceneTest::destroySemaphores()
+void MultithreadedBallsSceneTest::destroySemaphores()
 {
     for (const auto& acquireSemaphore : _acquireSemaphores) {
         device().destroySemaphore(acquireSemaphore);
@@ -280,18 +294,27 @@ void SimpleBallsSceneTest::destroySemaphores()
     _renderSemaphores.clear();
 }
 
-void SimpleBallsSceneTest::destroyVbo()
+void MultithreadedBallsSceneTest::destroyVbo()
 {
     memory().destroyBuffer(_vbo);
 }
 
-void SimpleBallsSceneTest::destroyCommandBuffers()
+void MultithreadedBallsSceneTest::destroySecondaryCommandBuffers()
+{
+    for (auto& threadCmdPool : _threadCmdPools) {
+        device().destroyCommandPool(threadCmdPool.cmdPool);
+        threadCmdPool.cmdBuffers.clear();
+    }
+    _threadCmdPools.clear();
+}
+
+void MultithreadedBallsSceneTest::destroyCommandBuffers()
 {
     device().destroyCommandPool(_cmdPool);
     _cmdBuffers.clear();
 }
 
-std::vector<vk::PipelineShaderStageCreateInfo> SimpleBallsSceneTest::getShaderStages() const
+std::vector<vk::PipelineShaderStageCreateInfo> MultithreadedBallsSceneTest::getShaderStages() const
 {
     std::vector<vk::PipelineShaderStageCreateInfo> stages;
 
@@ -305,11 +328,10 @@ std::vector<vk::PipelineShaderStageCreateInfo> SimpleBallsSceneTest::getShaderSt
     return stages;
 }
 
-uint32_t SimpleBallsSceneTest::getNextFrameIndex() const
+uint32_t MultithreadedBallsSceneTest::getNextFrameIndex() const
 {
-    TIME_IT("Frame image acquisition");
+    _semaphoreIndex = (_semaphoreIndex + 1) % window().swapchainImages().size();
 
-    _semaphoreIndex = (_semaphoreIndex + 1) % _acquireSemaphores.size();
     auto nextFrameAcquireStatus =
         device().acquireNextImageKHR(window().swapchain(), UINT64_MAX, _acquireSemaphores[_semaphoreIndex], {});
 
@@ -320,11 +342,42 @@ uint32_t SimpleBallsSceneTest::getNextFrameIndex() const
     return nextFrameAcquireStatus.value;
 }
 
-void SimpleBallsSceneTest::prepareCommandBuffer(std::size_t frameIndex) const
+void MultithreadedBallsSceneTest::prepareSecondaryCommandBuffer(std::size_t threadIndex,
+                                                                std::size_t frameIndex,
+                                                                std::size_t rangeFrom,
+                                                                std::size_t rangeTo)
+{
+    TIME_IT("CmdBuffer (secondary) building");
+
+    // Update test state from own range
+    updateTestState(static_cast<float>(window().frameTime()), rangeFrom, rangeTo);
+
+    // Update secondary command buffer
+    const vk::CommandBuffer& cmdBuffer = _threadCmdPools[threadIndex].cmdBuffers[frameIndex];
+
+    cmdBuffer.reset({});
+    vk::CommandBufferInheritanceInfo inheritanceInfo{_renderPass, 0, _framebuffers[frameIndex], VK_FALSE, {}, {}};
+    cmdBuffer.begin(vk::CommandBufferBeginInfo{vk::CommandBufferUsageFlagBits::eRenderPassContinue |
+                                                   vk::CommandBufferUsageFlagBits::eOneTimeSubmit,
+                                               &inheritanceInfo});
+    {
+        cmdBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, _pipeline);
+        cmdBuffer.bindVertexBuffers(0, {{_vbo.buffer}}, {{0}});
+
+        for (std::size_t ballIndex = rangeFrom; ballIndex < rangeTo; ++ballIndex) {
+            cmdBuffer.pushConstants(_pipelineLayout, vk::ShaderStageFlagBits::eVertex, 0, sizeof(glm::vec4),
+                                    &balls()[ballIndex].position);
+            cmdBuffer.pushConstants(_pipelineLayout, vk::ShaderStageFlagBits::eFragment, sizeof(glm::vec4),
+                                    sizeof(glm::vec4), &balls()[ballIndex].color);
+            cmdBuffer.draw(static_cast<uint32_t>(vertices().size()), 1, 0, 0);
+        }
+    }
+    cmdBuffer.end();
+}
+
+void MultithreadedBallsSceneTest::prepareCommandBuffer(std::size_t frameIndex)
 {
     static const vk::ClearValue clearValue = vk::ClearColorValue{std::array<float, 4>{{0.0f, 0.0f, 0.0f, 1.0f}}};
-    const vk::CommandBuffer& cmdBuffer = _cmdBuffers[frameIndex];
-
     vk::RenderPassBeginInfo renderPassInfo{
         _renderPass, _framebuffers[frameIndex], {{}, {window().size().x, window().size().y}}, 1, &clearValue};
 
@@ -336,28 +389,37 @@ void SimpleBallsSceneTest::prepareCommandBuffer(std::size_t frameIndex) const
 
     {
         TIME_IT("CmdBuffer building");
+        const vk::CommandBuffer& cmdBuffer = _cmdBuffers[frameIndex];
         cmdBuffer.reset({});
         cmdBuffer.begin({vk::CommandBufferUsageFlagBits::eOneTimeSubmit, nullptr});
         {
-            cmdBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, _pipeline);
-            cmdBuffer.beginRenderPass(renderPassInfo, vk::SubpassContents::eInline);
-            cmdBuffer.bindVertexBuffers(0, {{_vbo.buffer}}, {{0}});
+            cmdBuffer.beginRenderPass(renderPassInfo, vk::SubpassContents::eSecondaryCommandBuffers);
 
-            for (const auto& ball : balls()) {
-                cmdBuffer.pushConstants(_pipelineLayout, vk::ShaderStageFlagBits::eVertex, 0, sizeof(glm::vec4),
-                                        &ball.position);
-                cmdBuffer.pushConstants(_pipelineLayout, vk::ShaderStageFlagBits::eFragment, sizeof(glm::vec4),
-                                        sizeof(glm::vec4), &ball.color);
-                cmdBuffer.draw(static_cast<uint32_t>(vertices().size()), 1, 0, 0);
+            std::vector<std::thread> threads(_threadCmdPools.size());
+            std::vector<vk::CommandBuffer> threadedCommandBuffers;
+            for (std::size_t threadIndex = 0; threadIndex < _threadCmdPools.size(); ++threadIndex) {
+                std::size_t k = balls().size() / _threadCmdPools.size();
+                std::size_t rangeFrom = threadIndex * k;
+                std::size_t rangeTo = (threadIndex + 1) * k;
+
+                threadedCommandBuffers.push_back(_threadCmdPools[threadIndex].cmdBuffers[frameIndex]);
+
+                threads[threadIndex] =
+                    std::move(std::thread(&MultithreadedBallsSceneTest::prepareSecondaryCommandBuffer, this,
+                                          threadIndex, frameIndex, rangeFrom, rangeTo));
+            }
+            for (auto& thread : threads) {
+                thread.join();
             }
 
+            cmdBuffer.executeCommands(threadedCommandBuffers);
             cmdBuffer.endRenderPass();
         }
         cmdBuffer.end();
     }
 }
 
-void SimpleBallsSceneTest::submitCommandBuffer(std::size_t frameIndex) const
+void MultithreadedBallsSceneTest::submitCommandBuffer(std::size_t frameIndex)
 {
     TIME_IT("CmdBuffer submition");
 
@@ -367,7 +429,7 @@ void SimpleBallsSceneTest::submitCommandBuffer(std::size_t frameIndex) const
     queues().queue().submit(submits, _fences[frameIndex]);
 }
 
-void SimpleBallsSceneTest::presentFrame(std::size_t frameIndex) const
+void MultithreadedBallsSceneTest::presentFrame(std::size_t frameIndex)
 {
     TIME_IT("Frame presentation");
 

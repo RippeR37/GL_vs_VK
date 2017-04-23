@@ -15,7 +15,7 @@ class TestRunner
 
   private:
     int run_gl(int testNumber);
-    int run_vk(int testNumber);
+    int run_vk(int testNumber, bool multithreaded);
     int run_any(std::unique_ptr<TestInterface> test);
 
     base::ArgumentParser arguments;

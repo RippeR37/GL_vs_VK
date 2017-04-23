@@ -77,6 +77,7 @@ Buffer MemoryManager::copyToDeviceLocalMemory(const Buffer& sourceBuffer,
     vk::Fence fence = _device.createFence({});
     queue.submit(vk::SubmitInfo{0, nullptr, nullptr, 1, &cmdBuffer, 0, nullptr}, fence);
     _device.waitForFences({{fence}}, VK_FALSE, UINT64_MAX);
+    _device.destroyFence(fence);
 
     return {buffer, memory, sourceBuffer.size, 0};
 }
