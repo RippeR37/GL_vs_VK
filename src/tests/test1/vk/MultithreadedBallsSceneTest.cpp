@@ -80,7 +80,7 @@ void MultithreadedBallsSceneTest::createCommandBuffers()
 
 void MultithreadedBallsSceneTest::createSecondaryCommandBuffers()
 {
-    static const std::size_t threads = 4; // std::thread::hardware_concurrency();
+    static const std::size_t threads = std::thread::hardware_concurrency();
 
     _threadCmdPools.resize(threads);
     for (auto& sndCmdPool : _threadCmdPools) {

@@ -121,6 +121,7 @@
     <ClCompile Include="..\..\..\src\framework\VKTest.cpp" />
     <ClCompile Include="..\..\..\src\main.cpp" />
     <ClCompile Include="..\..\..\src\tests\common\SphereVerticesGenerator.cpp" />
+    <ClCompile Include="..\..\..\src\tests\test1\gl\MultithreadedBallsSceneTest.cpp" />
     <ClCompile Include="..\..\..\src\tests\test1\gl\SimpleBallsSceneTest.cpp" />
     <ClCompile Include="..\..\..\src\tests\test1\BaseBallsSceneTest.cpp" />
     <ClCompile Include="..\..\..\src\tests\test1\vk\MultithreadedBallsSceneTest.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="..\..\..\include\framework\VKTest.h" />
     <ClInclude Include="..\..\..\include\tests\common\Ball.h" />
     <ClInclude Include="..\..\..\include\tests\common\SphereVerticesGenerator.h" />
+    <ClInclude Include="..\..\..\include\tests\test1\gl\MultithreadedBallsSceneTest.h" />
     <ClInclude Include="..\..\..\include\tests\test1\gl\SimpleBallsSceneTest.h" />
     <ClInclude Include="..\..\..\include\tests\test1\BaseBallsSceneTest.h" />
     <ClInclude Include="..\..\..\include\tests\test1\SimpleBallsSceneTestIncludes.h" />

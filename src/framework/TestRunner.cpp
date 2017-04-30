@@ -47,19 +47,24 @@ int TestRunner::run()
         return errorCallback("Invalid `-api` value!");
 
     if (api == "gl") {
-        return run_gl(testNum);
+        return run_gl(testNum, multithreaded);
     } else {
         return run_vk(testNum, multithreaded);
     }
 }
 
-int TestRunner::run_gl(int testNumber)
+int TestRunner::run_gl(int testNumber, bool multithreaded)
 {
     std::unique_ptr<TestInterface> test;
 
     switch (testNumber) {
     case 1:
-        test = std::unique_ptr<TestInterface>(new tests::test_gl::SimpleBallsSceneTest());
+        if (multithreaded) {
+            test = std::unique_ptr<TestInterface>(new tests::test_gl::MultithreadedBallsSceneTest());
+        } else {
+            test = std::unique_ptr<TestInterface>(new tests::test_gl::SimpleBallsSceneTest());
+        }
+
         break;
     }
 
