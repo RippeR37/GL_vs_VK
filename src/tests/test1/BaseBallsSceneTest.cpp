@@ -1,4 +1,4 @@
-#include <tests/test1/BaseSimpleBallsSceneTest.h>
+#include <tests/test1/BaseBallsSceneTest.h>
 
 #include <base/Random.h>
 #include <tests/common/SphereVerticesGenerator.h>
@@ -13,7 +13,7 @@ const std::size_t kUpdateRuns = 10;
 }
 
 namespace tests {
-void BaseSimpleBallsSceneTest::initTestState()
+void BaseBallsSceneTest::initTestState()
 {
     // Balls
     {
@@ -38,12 +38,12 @@ void BaseSimpleBallsSceneTest::initTestState()
     }
 }
 
-void BaseSimpleBallsSceneTest::updateTestState(float frameTime)
+void BaseBallsSceneTest::updateTestState(float frameTime)
 {
     updateTestState(frameTime, 0, _balls.size());
 }
 
-void BaseSimpleBallsSceneTest::updateTestState(float frameTime, std::size_t rangeFrom, std::size_t rangeTo)
+void BaseBallsSceneTest::updateTestState(float frameTime, std::size_t rangeFrom, std::size_t rangeTo)
 {
     auto clampFloat = [](float& v, float min, float max) -> bool {
         if (v < min) {
@@ -72,18 +72,18 @@ void BaseSimpleBallsSceneTest::updateTestState(float frameTime, std::size_t rang
     }
 }
 
-void BaseSimpleBallsSceneTest::destroyTestState()
+void BaseBallsSceneTest::destroyTestState()
 {
     _balls.clear();
     _vertices.clear();
 }
 
-const std::vector<common::Ball>& BaseSimpleBallsSceneTest::balls() const
+const std::vector<common::Ball>& BaseBallsSceneTest::balls() const
 {
     return _balls;
 }
 
-const std::vector<glm::vec4>& BaseSimpleBallsSceneTest::vertices() const
+const std::vector<glm::vec4>& BaseBallsSceneTest::vertices() const
 {
     return _vertices;
 }

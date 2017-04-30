@@ -13,7 +13,7 @@
 namespace tests {
 namespace test_vk {
 MultithreadedBallsSceneTest::MultithreadedBallsSceneTest()
-    : BaseSimpleBallsSceneTest()
+    : BaseBallsSceneTest()
     , VKTest("MultithreadedBallsSceneTest")
     , _semaphoreIndex(0u)
 {

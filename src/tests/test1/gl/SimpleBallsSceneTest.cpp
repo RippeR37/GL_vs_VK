@@ -6,7 +6,7 @@
 namespace tests {
 namespace test_gl {
 SimpleBallsSceneTest::SimpleBallsSceneTest()
-    : BaseSimpleBallsSceneTest()
+    : BaseBallsSceneTest()
     , GLTest("SimpleBallsSceneTest")
 {
 }

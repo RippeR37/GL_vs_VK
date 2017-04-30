@@ -147,9 +147,6 @@
     <ClCompile Include="..\..\..\src\base\Random.cpp">
       <Filter>Source Files\base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\tests\test1\BaseSimpleBallsSceneTest.cpp">
-      <Filter>Source Files\tests\test1</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\base\vkx\MemoryManager.cpp">
       <Filter>Source Files\base\vkx</Filter>
     </ClCompile>
@@ -158,6 +155,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\base\ScopedTimer.cpp">
       <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\tests\test1\BaseBallsSceneTest.cpp">
+      <Filter>Source Files\tests\test1</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -245,9 +245,6 @@
     <ClInclude Include="..\..\..\include\tests\common\SphereVerticesGenerator.h">
       <Filter>Header Files\tests\common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tests\test1\BaseSimpleBallsSceneTest.h">
-      <Filter>Header Files\tests\test1</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\base\vkx\MemoryManager.h">
       <Filter>Header Files\base\vkx</Filter>
     </ClInclude>
@@ -256,6 +253,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\base\ScopedTimer.h">
       <Filter>Header Files\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\test1\BaseBallsSceneTest.h">
+      <Filter>Header Files\tests\test1</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

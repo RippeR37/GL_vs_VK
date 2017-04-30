@@ -12,7 +12,7 @@
 namespace tests {
 namespace test_vk {
 SimpleBallsSceneTest::SimpleBallsSceneTest()
-    : BaseSimpleBallsSceneTest()
+    : BaseBallsSceneTest()
     , VKTest("SimpleBallsSceneTest")
     , _semaphoreIndex(0u)
 {

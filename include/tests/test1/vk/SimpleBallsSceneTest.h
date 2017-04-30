@@ -4,11 +4,11 @@
 
 #include <base/vkx/ShaderModule.h>
 #include <tests/common/Ball.h>
-#include <tests/test1/BaseSimpleBallsSceneTest.h>
+#include <tests/test1/BaseBallsSceneTest.h>
 
 namespace tests {
 namespace test_vk {
-class SimpleBallsSceneTest : public BaseSimpleBallsSceneTest, public framework::VKTest
+class SimpleBallsSceneTest : public BaseBallsSceneTest, public framework::VKTest
 {
   public:
     SimpleBallsSceneTest();

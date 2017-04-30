@@ -5,11 +5,11 @@
 #include <base/gl/VertexBuffer.h>
 #include <framework/GLTest.h>
 #include <tests/common/Ball.h>
-#include <tests/test1/BaseSimpleBallsSceneTest.h>
+#include <tests/test1/BaseBallsSceneTest.h>
 
 namespace tests {
 namespace test_gl {
-class SimpleBallsSceneTest : public BaseSimpleBallsSceneTest, public framework::GLTest
+class SimpleBallsSceneTest : public BaseBallsSceneTest, public framework::GLTest
 {
   public:
     SimpleBallsSceneTest();

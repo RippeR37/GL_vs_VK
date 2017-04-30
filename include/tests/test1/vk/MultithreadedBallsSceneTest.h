@@ -3,11 +3,11 @@
 #include <base/vkx/ShaderModule.h>
 #include <framework/VKTest.h>
 #include <tests/common/Ball.h>
-#include <tests/test1/BaseSimpleBallsSceneTest.h>
+#include <tests/test1/BaseBallsSceneTest.h>
 
 namespace tests {
 namespace test_vk {
-class MultithreadedBallsSceneTest : public BaseSimpleBallsSceneTest, public framework::VKTest
+class MultithreadedBallsSceneTest : public BaseBallsSceneTest, public framework::VKTest
 {
   public:
     MultithreadedBallsSceneTest();

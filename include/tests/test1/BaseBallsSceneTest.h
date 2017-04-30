@@ -7,11 +7,11 @@
 #include <vector>
 
 namespace tests {
-class BaseSimpleBallsSceneTest
+class BaseBallsSceneTest
 {
   public:
-    BaseSimpleBallsSceneTest() = default;
-    virtual ~BaseSimpleBallsSceneTest() = default;
+    BaseBallsSceneTest() = default;
+    virtual ~BaseBallsSceneTest() = default;
 
   protected:
     void initTestState();
