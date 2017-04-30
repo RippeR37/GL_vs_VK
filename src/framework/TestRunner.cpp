@@ -1,6 +1,6 @@
 #include <base/gl/Window.h>
 #include <framework/TestRunner.h>
-#include <tests/test1/SimpleBallsSceneTestIncludes.h>
+#include <tests/test1/BallsSceneTests.h>
 
 #include <iostream>
 #include <stdexcept>

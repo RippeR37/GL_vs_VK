@@ -158,7 +158,7 @@
     <ClInclude Include="..\..\..\include\tests\test1\gl\MultithreadedBallsSceneTest.h" />
     <ClInclude Include="..\..\..\include\tests\test1\gl\SimpleBallsSceneTest.h" />
     <ClInclude Include="..\..\..\include\tests\test1\BaseBallsSceneTest.h" />
-    <ClInclude Include="..\..\..\include\tests\test1\SimpleBallsSceneTestIncludes.h" />
+    <ClInclude Include="..\..\..\include\tests\test1\BallsSceneTests.h" />
     <ClInclude Include="..\..\..\include\tests\test1\vk\MultithreadedBallsSceneTest.h" />
     <ClInclude Include="..\..\..\include\tests\test1\vk\SimpleBallsSceneTest.h" />
   </ItemGroup>

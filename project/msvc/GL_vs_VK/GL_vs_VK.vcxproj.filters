@@ -233,9 +233,6 @@
     <ClInclude Include="..\..\..\include\base\vkx\QueueManager.h">
       <Filter>Header Files\base\vkx</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tests\test1\SimpleBallsSceneTestIncludes.h">
-      <Filter>Header Files\tests\test1</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\base\vkx\Window.h">
       <Filter>Header Files\base\vkx</Filter>
     </ClInclude>
@@ -262,6 +259,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\tests\test1\gl\MultithreadedBallsSceneTest.h">
       <Filter>Header Files\tests\test1\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\test1\BallsSceneTests.h">
+      <Filter>Header Files\tests\test1</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
