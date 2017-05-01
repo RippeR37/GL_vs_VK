@@ -63,6 +63,26 @@ std::string File::readBinary(const std::string& path, bool throwException)
     return result;
 }
 
+std::vector<uint8_t> File::readBinaryBytes(const std::string& path, bool throwException)
+{
+    std::vector<uint8_t> result;
+    std::ifstream file(path, std::ios::in | std::ios::binary);
+    if (file) {
+        file.seekg(0, std::ios::end);
+        result.resize(static_cast<std::size_t>(file.tellg()));
+        file.seekg(0, std::ios::beg);
+        file.read(reinterpret_cast<char*>(&result.front()), result.size());
+        file.close();
+    } else {
+        std::cerr << "base::File::readBinaryBytes > Couldn't open file: " << path << std::endl;
+
+        if (throwException) {
+            throw std::runtime_error("Couldn't open file: '" + path + "'");
+        }
+    }
+    return result;
+}
+
 std::string File::getPath(const std::string& path)
 {
     return path.substr(0, path.find_last_of("/\\") + 1);
