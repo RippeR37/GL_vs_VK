@@ -1,6 +1,7 @@
 #include <base/gl/Window.h>
 #include <framework/TestRunner.h>
 #include <tests/test1/BallsSceneTests.h>
+#include <tests/test2/TerrainSceneTests.h>
 
 #include <iostream>
 #include <stdexcept>
@@ -13,7 +14,7 @@ TestRunner::TestRunner(base::ArgumentParser argumentParser)
 
 int TestRunner::run()
 {
-    const int TESTS = 1;
+    const int TESTS = 2;
 
     auto errorCallback = [&](const std::string& msg) -> int {
         std::cerr << "Invalid usage! " << msg << std::endl;
@@ -64,8 +65,14 @@ int TestRunner::run_gl(int testNumber, bool multithreaded)
         } else {
             test = std::unique_ptr<TestInterface>(new tests::test_gl::SimpleBallsSceneTest());
         }
-
         break;
+
+    case 2:
+        if (multithreaded) {
+            // TODO:
+        } else {
+            test = std::unique_ptr<TestInterface>(new tests::test_gl::TerrainSceneTest());
+        }
     }
 
     if (test) {
@@ -88,6 +95,13 @@ int TestRunner::run_vk(int testNumber, bool multithreaded)
             test = std::unique_ptr<TestInterface>(new tests::test_vk::SimpleBallsSceneTest());
         }
         break;
+
+    case 2:
+        if (multithreaded) {
+            // TODO:
+        } else {
+            // TODO:
+        }
     }
 
     if (test) {

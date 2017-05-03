@@ -63,6 +63,24 @@
     <Filter Include="Header Files\base\vkx">
       <UniqueIdentifier>{b51f1e3e-e98e-4ef5-8a03-82fea3a0987c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\tests\test2">
+      <UniqueIdentifier>{584ef61c-b8b1-4568-8a6c-4390a9ccd4b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\tests\test2\gl">
+      <UniqueIdentifier>{45e9d625-f7c1-4b23-a1ac-cb6529cc34dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\tests\test2\vk">
+      <UniqueIdentifier>{c9a70b9a-3c9f-443e-a5ff-4a5d03bc8a06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\tests\test2">
+      <UniqueIdentifier>{f516b16d-6018-400b-bfb4-abbef12c32d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\tests\test2\gl">
+      <UniqueIdentifier>{84d790fb-d67e-438a-a104-63b611f1a8de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\tests\test2\vk">
+      <UniqueIdentifier>{fa8ba94c-b385-4bcf-8871-c3e62dd5b507}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\README.md" />
@@ -164,6 +182,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\tests\common\Heightmap.cpp">
       <Filter>Source Files\tests\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\tests\common\TerrainLoD.cpp">
+      <Filter>Source Files\tests\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\tests\test2\gl\TerrainSceneTest.cpp">
+      <Filter>Source Files\tests\test2\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\tests\test2\BaseTerrainSceneTest.cpp">
+      <Filter>Source Files\tests\test2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -268,6 +295,21 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\tests\common\Heightmap.h">
       <Filter>Header Files\tests\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\common\TerrainLoD.h">
+      <Filter>Header Files\tests\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\test2\gl\TerrainSceneTest.h">
+      <Filter>Header Files\tests\test2\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\test2\BaseTerrainSceneTest.h">
+      <Filter>Header Files\tests\test2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\common\QTNode.h">
+      <Filter>Header Files\tests\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\test2\TerrainSceneTests.h">
+      <Filter>Header Files\tests\test2</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
