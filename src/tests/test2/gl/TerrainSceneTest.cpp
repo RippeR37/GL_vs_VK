@@ -33,6 +33,7 @@ void TerrainSceneTest::run()
         _vao.bind();
         _ibo.bind(base::gl::Buffer::Target::ElementArray);
 
+        _program["MVP"] = currentMVP();
         {
             auto renderChunk = [](std::size_t count, std::ptrdiff_t offset) {
                 glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, (const GLvoid*)offset);

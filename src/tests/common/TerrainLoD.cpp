@@ -57,18 +57,20 @@ void TerrainLoD::executeLoD(const glm::vec2& position,
 
 void TerrainLoD::load(const Heightmap& heightmap)
 {
+    glm::uvec2 mapSize = heightmap.getSize();
+    glm::vec4 mapScale = { 1.0, 4.0f, 1.0, 1.0f};
+
     // Vertices
     _vertices.reserve(heightmap.getData().size());
-    for (std::size_t z = 0; z < heightmap.getSize().y; ++z) {
-        for (std::size_t x = 0; x < heightmap.getSize().x; ++x) {
-            glm::vec2 mapSize = heightmap.getSize();
-            // TODO: invert 'y' and 'z' places
-            _vertices.push_back(glm::vec4{x / mapSize.x, z / mapSize.y, heightmap.getHeight(x, z) / 256.0f, 1.0f});
+    for (std::size_t z = 0; z < mapSize.y; ++z) {
+        for (std::size_t x = 0; x < mapSize.x; ++x) {
+            glm::vec4 vertex = { x, heightmap.getHeight(x, z), z, 1.0};
+            _vertices.push_back(vertex / mapScale);
         }
     }
 
     // Indices - recursive for each level and all sub-levels
-    computeNodesRecursive(heightmap, _root, {0, 0}, heightmap.getSize() - glm::uvec2{1, 1});
+    computeNodesRecursive(heightmap, _root, {0, 0}, mapSize - glm::uvec2{1, 1});
 }
 
 void TerrainLoD::computeNodesRecursive(const Heightmap& heightmap,
