@@ -115,6 +115,7 @@
     <ClCompile Include="..\..\..\src\base\vkx\MemoryManager.cpp" />
     <ClCompile Include="..\..\..\src\base\vkx\QueueManager.cpp" />
     <ClCompile Include="..\..\..\src\base\vkx\ShaderModule.cpp" />
+    <ClCompile Include="..\..\..\src\base\vkx\Utils.cpp" />
     <ClCompile Include="..\..\..\src\base\vkx\Window.cpp" />
     <ClCompile Include="..\..\..\src\framework\GLTest.cpp" />
     <ClCompile Include="..\..\..\src\framework\TestRunner.cpp" />
@@ -130,6 +131,7 @@
     <ClCompile Include="..\..\..\src\tests\test1\vk\SimpleBallsSceneTest.cpp" />
     <ClCompile Include="..\..\..\src\tests\test2\BaseTerrainSceneTest.cpp" />
     <ClCompile Include="..\..\..\src\tests\test2\gl\TerrainSceneTest.cpp" />
+    <ClCompile Include="..\..\..\src\tests\test2\vk\TerrainSceneTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\base\ArgumentParser.h" />
@@ -152,6 +154,7 @@
     <ClInclude Include="..\..\..\include\base\vkx\MemoryManager.h" />
     <ClInclude Include="..\..\..\include\base\vkx\QueueManager.h" />
     <ClInclude Include="..\..\..\include\base\vkx\ShaderModule.h" />
+    <ClInclude Include="..\..\..\include\base\vkx\Utils.h" />
     <ClInclude Include="..\..\..\include\base\vkx\Window.h" />
     <ClInclude Include="..\..\..\include\framework\GLTest.h" />
     <ClInclude Include="..\..\..\include\framework\TestInterface.h" />
@@ -171,6 +174,7 @@
     <ClInclude Include="..\..\..\include\tests\test2\BaseTerrainSceneTest.h" />
     <ClInclude Include="..\..\..\include\tests\test2\gl\TerrainSceneTest.h" />
     <ClInclude Include="..\..\..\include\tests\test2\TerrainSceneTests.h" />
+    <ClInclude Include="..\..\..\include\tests\test2\vk\TerrainSceneTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

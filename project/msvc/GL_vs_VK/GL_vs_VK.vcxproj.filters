@@ -192,6 +192,12 @@
     <ClCompile Include="..\..\..\src\tests\test2\BaseTerrainSceneTest.cpp">
       <Filter>Source Files\tests\test2</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\tests\test2\vk\TerrainSceneTest.cpp">
+      <Filter>Source Files\tests\test2\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\base\vkx\Utils.cpp">
+      <Filter>Source Files\base\vkx</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\base\gl\Buffer.h">
@@ -310,6 +316,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\tests\test2\TerrainSceneTests.h">
       <Filter>Header Files\tests\test2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\test2\vk\TerrainSceneTest.h">
+      <Filter>Header Files\tests\test2\vk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\base\vkx\Utils.h">
+      <Filter>Header Files\base\vkx</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
