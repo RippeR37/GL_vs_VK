@@ -98,7 +98,7 @@ int TestRunner::run_vk(int testNumber, bool multithreaded)
 
     case 2:
         if (multithreaded) {
-            // TODO:
+            test = std::unique_ptr<TestInterface>(new tests::test_vk::MultithreadedTerrainSceneTest());
         } else {
             test = std::unique_ptr<TestInterface>(new tests::test_vk::TerrainSceneTest());
         }

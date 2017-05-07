@@ -55,16 +55,34 @@ void TerrainLoD::executeLoD(const glm::vec2& position,
     executeLoDRecursive(position, function, _root);
 }
 
+void TerrainLoD::executeLoD(const glm::vec2& position,
+                            const std::function<void(std::size_t, std::ptrdiff_t)>& function,
+                            std::size_t nodeIndex) const
+{
+    switch (nodeIndex) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+        if (_root.nodes[nodeIndex]) {
+            executeLoDRecursive(position, function, *_root.nodes[nodeIndex]);
+        }
+        break;
+    default:
+        break;
+    }
+}
+
 void TerrainLoD::load(const Heightmap& heightmap)
 {
     glm::uvec2 mapSize = heightmap.getSize();
-    glm::vec4 mapScale = { 1.0, 4.0f, 1.0, 1.0f};
+    glm::vec4 mapScale = {1.0, 4.0f, 1.0, 1.0f};
 
     // Vertices
     _vertices.reserve(heightmap.getData().size());
     for (std::size_t z = 0; z < mapSize.y; ++z) {
         for (std::size_t x = 0; x < mapSize.x; ++x) {
-            glm::vec4 vertex = { x, heightmap.getHeight(x, z), z, 1.0};
+            glm::vec4 vertex = {x, heightmap.getHeight(x, z), z, 1.0};
             _vertices.push_back(vertex / mapScale);
         }
     }

@@ -1,16 +1,16 @@
 #pragma once
 
-#include <base/vkx/ShaderModule.h>
 #include <framework/VKTest.h>
-#include <tests/common/Ball.h>
-#include <tests/test1/BaseBallsSceneTest.h>
+
+#include <base/vkx/ShaderModule.h>
+#include <tests/test2/BaseTerrainSceneTest.h>
 
 namespace tests {
 namespace test_vk {
-class MultithreadedBallsSceneTest : public BaseBallsSceneTest, public framework::VKTest
+class MultithreadedTerrainSceneTest : public BaseTerrainSceneTest, public framework::VKTest
 {
   public:
-    MultithreadedBallsSceneTest();
+    MultithreadedTerrainSceneTest();
 
     void setup() override;
     void run() override;
@@ -24,6 +24,7 @@ class MultithreadedBallsSceneTest : public BaseBallsSceneTest, public framework:
     };
 
     void createVbo();
+    void createIbo();
     void createCommandBuffers();
     void createSecondaryCommandBuffers();
     void createSemaphores();
@@ -43,21 +44,20 @@ class MultithreadedBallsSceneTest : public BaseBallsSceneTest, public framework:
     void destroySemaphores();
     void destroySecondaryCommandBuffers();
     void destroyCommandBuffers();
+    void destroyIbo();
     void destroyVbo();
 
     std::vector<vk::PipelineShaderStageCreateInfo> getShaderStages() const;
     uint32_t getNextFrameIndex() const;
 
-    void prepareSecondaryCommandBuffer(std::size_t frameIndex,
-                                       std::size_t bufferIndex,
-                                       std::size_t rangeFrom,
-                                       std::size_t rangeTo);
+    void prepareSecondaryCommandBuffer(std::size_t frameIndex, std::size_t bufferIndex) const;
+    void prepareCommandBuffer(std::size_t frameIndex) const;
+    void submitCommandBuffer(std::size_t frameIndex) const;
+    void presentFrame(std::size_t frameIndex) const;
 
-    void prepareCommandBuffer(std::size_t frameIndex);
-    void submitCommandBuffer(std::size_t frameIndex);
-    void presentFrame(std::size_t frameIndex);
-
+    unsigned int _threadWorkers;
     base::vkx::Buffer _vbo;
+    base::vkx::Buffer _ibo;
     vk::CommandPool _cmdPool;
     std::vector<vk::CommandBuffer> _cmdBuffers;
     std::vector<PerThreadSecondaryCommandPool> _threadCmdPools;

@@ -131,6 +131,7 @@
     <ClCompile Include="..\..\..\src\tests\test1\vk\SimpleBallsSceneTest.cpp" />
     <ClCompile Include="..\..\..\src\tests\test2\BaseTerrainSceneTest.cpp" />
     <ClCompile Include="..\..\..\src\tests\test2\gl\TerrainSceneTest.cpp" />
+    <ClCompile Include="..\..\..\src\tests\test2\vk\MultithreadedTerrainSceneTest.cpp" />
     <ClCompile Include="..\..\..\src\tests\test2\vk\TerrainSceneTest.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -174,6 +175,7 @@
     <ClInclude Include="..\..\..\include\tests\test2\BaseTerrainSceneTest.h" />
     <ClInclude Include="..\..\..\include\tests\test2\gl\TerrainSceneTest.h" />
     <ClInclude Include="..\..\..\include\tests\test2\TerrainSceneTests.h" />
+    <ClInclude Include="..\..\..\include\tests\test2\vk\MultithreadedTerrainSceneTest.h" />
     <ClInclude Include="..\..\..\include\tests\test2\vk\TerrainSceneTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
