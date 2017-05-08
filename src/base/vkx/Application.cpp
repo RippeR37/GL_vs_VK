@@ -129,11 +129,12 @@ vk::UniqueDevice Application::createDevice()
     std::vector<std::string> extensions = {{VK_KHR_SWAPCHAIN_EXTENSION_NAME}};
     std::vector<const char*> extensionsView = viewOf(extensions);
 
-    vk::PhysicalDeviceFeatures emptyFeatures{0u, 0u, 0u};
+    vk::PhysicalDeviceFeatures features{};
+    features.fillModeNonSolid = VK_TRUE;
     std::vector<vk::DeviceQueueCreateInfo> queueCreateInfos = QueueManager::createInfos(instance(), physicalDevice());
     vk::DeviceCreateInfo deviceCreateInfo{
         {},      static_cast<uint32_t>(queueCreateInfos.size()), queueCreateInfos.data(), 0,
-        nullptr, static_cast<uint32_t>(extensionsView.size()),   extensionsView.data(),   &emptyFeatures};
+        nullptr, static_cast<uint32_t>(extensionsView.size()),   extensionsView.data(),   &features};
 
     return physicalDevice().createDeviceUnique(deviceCreateInfo);
 }
