@@ -2,6 +2,8 @@
 
 #include <base/File.h>
 
+#include <stdexcept>
+
 namespace tests {
 namespace common {
 Heightmap::Heightmap(const std::string& path, std::size_t width, std::size_t height)
