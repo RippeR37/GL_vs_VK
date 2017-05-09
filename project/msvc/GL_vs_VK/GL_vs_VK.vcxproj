@@ -121,6 +121,7 @@
     <ClCompile Include="..\..\..\src\framework\TestRunner.cpp" />
     <ClCompile Include="..\..\..\src\framework\VKTest.cpp" />
     <ClCompile Include="..\..\..\src\main.cpp" />
+    <ClCompile Include="..\..\..\src\tests\common\CubeVerticesGenerator.cpp" />
     <ClCompile Include="..\..\..\src\tests\common\Heightmap.cpp" />
     <ClCompile Include="..\..\..\src\tests\common\SphereVerticesGenerator.cpp" />
     <ClCompile Include="..\..\..\src\tests\common\TerrainLoD.cpp" />
@@ -133,6 +134,8 @@
     <ClCompile Include="..\..\..\src\tests\test2\gl\TerrainSceneTest.cpp" />
     <ClCompile Include="..\..\..\src\tests\test2\vk\MultithreadedTerrainSceneTest.cpp" />
     <ClCompile Include="..\..\..\src\tests\test2\vk\TerrainSceneTest.cpp" />
+    <ClCompile Include="..\..\..\src\tests\test3\BaseShadowMappingSceneTest.cpp" />
+    <ClCompile Include="..\..\..\src\tests\test3\gl\ShadowMappingSceneTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\base\ArgumentParser.h" />
@@ -162,8 +165,10 @@
     <ClInclude Include="..\..\..\include\framework\TestRunner.h" />
     <ClInclude Include="..\..\..\include\framework\VKTest.h" />
     <ClInclude Include="..\..\..\include\tests\common\Ball.h" />
+    <ClInclude Include="..\..\..\include\tests\common\CubeVerticesGenerator.h" />
     <ClInclude Include="..\..\..\include\tests\common\Heightmap.h" />
     <ClInclude Include="..\..\..\include\tests\common\QTNode.h" />
+    <ClInclude Include="..\..\..\include\tests\common\RenderObject.h" />
     <ClInclude Include="..\..\..\include\tests\common\SphereVerticesGenerator.h" />
     <ClInclude Include="..\..\..\include\tests\common\TerrainLoD.h" />
     <ClInclude Include="..\..\..\include\tests\test1\gl\MultithreadedBallsSceneTest.h" />
@@ -177,6 +182,9 @@
     <ClInclude Include="..\..\..\include\tests\test2\TerrainSceneTests.h" />
     <ClInclude Include="..\..\..\include\tests\test2\vk\MultithreadedTerrainSceneTest.h" />
     <ClInclude Include="..\..\..\include\tests\test2\vk\TerrainSceneTest.h" />
+    <ClInclude Include="..\..\..\include\tests\test3\BaseShadowMappingSceneTest.h" />
+    <ClInclude Include="..\..\..\include\tests\test3\gl\ShadowMappingSceneTest.h" />
+    <ClInclude Include="..\..\..\include\tests\test3\ShadowMappingSceneTests.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

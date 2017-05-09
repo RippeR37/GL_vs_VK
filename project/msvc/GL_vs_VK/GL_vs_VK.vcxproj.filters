@@ -81,6 +81,24 @@
     <Filter Include="Source Files\tests\test2\vk">
       <UniqueIdentifier>{fa8ba94c-b385-4bcf-8871-c3e62dd5b507}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\tests\test3">
+      <UniqueIdentifier>{5cb16476-be49-4a6e-91b4-11a4ccb0d0fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\tests\test3\vk">
+      <UniqueIdentifier>{92ef02fe-e778-4402-894c-9078e380fb6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\tests\test3\gl">
+      <UniqueIdentifier>{a30236f3-0caf-44c5-a120-0e92e42bbede}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\tests\test3">
+      <UniqueIdentifier>{00aa1a23-4cba-40dc-b267-bf578191c352}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\tests\test3\vk">
+      <UniqueIdentifier>{d1468db2-d60f-40b5-accc-a287cd357a7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\tests\test3\gl">
+      <UniqueIdentifier>{d6aace67-0fdb-4003-931a-dedfc04b2884}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\README.md" />
@@ -200,6 +218,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\tests\test2\vk\MultithreadedTerrainSceneTest.cpp">
       <Filter>Source Files\tests\test2\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\tests\test3\BaseShadowMappingSceneTest.cpp">
+      <Filter>Source Files\tests\test3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\tests\test3\gl\ShadowMappingSceneTest.cpp">
+      <Filter>Source Files\tests\test3\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\tests\common\CubeVerticesGenerator.cpp">
+      <Filter>Source Files\tests\common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -328,6 +355,21 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\tests\test2\vk\MultithreadedTerrainSceneTest.h">
       <Filter>Header Files\tests\test2\vk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\test3\ShadowMappingSceneTests.h">
+      <Filter>Header Files\tests\test3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\test3\BaseShadowMappingSceneTest.h">
+      <Filter>Header Files\tests\test3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\test3\gl\ShadowMappingSceneTest.h">
+      <Filter>Header Files\tests\test3\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\common\RenderObject.h">
+      <Filter>Header Files\tests\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\common\CubeVerticesGenerator.h">
+      <Filter>Header Files\tests\common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 #include <framework/TestRunner.h>
 #include <tests/test1/BallsSceneTests.h>
 #include <tests/test2/TerrainSceneTests.h>
+#include <tests/test3/ShadowMappingSceneTests.h>
 
 #include <iostream>
 #include <stdexcept>
@@ -14,7 +15,7 @@ TestRunner::TestRunner(base::ArgumentParser argumentParser)
 
 int TestRunner::run()
 {
-    const int TESTS = 2;
+    const int TESTS = 3;
 
     auto errorCallback = [&](const std::string& msg) -> int {
         std::cerr << "Invalid usage! " << msg << std::endl;
@@ -39,11 +40,10 @@ int TestRunner::run()
         // ignore, will fail with proper message later
     }
 
-    std::string api = arguments.getArgument("api");
-
     if (testNum < 1 || testNum > TESTS)
         return errorCallback("Invalid test number!");
 
+    std::string api = arguments.getArgument("api");
     if (api != "gl" && api != "vk")
         return errorCallback("Invalid `-api` value!");
 
@@ -69,9 +69,16 @@ int TestRunner::run_gl(int testNumber, bool multithreaded)
 
     case 2:
         if (multithreaded) {
-            // TODO:
+            // N/A
         } else {
             test = std::unique_ptr<TestInterface>(new tests::test_gl::TerrainSceneTest());
+        }
+
+    case 3:
+        if (multithreaded) {
+            // TODO:
+        } else {
+            test = std::unique_ptr<TestInterface>(new tests::test_gl::ShadowMappingSceneTest());
         }
     }
 
@@ -101,6 +108,13 @@ int TestRunner::run_vk(int testNumber, bool multithreaded)
             test = std::unique_ptr<TestInterface>(new tests::test_vk::MultithreadedTerrainSceneTest());
         } else {
             test = std::unique_ptr<TestInterface>(new tests::test_vk::TerrainSceneTest());
+        }
+
+    case 3:
+        if (multithreaded) {
+            // TODO:
+        } else {
+            // TODO:
         }
     }
 
