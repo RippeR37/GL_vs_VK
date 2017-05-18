@@ -17,6 +17,7 @@ class BaseShadowMappingSceneTest
     const std::vector<common::RenderObject>& renderObjects() const;
     const glm::mat4& renderMatrix() const;
     const glm::mat4& shadowMatrix() const;
+    const glm::uvec2& shadowmapSize() const;
 
     glm::mat4 applyDepthBias(const glm::mat4& matrix) const;
 

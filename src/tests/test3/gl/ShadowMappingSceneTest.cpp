@@ -61,7 +61,8 @@ void ShadowMappingSceneTest::initShadowmapObjects()
 
     glGenTextures(1, &_shadowmapTexture);
     glBindTexture(GL_TEXTURE_2D, _shadowmapTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, 1200, 1200, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, shadowmapSize().x, shadowmapSize().y, 0, GL_DEPTH_COMPONENT,
+                 GL_FLOAT, 0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -131,7 +132,7 @@ void ShadowMappingSceneTest::initVAO(const common::RenderObject& renderObject, G
 void ShadowMappingSceneTest::setupShadowStage()
 {
     glBindFramebuffer(GL_FRAMEBUFFER, _shadowmapFramebuffer);
-    glViewport(0, 0, 1200, 1200);
+    glViewport(0, 0, shadowmapSize().x, shadowmapSize().y);
     glClear(GL_DEPTH_BUFFER_BIT);
 
     _shadowProgram.use();
