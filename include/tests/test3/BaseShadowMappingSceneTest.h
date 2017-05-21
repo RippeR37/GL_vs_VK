@@ -26,8 +26,10 @@ class BaseShadowMappingSceneTest
     void createRenderObjects();
 
     std::vector<common::RenderObject> _renderObjects;
+    glm::mat4 _renderMatrix;
+    glm::mat4 _shadowMatrix;
+
     glm::mat4 _projectionMatrix;
     glm::mat4 _viewMatrix;
-    glm::mat4 _shadowMatrix;
 };
 }

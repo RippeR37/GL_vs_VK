@@ -317,7 +317,7 @@ std::vector<vk::Framebuffer> ShadowMappingSceneTest::createFramebuffers(const vk
 
         vk::FramebufferCreateInfo framebufferInfo{{},
                                                   renderPass,
-                                                  attachments.size(),
+                                                  static_cast<uint32_t>(attachments.size()),
                                                   attachments.data(),
                                                   static_cast<uint32_t>(size.x),
                                                   static_cast<uint32_t>(size.y),
@@ -400,7 +400,7 @@ vk::PipelineLayout ShadowMappingSceneTest::createPipelineLayout(const std::vecto
                                                                 bool depthMatrix)
 {
     std::vector<vk::PushConstantRange> pushConstants;
-    std::size_t rangeSize = sizeof(glm::mat4) * (depthMatrix ? 2 : 1);
+    uint32_t rangeSize = static_cast<uint32_t>(sizeof(glm::mat4) * (depthMatrix ? 2 : 1));
     pushConstants.push_back({vk::ShaderStageFlagBits::eVertex, 0, rangeSize}); // MVP matrix (+ depthMVP matrix)
 
     vk::PipelineLayoutCreateInfo pipelineLayoutInfo{{},

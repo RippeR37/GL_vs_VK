@@ -25,7 +25,9 @@ std::vector<glm::vec4> generateColorBuffer(std::size_t count, const glm::vec4& c
 
 namespace tests {
 BaseShadowMappingSceneTest::BaseShadowMappingSceneTest()
-    : _projectionMatrix(1.0f)
+    : _renderMatrix(1.0f)
+    , _shadowMatrix(1.0f)
+    , _projectionMatrix(1.0f)
     , _viewMatrix(1.0f)
 {
     initMatrices();
@@ -38,6 +40,7 @@ void BaseShadowMappingSceneTest::updateTestState(double /*dt*/)
     _viewMatrix = glm::lookAt(glm::vec3{std::cos(time) * 10.0, 5.0, std::sin(time) * 10.0}, //
                               kCameraTarget, //
                               glm::vec3{0.0f, 1.0f, 0.0f});
+    _renderMatrix = _projectionMatrix * _viewMatrix;
 }
 
 const std::vector<common::RenderObject>& BaseShadowMappingSceneTest::renderObjects() const
@@ -47,7 +50,7 @@ const std::vector<common::RenderObject>& BaseShadowMappingSceneTest::renderObjec
 
 const glm::mat4& BaseShadowMappingSceneTest::renderMatrix() const
 {
-    return _projectionMatrix * _viewMatrix;
+    return _renderMatrix;
 }
 
 const glm::mat4& BaseShadowMappingSceneTest::shadowMatrix() const
@@ -64,6 +67,7 @@ void BaseShadowMappingSceneTest::initMatrices()
 {
     _projectionMatrix = glm::perspective(kFoV, kAspectRatio, kClipDistances[0], kClipDistances[1]);
     _viewMatrix = glm::lookAt(kCameraPosition, kCameraTarget, glm::vec3{0.0f, 1.0f, 0.0f});
+    _renderMatrix = _projectionMatrix * _viewMatrix;
 
     glm::mat4 shadowProjectionMatrix = glm::ortho(-30.0f, 30.0f, -15.0f, 15.0f, -30.0f, 30.0f);
     glm::mat4 shadowViewMatrix = glm::lookAt(kLightPosition, glm::vec3{0.0f}, glm::vec3{0.0f, 1.0f, 0.0f});
