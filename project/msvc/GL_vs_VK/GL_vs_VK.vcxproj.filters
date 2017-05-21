@@ -228,6 +228,9 @@
     <ClCompile Include="..\..\..\src\tests\common\CubeVerticesGenerator.cpp">
       <Filter>Source Files\tests\common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\tests\test3\vk\ShadowMappingSceneTest.cpp">
+      <Filter>Source Files\tests\test3\vk</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\base\gl\Buffer.h">
@@ -370,6 +373,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\tests\common\CubeVerticesGenerator.h">
       <Filter>Header Files\tests\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\test3\vk\ShadowMappingSceneTest.h">
+      <Filter>Header Files\tests\test3\vk</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

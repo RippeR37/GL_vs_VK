@@ -19,7 +19,7 @@ class BaseShadowMappingSceneTest
     const glm::mat4& shadowMatrix() const;
     const glm::uvec2& shadowmapSize() const;
 
-    glm::mat4 applyDepthBias(const glm::mat4& matrix) const;
+    virtual glm::mat4 convertProjectionToImage(const glm::mat4& matrix) const = 0;
 
   private:
     void initMatrices();

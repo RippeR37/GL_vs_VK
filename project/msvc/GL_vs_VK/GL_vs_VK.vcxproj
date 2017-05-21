@@ -136,6 +136,7 @@
     <ClCompile Include="..\..\..\src\tests\test2\vk\TerrainSceneTest.cpp" />
     <ClCompile Include="..\..\..\src\tests\test3\BaseShadowMappingSceneTest.cpp" />
     <ClCompile Include="..\..\..\src\tests\test3\gl\ShadowMappingSceneTest.cpp" />
+    <ClCompile Include="..\..\..\src\tests\test3\vk\ShadowMappingSceneTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\base\ArgumentParser.h" />
@@ -185,6 +186,7 @@
     <ClInclude Include="..\..\..\include\tests\test3\BaseShadowMappingSceneTest.h" />
     <ClInclude Include="..\..\..\include\tests\test3\gl\ShadowMappingSceneTest.h" />
     <ClInclude Include="..\..\..\include\tests\test3\ShadowMappingSceneTests.h" />
+    <ClInclude Include="..\..\..\include\tests\test3\vk\ShadowMappingSceneTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

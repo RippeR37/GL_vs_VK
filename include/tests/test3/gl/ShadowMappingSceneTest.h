@@ -47,6 +47,8 @@ class ShadowMappingSceneTest : public BaseShadowMappingSceneTest, public framewo
     void setupRenderStage();
     void render(const base::gl::Program& currentProgram, const glm::mat4& viewProjectionmatrix);
 
+    glm::mat4 convertProjectionToImage(const glm::mat4& matrix) const;
+
     GLuint _shadowmapFramebuffer;
     GLuint _shadowmapTexture;
     base::gl::Program _shadowProgram;

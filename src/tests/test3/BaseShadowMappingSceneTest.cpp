@@ -60,16 +60,6 @@ const glm::uvec2& BaseShadowMappingSceneTest::shadowmapSize() const
     return kShadowmapSize;
 }
 
-glm::mat4 BaseShadowMappingSceneTest::applyDepthBias(const glm::mat4& matrix) const
-{
-    static const glm::mat4 bias = {0.5, 0.0, 0.0, 0.0, //
-                                   0.0, 0.5, 0.0, 0.0, //
-                                   0.0, 0.0, 0.5, 0.0, //
-                                   0.5, 0.5, 0.5, 1.0};
-
-    return bias * matrix;
-}
-
 void BaseShadowMappingSceneTest::initMatrices()
 {
     _projectionMatrix = glm::perspective(kFoV, kAspectRatio, kClipDistances[0], kClipDistances[1]);

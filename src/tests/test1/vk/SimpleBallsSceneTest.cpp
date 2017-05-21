@@ -91,7 +91,6 @@ void SimpleBallsSceneTest::createVbo()
     }
     _vbo = memory().copyToDeviceLocalMemory(stagingBuffer, usage, _cmdBuffers.front(), queues().queue());
 
-    _cmdBuffers.front().reset(vk::CommandBufferResetFlagBits::eReleaseResources);
     memory().destroyBuffer(stagingBuffer);
 }
 

@@ -150,14 +150,14 @@ void ShadowMappingSceneTest::setupRenderStage()
 
 void ShadowMappingSceneTest::render(const base::gl::Program& currentProgram, const glm::mat4& viewProjectionmatrix)
 {
-    // WARNING: currentProgram must be already used/binded!
+    // WARNING: currentProgram must be already used/bound!
     for (const auto& renderObject : _glRenderObjects) {
         glm::mat4 MVP = viewProjectionmatrix * renderObject.modelMatrix;
         currentProgram["MVP"] = MVP;
 
         try {
             // TODO: move this to separate method and execute it only for render-program!
-            glm::mat4 depthMVP = applyDepthBias(shadowMatrix() * renderObject.modelMatrix);
+            glm::mat4 depthMVP = convertProjectionToImage(shadowMatrix() * renderObject.modelMatrix);
             currentProgram["depthMVP"] = depthMVP;
         } catch (...) {
         }
@@ -165,6 +165,16 @@ void ShadowMappingSceneTest::render(const base::gl::Program& currentProgram, con
         renderObject.vao.bind();
         renderObject.vao.drawArrays();
     }
+}
+
+glm::mat4 ShadowMappingSceneTest::convertProjectionToImage(const glm::mat4& matrix) const
+{
+    static const glm::mat4 bias = {0.5, 0.0, 0.0, 0.0, //
+                                   0.0, 0.5, 0.0, 0.0, //
+                                   0.0, 0.0, 0.5, 0.0, //
+                                   0.5, 0.5, 0.5, 1.0};
+
+    return bias * matrix;
 }
 }
 }

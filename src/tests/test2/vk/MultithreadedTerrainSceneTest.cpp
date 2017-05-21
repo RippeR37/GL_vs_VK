@@ -106,7 +106,6 @@ void MultithreadedTerrainSceneTest::createVbo()
     }
     _vbo = memory().copyToDeviceLocalMemory(stagingBuffer, usage, _cmdBuffers.front(), queues().queue());
 
-    _cmdBuffers.front().reset(vk::CommandBufferResetFlagBits::eReleaseResources);
     memory().destroyBuffer(stagingBuffer);
 }
 
@@ -123,7 +122,6 @@ void MultithreadedTerrainSceneTest::createIbo()
     }
     _ibo = memory().copyToDeviceLocalMemory(stagingBuffer, usage, _cmdBuffers.front(), queues().queue());
 
-    _cmdBuffers.front().reset(vk::CommandBufferResetFlagBits::eReleaseResources);
     memory().destroyBuffer(stagingBuffer);
 }
 

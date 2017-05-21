@@ -79,6 +79,8 @@ Buffer MemoryManager::copyToDeviceLocalMemory(const Buffer& sourceBuffer,
     _device.waitForFences({{fence}}, VK_FALSE, UINT64_MAX);
     _device.destroyFence(fence);
 
+    cmdBuffer.reset(vk::CommandBufferResetFlagBits::eReleaseResources);
+
     return {buffer, memory, sourceBuffer.size, 0};
 }
 

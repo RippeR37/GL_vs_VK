@@ -114,7 +114,7 @@ int TestRunner::run_vk(int testNumber, bool multithreaded)
         if (multithreaded) {
             // TODO:
         } else {
-            // TODO:
+            test = std::unique_ptr<TestInterface>(new tests::test_vk::ShadowMappingSceneTest);
         }
     }
 
