@@ -73,6 +73,7 @@ int TestRunner::run_gl(int testNumber, bool multithreaded)
         } else {
             test = std::unique_ptr<TestInterface>(new tests::test_gl::TerrainSceneTest());
         }
+        break;
 
     case 3:
         if (multithreaded) {
@@ -80,6 +81,7 @@ int TestRunner::run_gl(int testNumber, bool multithreaded)
         } else {
             test = std::unique_ptr<TestInterface>(new tests::test_gl::ShadowMappingSceneTest());
         }
+        break;
     }
 
     if (test) {
@@ -109,6 +111,7 @@ int TestRunner::run_vk(int testNumber, bool multithreaded)
         } else {
             test = std::unique_ptr<TestInterface>(new tests::test_vk::TerrainSceneTest());
         }
+        break;
 
     case 3:
         if (multithreaded) {
@@ -116,6 +119,7 @@ int TestRunner::run_vk(int testNumber, bool multithreaded)
         } else {
             test = std::unique_ptr<TestInterface>(new tests::test_vk::ShadowMappingSceneTest);
         }
+        break;
     }
 
     if (test) {
