@@ -10,3 +10,9 @@
 	path = third_party/glm
 	url = https://github.com/g-truc/glm.git
 	ignore = dirty
+[submodule "third_party/vulkan"]
+	path = third_party/vulkan
+	url = https://github.com/KhronosGroup/Vulkan-Docs.git
+[submodule "third_party/vulkan-hpp"]
+	path = third_party/vulkan-hpp
+	url = https://github.com/KhronosGroup/Vulkan-Hpp.git

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-# This script should be run from GLUL's base directory,
+# This script should be run from project's base directory,
 # i.e. ./scripts/linux/install_dependencies.sh
 SCRIPT_DIR="`dirname $0`"
 
