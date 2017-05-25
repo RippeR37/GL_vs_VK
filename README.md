@@ -96,7 +96,7 @@ cd GL_vs_VK
 git submodule update --init
 
 # Install dependencies
-sudo apt-get install freeglut3-dev libvulkan1  # OpenGL/Vulkan deps
+sudo apt-get install freeglut3-dev libvulkan-dev  # OpenGL/Vulkan deps
 ./scripts/linux/install_dependencies.sh
 
 # Build
