@@ -6,17 +6,19 @@ This project is part of my master-thesis and aims to compare OpenGL and Vulkan A
 
 **Disclaimer**
 
-Tests used in this project are fairly simple and doesn't involve any advanced techniques to avoid drivers overhead in OpenGL (commonly known as AZDO techniques). The reason for this is to be able to measure raw overhead of each API and their drivers and not to implement something in most-efficient way possible. The tests were also chosen to replicate some real-life scenarios, so I don't use some features that I could becasue I want to replicate situation where I can (e.g. I'm not using instancing becasue I want to simulate a situation with multile different objects to be rendered).
+Tests used in this project are fairly simple and doesn't involve any advanced techniques to avoid drivers overhead in OpenGL (commonly known as AZDO techniques). The reason for this is to be able to measure raw overhead of each API and their drivers instead of implementing something in most-efficient way possible. The tests were also chosen to replicate some real-life scenarios, so they don't use some available features that to replicate situations where they can't be used (e.g. I'm not using instancing becasue I want to simulate a scene with multile different objects to be rendered).
 
 
 ## Implemented tests
 
 
 | Test \ API implementation | OpenGL | Multithreaded OpenGL | Vulkan | Multithreaded Vulkan |
-| :----: | :---: | :-----: | :------: | :------: |
-| Test #1 | YES | YES | YES | YES |
-| Test #2 | YES | NO | YES | YES |
-| Test #3 | YES | NO | YES | TO-DO |
+| :---: | :---: | :---: | :---: | :---: |
+| Test #1 | ✅ | ✅ | ✅ | ✅ |
+| Test #2 | ✅ | ❌ | ✅ | ✅ |
+| Test #3 | ✅ | ❌ | ✅ | ✅ |
+
+Test #2 and #3 doesn't have multithreaded version with OpenGL API as they don't have easily scalable CPU-bound work that could benefit from dispatching to multiple threads.
 
 
 ### Test #1 - static scene
@@ -60,7 +62,8 @@ TO-DO
 3. (Optional) Install OpenGL/Vulkan system dependencies (drivers etc.)
 4. Install project's third-party dependencies
 5. Build
-6. Run some tests
+6. Compile all Vulkan shaders (scripts in bin/resources/...)
+7. Run some tests
 
 ```
 git clone https://github.com/RippeR37/GL_vs_VK.git`
@@ -87,7 +90,8 @@ GL_vs_VK.exe -t (1|2|3) -api (gl|vk) (-m)
 3. (Optional) Install system dependencies
 4. Install project's third-party dependencies
 5. Build
-6. Run some tests
+6. Compile all Vulkan shaders (scripts in bin/resources/...)
+7. Run some tests
 
 ```
 # Initialize repository

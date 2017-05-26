@@ -55,7 +55,6 @@ class MultithreadedTerrainSceneTest : public BaseTerrainSceneTest, public framew
     void submitCommandBuffer(std::size_t frameIndex) const;
     void presentFrame(std::size_t frameIndex) const;
 
-    unsigned int _threadWorkers;
     base::vkx::Buffer _vbo;
     base::vkx::Buffer _ibo;
     vk::CommandPool _cmdPool;

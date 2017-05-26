@@ -1,7 +1,7 @@
 #pragma once
 
 #ifdef ENABLE_TIMINGS
-#define TIME_IT(x) ::base::ScopedTimer{x};
+#define TIME_IT(x) auto __scopedTimer = ::base::ScopedTimer{x};
 #define TIME_RESET(x) ::base::ScopedTimer::reset(x);
 #else
 #define TIME_IT(x)

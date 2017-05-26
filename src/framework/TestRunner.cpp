@@ -77,7 +77,7 @@ int TestRunner::run_gl(int testNumber, bool multithreaded)
 
     case 3:
         if (multithreaded) {
-            // TODO:
+            // N/A
         } else {
             test = std::unique_ptr<TestInterface>(new tests::test_gl::ShadowMappingSceneTest());
         }
@@ -87,7 +87,8 @@ int TestRunner::run_gl(int testNumber, bool multithreaded)
     if (test) {
         return run_any(std::move(test));
     } else {
-        std::cerr << "Unknown OpenGL test: " << testNumber << std::endl;
+        std::cerr << "Unknown " << (multithreaded ? "multithreaded" : "") << " OpenGL test: " << testNumber
+                  << std::endl;
         return -1;
     }
 }
@@ -115,7 +116,7 @@ int TestRunner::run_vk(int testNumber, bool multithreaded)
 
     case 3:
         if (multithreaded) {
-            // TODO:
+            test = std::unique_ptr<TestInterface>(new tests::test_vk::MultithreadedShadowMappingSceneTest());
         } else {
             test = std::unique_ptr<TestInterface>(new tests::test_vk::ShadowMappingSceneTest);
         }
@@ -125,7 +126,8 @@ int TestRunner::run_vk(int testNumber, bool multithreaded)
     if (test) {
         return run_any(std::move(test));
     } else {
-        std::cerr << "Unknown Vulkan test: " << testNumber << std::endl;
+        std::cerr << "Unknown " << (multithreaded ? "multithreaded" : "") << " Vulkan test: " << testNumber
+                  << std::endl;
         return -1;
     }
 }
