@@ -27,7 +27,6 @@ find_package(Threads REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(Vulkan REQUIRED)
 find_package(GLM REQUIRED)
-find_package(GLFW 3.2)
 find_package(GLEW)
 
 
@@ -37,7 +36,7 @@ find_package(GLEW)
 
 ### GLFW 3.2
 if(NOT GLFW_FOUND)
-    MESSAGE("GLFW not found, building from third_party...")
+    # MESSAGE("GLFW not found, building from third_party...")
 
     set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
     set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
@@ -54,6 +53,7 @@ if(NOT GLEW_FOUND)
     MESSAGE("GLEW not found, building from third_party...")
 
     set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+    set(BUILD_UTILS OFF CACHE BOOL "" FORCE)
     set(GLEW_LIBRARIES glew)
 
     set(GLEW_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/third_party/glew/include")
