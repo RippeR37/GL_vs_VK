@@ -152,7 +152,8 @@ vk::SwapchainKHR Window::createSwapchain()
         throw std::system_error(vk::Result::eErrorFormatNotSupported, "surface doesn't support ColorAttachment usage");
     }
 
-    uint32_t minImageCount = std::min(3u, surfaceCapabilities.maxImageCount);
+    uint32_t maxImageCount = (surfaceCapabilities.maxImageCount > 0) ? surfaceCapabilities.maxImageCount : 3u;
+    uint32_t minImageCount = std::min(3u, maxImageCount);
     vk::PresentModeKHR presentMode = getSupportedSwapchainPresentMode();
     vk::Extent2D surfaceExtent = (surfaceCapabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()
                                       ? surfaceCapabilities.currentExtent

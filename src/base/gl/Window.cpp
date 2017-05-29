@@ -272,6 +272,16 @@ void Window::setHint(int option, int value)
     _hintsSet = true;
 }
 
+void Window::enableVSync()
+{
+    glfwSwapInterval(1);
+}
+
+void Window::disableVSync()
+{
+    glfwSwapInterval(0);
+}
+
 void Window::setHints(const std::vector<std::pair<int, int>>& hints)
 {
     for (auto& hint : hints)

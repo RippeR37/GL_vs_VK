@@ -10,6 +10,7 @@ GLTest::GLTest(const std::string& testName)
 void GLTest::setup()
 {
     window_.create();
+    window_.disableVSync();
 }
 
 void GLTest::teardown()

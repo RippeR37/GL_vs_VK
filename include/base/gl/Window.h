@@ -49,6 +49,9 @@ class Window
     double getFrameTime() const;
     GLFWwindow* getHandle();
 
+    static void enableVSync();
+    static void disableVSync();
+
     static void setHint(int option, int value);
     static void setHints(const std::vector<std::pair<int, int>>& hints);
     static void setDefaultHints();
