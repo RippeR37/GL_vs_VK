@@ -5,7 +5,7 @@
 enable_language(CXX)
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    set(WARNINGS "-Wall -Wextra -Werror")
+    set(WARNINGS "-Wall -Wextra")
     set(EXTRA_FLAGS "-std=c++11")
 elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     set(WARNINGS "/W4 /WX /EHsc")
@@ -26,9 +26,45 @@ endif()
 find_package(Threads REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(Vulkan REQUIRED)
-find_package(GLFW REQUIRED)
-find_package(GLEW REQUIRED)
 find_package(GLM REQUIRED)
+find_package(GLFW 3.2)
+find_package(GLEW)
+
+
+###
+### Workarounds for missing dependencies
+###
+
+### GLFW 3.2
+if(NOT GLFW_FOUND)
+    MESSAGE("GLFW not found, building from third_party...")
+
+    set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+
+    set(GLFW_LIBRARIES glfw)
+    set(GLFW_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/third_party/glfw/include")
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../third_party/glfw ${CMAKE_CURRENT_BINARY_DIR}/../third_party/glfw)
+
+endif()
+
+### GLEW
+if(NOT GLEW_FOUND)
+    MESSAGE("GLEW not found, building from third_party...")
+
+    set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+    set(GLEW_LIBRARIES glew)
+
+    set(GLEW_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/third_party/glew/include")
+    execute_process(COMMAND make WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/third_party/glew/auto")
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../third_party/glew/build/cmake ${CMAKE_CURRENT_BINARY_DIR}/../third_party/glew/build/cmake)
+endif()
+
+
+###
+### Setting up dependencies
+###
 
 set(GLvsVK_LINK_LIBRARIES
     ${CMAKE_THREAD_LIBS_INIT}
