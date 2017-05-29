@@ -529,8 +529,6 @@ void ShadowMappingSceneTest::destroyDescriptorSetLayout(vk::DescriptorSetLayout&
 
 void ShadowMappingSceneTest::destroyProgram(VkProgram& program)
 {
-    device().destroyShaderModule(program.vertexModule);
-    device().destroyShaderModule(program.fragmentModule);
     program = VkProgram{};
 }
 

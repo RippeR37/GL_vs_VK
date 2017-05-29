@@ -548,8 +548,6 @@ void MultithreadedShadowMappingSceneTest::destroyDescriptorSetLayout(vk::Descrip
 
 void MultithreadedShadowMappingSceneTest::destroyProgram(VkProgram& program)
 {
-    device().destroyShaderModule(program.vertexModule);
-    device().destroyShaderModule(program.fragmentModule);
     program = VkProgram{};
 }
 
