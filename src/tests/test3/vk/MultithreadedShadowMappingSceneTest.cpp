@@ -6,7 +6,28 @@
 #include <glm/vec4.hpp>
 #include <vulkan/vulkan.hpp>
 
+#include <iostream>
+#include <stdexcept>
 #include <thread>
+
+namespace {
+const std::vector<vk::Format> kDepthFormatCandidates{vk::Format::eD24UnormS8Uint, vk::Format::eD32Sfloat,
+                                                     vk::Format::eD16Unorm, vk::Format::eD16UnormS8Uint};
+
+vk::Format findOptimalTilingDepthFormat(const vk::PhysicalDevice& physicalDevice)
+{
+    for (auto format : kDepthFormatCandidates) {
+        vk::FormatProperties properties = physicalDevice.getFormatProperties(format);
+        vk::FormatFeatureFlags wantedFeatures = vk::FormatFeatureFlagBits::eDepthStencilAttachment;
+
+        if ((properties.optimalTilingFeatures & wantedFeatures) == wantedFeatures) {
+            return format;
+        }
+    }
+
+    throw std::system_error(vk::Result::eErrorFormatNotSupported, "None of cadidate depth formats are supported");
+}
+}
 
 namespace tests {
 namespace test_vk {
@@ -181,7 +202,13 @@ MultithreadedShadowMappingSceneTest::VkDepthBuffer MultithreadedShadowMappingSce
     const glm::uvec2& size, vk::ImageUsageFlags usage)
 {
     VkDepthBuffer depthBuffer;
-    depthBuffer.format = vk::Format::eD24UnormS8Uint;
+    depthBuffer.format = findOptimalTilingDepthFormat(physicalDevice());
+
+    if (depthBuffer.format != kDepthFormatCandidates.front()) {
+        std::cerr << "Warning: Selected depth format (" << vk::to_string(depthBuffer.format)
+                  << ") differs from preffered " << vk::to_string(kDepthFormatCandidates.front())
+                  << ". Performance might be slightly changed!";
+    }
 
     vk::ImageCreateInfo depthBufferInfo{{},
                                         vk::ImageType::e2D,
@@ -223,7 +250,7 @@ vk::RenderPass MultithreadedShadowMappingSceneTest::createShadowmapRenderPass()
                                   vk::AttachmentLoadOp::eDontCare,
                                   vk::AttachmentStoreOp::eDontCare,
                                   vk::ImageLayout::eUndefined,
-                                  vk::ImageLayout::eShaderReadOnlyOptimal},
+                                  vk::ImageLayout::eDepthStencilAttachmentOptimal},
     };
     vk::AttachmentReference depthReference{0, vk::ImageLayout::eDepthStencilAttachmentOptimal};
 
@@ -400,9 +427,9 @@ vk::Sampler MultithreadedShadowMappingSceneTest::createRenderShadowmapSampler()
                                       vk::Filter::eNearest,
                                       vk::Filter::eNearest,
                                       vk::SamplerMipmapMode::eNearest,
-                                      vk::SamplerAddressMode::eClampToBorder,
-                                      vk::SamplerAddressMode::eClampToBorder,
-                                      vk::SamplerAddressMode::eClampToBorder,
+                                      vk::SamplerAddressMode::eClampToEdge,
+                                      vk::SamplerAddressMode::eClampToEdge,
+                                      vk::SamplerAddressMode::eClampToEdge,
                                       0.0f,
                                       VK_FALSE,
                                       1.0f,
@@ -783,6 +810,17 @@ void MultithreadedShadowMappingSceneTest::prepareCommandBuffer(std::size_t frame
             cmdBuffer.executeCommands(shadowmapSecondaryCommandBuffer);
             cmdBuffer.endRenderPass();
         }
+
+        // Image barrier between draw calls for shadowmap image
+        std::vector<vk::ImageMemoryBarrier> imageBarriers{vk::ImageMemoryBarrier{
+            vk::AccessFlagBits::eDepthStencilAttachmentWrite, vk::AccessFlagBits::eShaderRead,
+            vk::ImageLayout::eDepthStencilAttachmentOptimal, vk::ImageLayout::eShaderReadOnlyOptimal,
+            VK_QUEUE_FAMILY_IGNORED, VK_QUEUE_FAMILY_IGNORED, _shadowmapPass.depthBuffer.image,
+            vk::ImageSubresourceRange{vk::ImageAspectFlagBits::eDepth, 0, 1, 0, 1}}};
+        cmdBuffer.pipelineBarrier(vk::PipelineStageFlagBits::eLateFragmentTests,
+                                  vk::PipelineStageFlagBits::eFragmentShader, vk::DependencyFlagBits{},
+                                  std::vector<vk::MemoryBarrier>{}, std::vector<vk::BufferMemoryBarrier>{},
+                                  imageBarriers);
 
         {
             // Render pass

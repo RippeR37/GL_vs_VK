@@ -4,6 +4,10 @@
 
 enable_language(CXX)
 
+if(NOT DEFINED CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
+endif()
+
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     set(WARNINGS "-Wall -Wextra")
     set(EXTRA_FLAGS "-std=c++11")

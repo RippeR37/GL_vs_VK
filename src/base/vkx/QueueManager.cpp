@@ -28,7 +28,7 @@ std::vector<vk::DeviceQueueCreateInfo> QueueManager::createInfos(const vk::Insta
 
     if (queueCreateInfos.empty()) {
         throw std::system_error(vk::Result::eErrorInitializationFailed,
-                                "Unable to find queues supporting graphics operations");
+                                "Unable to find queue supporting graphics operations");
     }
 
     return queueCreateInfos;
