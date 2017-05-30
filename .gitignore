@@ -8,7 +8,6 @@
 *.ilk
 *.suo
 *.exp
-*.spv
 
 bin/GL_vs_VK*
 build/*

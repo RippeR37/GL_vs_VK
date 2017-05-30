@@ -62,8 +62,7 @@ TO-DO
 3. (Optional) Install OpenGL/Vulkan system dependencies (drivers etc.)
 4. Install project's third-party dependencies
 5. Build
-6. Compile all Vulkan shaders (scripts in bin/resources/...)
-7. Run some tests
+6. Run some tests
 
 ```
 git clone https://github.com/RippeR37/GL_vs_VK.git`
@@ -87,11 +86,9 @@ GL_vs_VK.exe -t (1|2|3) -api (gl|vk) (-m)
 
 1. Clone or download this repository
 2. Initialize GIT submodules
-3. (Optional) Install system dependencies
-4. Install project's third-party dependencies
-5. Build
-6. Compile all Vulkan shaders (scripts in bin/resources/...)
-7. Run some tests
+3. Install dependencies
+4. Build
+5. Run some tests
 
 ```
 # Initialize repository
