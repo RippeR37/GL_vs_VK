@@ -4,7 +4,7 @@ OpenGL vs Vulkan
 This project is part of my master-thesis and aims to compare OpenGL and Vulkan API in terms of API-related overhead and performance user can gain (or lose) by using given API. Core idea resolves around creating pairs of almost-identical tests in each API and benchmark them.
 
 
-**Disclaimer**
+### Disclaimer :warning:
 
 Tests used in this project are fairly simple and doesn't involve any advanced techniques to avoid drivers overhead in OpenGL (commonly known as AZDO techniques). The reason for this is to be able to measure raw overhead of each API and their drivers instead of implementing something in most-efficient way possible. The tests were also chosen to replicate some real-life scenarios, so they don't use some available features that to replicate situations where they can't be used (e.g. I'm not using instancing becasue I want to simulate a scene with multile different objects to be rendered).
 
@@ -53,6 +53,7 @@ TO-DO
 * VulkanSDK might be needed on Windows (v1.0.46.0 or higher)
   * Vulkan-Hpp is one of dependencies
 * Hardware and drivers supporting OpenGL and Vulkan
+* OpenGL and Vulkan drivers
 
 
 ### Windows
@@ -120,4 +121,9 @@ cd ../bin/
 
 ## Author
 
-I'm the only author of this repository and due to it's nature, for now I'm can't approve any contributions. If you have any notes or issues, please raise them and make sure to include your hardware, software and driver version (link to http://vulkan.gpuinfo.org entry would be nice).
+I'm the only author of this repository and due to it's nature, for now I can't approve any code contributions. If you have any notes or issues, please raise them and make sure to include your hardware, software and driver version (link to http://vulkan.gpuinfo.org entry would be nice).
+
+
+## Contributions
+
+* [@hadrien-psydk](https://github.com/hadrien-psydk) - testing & debugging on AMD GPU
