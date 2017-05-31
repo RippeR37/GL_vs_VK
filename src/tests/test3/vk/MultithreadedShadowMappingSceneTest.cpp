@@ -13,6 +13,7 @@
 namespace {
 const std::vector<vk::Format> kDepthFormatCandidates{vk::Format::eD24UnormS8Uint, vk::Format::eD32Sfloat,
                                                      vk::Format::eD16Unorm, vk::Format::eD16UnormS8Uint};
+const std::vector<vk::Format> kDepthFormatsWithStencilAspect{vk::Format::eD24UnormS8Uint, vk::Format::eD16UnormS8Uint};
 
 vk::Format findOptimalTilingDepthFormat(const vk::PhysicalDevice& physicalDevice)
 {
@@ -26,6 +27,19 @@ vk::Format findOptimalTilingDepthFormat(const vk::PhysicalDevice& physicalDevice
     }
 
     throw std::system_error(vk::Result::eErrorFormatNotSupported, "None of cadidate depth formats are supported");
+}
+
+vk::ImageAspectFlags getImageDepthFormatAspect(const vk::Format& format)
+{
+    vk::ImageAspectFlags result = vk::ImageAspectFlagBits::eDepth;
+
+    for (const auto& withStencilFormat : kDepthFormatsWithStencilAspect) {
+        if (format == withStencilFormat) {
+            result |= vk::ImageAspectFlagBits::eStencil;
+        }
+    }
+
+    return result;
 }
 }
 
@@ -737,9 +751,9 @@ void MultithreadedShadowMappingSceneTest::prepareSecondaryCommandBuffer(std::siz
                                                        vk::CommandBufferUsageFlagBits::eOneTimeSubmit,
                                                    &inheritanceInfo});
 
+        cmdBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, pass.pipeline);
         cmdBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pass.pipelineLayout, 0, 1, &pass.descriptorSet,
                                      0, nullptr);
-        cmdBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, pass.pipeline);
 
         for (std::size_t index = rangeFrom; index < rangeTo; ++index) {
             const VkRenderObject& renderObject = _vkRenderObjects[index];
@@ -798,7 +812,6 @@ void MultithreadedShadowMappingSceneTest::prepareCommandBuffer(std::size_t frame
 
         {
             // Shadowmap pass
-            // TODO: bind pipeline here
             const vk::ClearValue clearValue = vk::ClearDepthStencilValue{1.0f, 0};
             vk::RenderPassBeginInfo renderPassInfo{_shadowmapPass.renderPass,
                                                    _shadowmapPass.framebuffers[frameIndex],
@@ -812,11 +825,12 @@ void MultithreadedShadowMappingSceneTest::prepareCommandBuffer(std::size_t frame
         }
 
         // Image barrier between draw calls for shadowmap image
+        vk::ImageAspectFlags depthImageAspect = getImageDepthFormatAspect(_shadowmapPass.depthBuffer.format);
         std::vector<vk::ImageMemoryBarrier> imageBarriers{vk::ImageMemoryBarrier{
             vk::AccessFlagBits::eDepthStencilAttachmentWrite, vk::AccessFlagBits::eShaderRead,
             vk::ImageLayout::eDepthStencilAttachmentOptimal, vk::ImageLayout::eShaderReadOnlyOptimal,
             VK_QUEUE_FAMILY_IGNORED, VK_QUEUE_FAMILY_IGNORED, _shadowmapPass.depthBuffer.image,
-            vk::ImageSubresourceRange{vk::ImageAspectFlagBits::eDepth, 0, 1, 0, 1}}};
+            vk::ImageSubresourceRange{depthImageAspect, 0, 1, 0, 1}}};
         cmdBuffer.pipelineBarrier(vk::PipelineStageFlagBits::eLateFragmentTests,
                                   vk::PipelineStageFlagBits::eFragmentShader, vk::DependencyFlagBits{},
                                   std::vector<vk::MemoryBarrier>{}, std::vector<vk::BufferMemoryBarrier>{},
@@ -824,8 +838,6 @@ void MultithreadedShadowMappingSceneTest::prepareCommandBuffer(std::size_t frame
 
         {
             // Render pass
-            // TODO: bind pipeline and descriptor set here
-
             const std::vector<vk::ClearValue> clearValues{vk::ClearColorValue{
                                                               std::array<float, 4>{{0.1f, 0.1f, 0.1f, 1.0f}}},
                                                           vk::ClearDepthStencilValue{1.0f, 0}};
