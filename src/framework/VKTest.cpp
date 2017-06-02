@@ -56,6 +56,11 @@ void VKTest::printStatistics() const
     std::cout << "  Driver version:   " << version(deviceInfo().properties.driverVersion) << std::endl;
     std::cout << std::endl;
 
+    std::cout << "Test information" << std::endl;
+    std::cout << "================" << std::endl;
+    std::cout << "  Name: " << window().title() << std::endl;
+    std::cout << std::endl;
+
     BenchmarkableTest::printStatistics();
 }
 }

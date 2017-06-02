@@ -31,6 +31,11 @@ void GLTest::printStatistics() const
     std::cout << "  Renderer:   " << glGetString(GL_RENDERER) << std::endl;
     std::cout << std::endl;
 
+    std::cout << "Test information" << std::endl;
+    std::cout << "================" << std::endl;
+    std::cout << "  Name: " << window_.getTitle() << std::endl;
+    std::cout << std::endl;
+
     BenchmarkableTest::printStatistics();
 }
 }
