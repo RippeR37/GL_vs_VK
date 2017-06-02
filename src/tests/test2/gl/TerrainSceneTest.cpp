@@ -5,9 +5,9 @@
 
 namespace tests {
 namespace test_gl {
-TerrainSceneTest::TerrainSceneTest()
+TerrainSceneTest::TerrainSceneTest(bool benchmarkMode, float benchmarkTime)
     : BaseTerrainSceneTest()
-    , GLTest("TerrainSceneTest")
+    , GLTest("TerrainSceneTest", benchmarkMode, benchmarkTime)
     , _ibo(base::gl::Buffer::Target::ElementArray, base::gl::Buffer::Usage::StaticDraw)
 {
 }
@@ -47,6 +47,10 @@ void TerrainSceneTest::run()
 
         window_.update();
         updateTestState(window_.getFrameTime());
+
+        if (processFrameTime(window_.getFrameTime())) {
+            break; // Benchmarking is complete
+        }
     }
 }
 

@@ -7,6 +7,10 @@
 #include <iostream>
 #include <stdexcept>
 
+namespace {
+const float kDefaultTestBenchmarkTime = 15.0f; // 15 seconds
+}
+
 namespace framework {
 TestRunner::TestRunner(base::ArgumentParser argumentParser)
     : arguments(std::move(argumentParser))
@@ -32,7 +36,6 @@ int TestRunner::run()
     if (!arguments.hasArgument("api"))
         return errorCallback("Missing `-api` argument!");
 
-    bool multithreaded = arguments.hasArgument("m");
     int testNum = -1;
     try {
         testNum = arguments.getIntArgument("t");
@@ -47,23 +50,37 @@ int TestRunner::run()
     if (api != "gl" && api != "vk")
         return errorCallback("Invalid `-api` value!");
 
+    bool multithreaded = arguments.hasArgument("m");
+    bool benchmarkMode = arguments.hasArgument("benchmark");
+    float benchmarkTime = kDefaultTestBenchmarkTime;
+
+    if (benchmarkMode && arguments.hasArgument("time")) {
+        try {
+            benchmarkTime = arguments.getFloatArgument("time");
+        } catch (...) {
+            std::cerr << "Invalid value for argument '-time'!";
+        }
+    }
+
     if (api == "gl") {
-        return run_gl(testNum, multithreaded);
+        return run_gl(testNum, multithreaded, benchmarkMode, benchmarkTime);
     } else {
-        return run_vk(testNum, multithreaded);
+        return run_vk(testNum, multithreaded, benchmarkMode, benchmarkTime);
     }
 }
 
-int TestRunner::run_gl(int testNumber, bool multithreaded)
+int TestRunner::run_gl(int testNumber, bool multithreaded, bool benchmarkMode, float benchmarkTime)
 {
-    std::unique_ptr<TestInterface> test;
+    std::unique_ptr<BenchmarkableTest> test;
 
     switch (testNumber) {
     case 1:
         if (multithreaded) {
-            test = std::unique_ptr<TestInterface>(new tests::test_gl::MultithreadedBallsSceneTest());
+            test = std::unique_ptr<BenchmarkableTest>(
+                new tests::test_gl::MultithreadedBallsSceneTest(benchmarkMode, benchmarkTime));
         } else {
-            test = std::unique_ptr<TestInterface>(new tests::test_gl::SimpleBallsSceneTest());
+            test = std::unique_ptr<BenchmarkableTest>(
+                new tests::test_gl::SimpleBallsSceneTest(benchmarkMode, benchmarkTime));
         }
         break;
 
@@ -71,7 +88,8 @@ int TestRunner::run_gl(int testNumber, bool multithreaded)
         if (multithreaded) {
             // N/A
         } else {
-            test = std::unique_ptr<TestInterface>(new tests::test_gl::TerrainSceneTest());
+            test =
+                std::unique_ptr<BenchmarkableTest>(new tests::test_gl::TerrainSceneTest(benchmarkMode, benchmarkTime));
         }
         break;
 
@@ -79,7 +97,8 @@ int TestRunner::run_gl(int testNumber, bool multithreaded)
         if (multithreaded) {
             // N/A
         } else {
-            test = std::unique_ptr<TestInterface>(new tests::test_gl::ShadowMappingSceneTest());
+            test = std::unique_ptr<BenchmarkableTest>(
+                new tests::test_gl::ShadowMappingSceneTest(benchmarkMode, benchmarkTime));
         }
         break;
     }
@@ -93,32 +112,38 @@ int TestRunner::run_gl(int testNumber, bool multithreaded)
     }
 }
 
-int TestRunner::run_vk(int testNumber, bool multithreaded)
+int TestRunner::run_vk(int testNumber, bool multithreaded, bool benchmarkMode, float benchmarkTime)
 {
-    std::unique_ptr<TestInterface> test;
+    std::unique_ptr<BenchmarkableTest> test;
 
     switch (testNumber) {
     case 1:
         if (multithreaded) {
-            test = std::unique_ptr<TestInterface>(new tests::test_vk::MultithreadedBallsSceneTest());
+            test = std::unique_ptr<BenchmarkableTest>(
+                new tests::test_vk::MultithreadedBallsSceneTest(benchmarkMode, benchmarkTime));
         } else {
-            test = std::unique_ptr<TestInterface>(new tests::test_vk::SimpleBallsSceneTest());
+            test = std::unique_ptr<BenchmarkableTest>(
+                new tests::test_vk::SimpleBallsSceneTest(benchmarkMode, benchmarkTime));
         }
         break;
 
     case 2:
         if (multithreaded) {
-            test = std::unique_ptr<TestInterface>(new tests::test_vk::MultithreadedTerrainSceneTest());
+            test = std::unique_ptr<BenchmarkableTest>(
+                new tests::test_vk::MultithreadedTerrainSceneTest(benchmarkMode, benchmarkTime));
         } else {
-            test = std::unique_ptr<TestInterface>(new tests::test_vk::TerrainSceneTest());
+            test =
+                std::unique_ptr<BenchmarkableTest>(new tests::test_vk::TerrainSceneTest(benchmarkMode, benchmarkTime));
         }
         break;
 
     case 3:
         if (multithreaded) {
-            test = std::unique_ptr<TestInterface>(new tests::test_vk::MultithreadedShadowMappingSceneTest());
+            test = std::unique_ptr<BenchmarkableTest>(
+                new tests::test_vk::MultithreadedShadowMappingSceneTest(benchmarkMode, benchmarkTime));
         } else {
-            test = std::unique_ptr<TestInterface>(new tests::test_vk::ShadowMappingSceneTest);
+            test = std::unique_ptr<BenchmarkableTest>(
+                new tests::test_vk::ShadowMappingSceneTest(benchmarkMode, benchmarkTime));
         }
         break;
     }
@@ -132,11 +157,13 @@ int TestRunner::run_vk(int testNumber, bool multithreaded)
     }
 }
 
-int TestRunner::run_any(std::unique_ptr<TestInterface> test)
+int TestRunner::run_any(std::unique_ptr<BenchmarkableTest> test)
 {
     try {
         test->setup();
+        test->startMeasuring();
         test->run();
+        test->printStatistics();
         test->teardown();
 
     } catch (const std::runtime_error& exception) {

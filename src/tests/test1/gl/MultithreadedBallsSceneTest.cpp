@@ -10,9 +10,9 @@
 
 namespace tests {
 namespace test_gl {
-MultithreadedBallsSceneTest::MultithreadedBallsSceneTest()
+MultithreadedBallsSceneTest::MultithreadedBallsSceneTest(bool benchmarkMode, float benchmarkTime)
     : BaseBallsSceneTest()
-    , GLTest("MultithreadedBallsSceneTest")
+    , GLTest("MultithreadedBallsSceneTest", benchmarkMode, benchmarkTime)
 {
 }
 
@@ -48,6 +48,10 @@ void MultithreadedBallsSceneTest::run()
         program_.unbind();
 
         window_.update();
+
+        if (processFrameTime(window_.getFrameTime())) {
+            break; // Benchmarking is complete
+        }
     }
 }
 
@@ -106,8 +110,8 @@ void MultithreadedBallsSceneTest::updateStateMultithreaded()
         std::size_t rangeFrom = threadIndex * k;
         std::size_t rangeTo = (threadIndex + 1) * k;
 
-        threads[threadIndex] = std::move(
-            std::thread(&MultithreadedBallsSceneTest::updatePartialState, this, rangeFrom, rangeTo));
+        threads[threadIndex] =
+            std::move(std::thread(&MultithreadedBallsSceneTest::updatePartialState, this, rangeFrom, rangeTo));
     }
 
     for (auto& thread : threads) {

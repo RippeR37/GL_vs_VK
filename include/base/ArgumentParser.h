@@ -12,6 +12,7 @@ class ArgumentParser
     bool hasArgument(const std::string& argumentName) const;
     std::string getArgument(const std::string& argumentName) const;
     int getIntArgument(const std::string& argumentName) const;
+    float getFloatArgument(const std::string& argumentName) const;
 
     const std::string& getPath() const;
 

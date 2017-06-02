@@ -12,7 +12,7 @@ namespace test_gl {
 class SimpleBallsSceneTest : public BaseBallsSceneTest, public framework::GLTest
 {
   public:
-    SimpleBallsSceneTest();
+    SimpleBallsSceneTest(bool benchmarkMode, float benchmarkTime);
 
     void setup() override;
     void run() override;

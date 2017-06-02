@@ -11,7 +11,7 @@ namespace test_vk {
 class SimpleBallsSceneTest : public BaseBallsSceneTest, public framework::VKTest
 {
   public:
-    SimpleBallsSceneTest();
+    SimpleBallsSceneTest(bool benchmarkMode, float benchmarkTime);
 
     void setup() override;
     void run() override;

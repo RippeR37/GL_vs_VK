@@ -12,7 +12,7 @@ namespace test_vk {
 class ShadowMappingSceneTest : public BaseShadowMappingSceneTest, public framework::VKTest
 {
   public:
-    ShadowMappingSceneTest();
+    ShadowMappingSceneTest(bool benchmarkMode, float benchmarkTime);
 
     void setup() override;
     void run() override;

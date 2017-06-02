@@ -11,9 +11,9 @@
 
 namespace tests {
 namespace test_vk {
-SimpleBallsSceneTest::SimpleBallsSceneTest()
+SimpleBallsSceneTest::SimpleBallsSceneTest(bool benchmarkMode, float benchmarkTime)
     : BaseBallsSceneTest()
-    , VKTest("SimpleBallsSceneTest")
+    , VKTest("SimpleBallsSceneTest", benchmarkMode, benchmarkTime)
     , _semaphoreIndex(0u)
 {
 }
@@ -49,6 +49,10 @@ void SimpleBallsSceneTest::run()
         presentFrame(frameIndex);
 
         window().update();
+
+        if (processFrameTime(window().frameTime())) {
+            break; // Benchmarking is complete
+        }
     }
 }
 

@@ -47,6 +47,11 @@ int ArgumentParser::getIntArgument(const std::string& argumentName) const
     return std::stoi(getArgument(argumentName));
 }
 
+float ArgumentParser::getFloatArgument(const std::string& argumentName) const
+{
+    return std::stof(getArgument(argumentName));
+}
+
 const std::string& ArgumentParser::getPath() const
 {
     return path;

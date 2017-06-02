@@ -11,7 +11,7 @@ namespace test_gl {
 class ShadowMappingSceneTest : public BaseShadowMappingSceneTest, public framework::GLTest
 {
   public:
-    ShadowMappingSceneTest();
+    ShadowMappingSceneTest(bool benchmarkMode, float benchmarkTime);
 
     void setup() override;
     void run() override;

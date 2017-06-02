@@ -234,6 +234,9 @@
     <ClCompile Include="..\..\..\src\tests\test3\vk\MultithreadedShadowMappingSceneTest.cpp">
       <Filter>Source Files\tests\test3\vk</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\framework\BenchmarkableTest.cpp">
+      <Filter>Source Files\framework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\base\gl\Buffer.h">
@@ -382,6 +385,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\tests\test3\vk\MultithreadedShadowMappingSceneTest.h">
       <Filter>Header Files\tests\test3\vk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\framework\BenchmarkableTest.h">
+      <Filter>Header Files\framework</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

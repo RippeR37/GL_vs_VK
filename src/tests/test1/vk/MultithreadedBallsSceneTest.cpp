@@ -12,9 +12,9 @@
 
 namespace tests {
 namespace test_vk {
-MultithreadedBallsSceneTest::MultithreadedBallsSceneTest()
+MultithreadedBallsSceneTest::MultithreadedBallsSceneTest(bool benchmarkMode, float benchmarkTime)
     : BaseBallsSceneTest()
-    , VKTest("MultithreadedBallsSceneTest")
+    , VKTest("MultithreadedBallsSceneTest", benchmarkMode, benchmarkTime)
     , _semaphoreIndex(0u)
 {
 }
@@ -48,6 +48,10 @@ void MultithreadedBallsSceneTest::run()
         presentFrame(frameIndex);
 
         window().update();
+
+        if (processFrameTime(window().frameTime())) {
+            break; // Benchmarking is complete
+        }
     }
 }
 

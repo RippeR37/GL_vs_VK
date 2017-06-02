@@ -44,9 +44,9 @@ vk::ImageAspectFlags getImageDepthFormatAspect(const vk::Format& format)
 
 namespace tests {
 namespace test_vk {
-ShadowMappingSceneTest::ShadowMappingSceneTest()
+ShadowMappingSceneTest::ShadowMappingSceneTest(bool benchmarkMode, float benchmarkTime)
     : BaseShadowMappingSceneTest()
-    , VKTest("ShadowMappingSceneTest")
+    , VKTest("ShadowMappingSceneTest", benchmarkMode, benchmarkTime)
     , _semaphoreIndex(0u)
 {
 }
@@ -77,6 +77,10 @@ void ShadowMappingSceneTest::run()
         presentFrame(frameIndex);
 
         window().update();
+
+        if (processFrameTime(window().frameTime())) {
+            break; // Benchmarking is complete
+        }
     }
 }
 

@@ -8,9 +8,9 @@
 
 namespace tests {
 namespace test_vk {
-TerrainSceneTest::TerrainSceneTest()
+TerrainSceneTest::TerrainSceneTest(bool benchmarkMode, float benchmarkTime)
     : BaseTerrainSceneTest()
-    , VKTest("TerrainSceneTest")
+    , VKTest("TerrainSceneTest", benchmarkMode, benchmarkTime)
     , _semaphoreIndex(0u)
 {
 }
@@ -44,6 +44,10 @@ void TerrainSceneTest::run()
         presentFrame(frameIndex);
 
         window().update();
+
+        if (processFrameTime(window().frameTime())) {
+            break; // Benchmarking is complete
+        }
     }
 }
 

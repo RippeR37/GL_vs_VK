@@ -11,9 +11,9 @@
 
 namespace tests {
 namespace test_vk {
-MultithreadedTerrainSceneTest::MultithreadedTerrainSceneTest()
+MultithreadedTerrainSceneTest::MultithreadedTerrainSceneTest(bool benchmarkMode, float benchmarkTime)
     : BaseTerrainSceneTest()
-    , VKTest("MultithreadedTerrainSceneTest")
+    , VKTest("MultithreadedTerrainSceneTest", benchmarkMode, benchmarkTime)
     , _semaphoreIndex(0u)
 {
 }
@@ -48,6 +48,10 @@ void MultithreadedTerrainSceneTest::run()
         presentFrame(frameIndex);
 
         window().update();
+
+        if (processFrameTime(window().frameTime())) {
+            break; // Benchmarking is complete
+        }
     }
 }
 

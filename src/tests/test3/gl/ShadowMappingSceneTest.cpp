@@ -7,9 +7,9 @@
 
 namespace tests {
 namespace test_gl {
-ShadowMappingSceneTest::ShadowMappingSceneTest()
+ShadowMappingSceneTest::ShadowMappingSceneTest(bool benchmarkMode, float benchmarkTime)
     : BaseShadowMappingSceneTest()
-    , GLTest("ShadowMappingSceneTest")
+    , GLTest("ShadowMappingSceneTest", benchmarkMode, benchmarkTime)
 {
 }
 
@@ -39,6 +39,10 @@ void ShadowMappingSceneTest::run()
         }
 
         window_.update();
+
+        if (processFrameTime(window_.getFrameTime())) {
+            break; // Benchmarking is complete
+        }
     }
 }
 

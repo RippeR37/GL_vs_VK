@@ -12,7 +12,7 @@ namespace test_gl {
 class MultithreadedBallsSceneTest : public BaseBallsSceneTest, public framework::GLTest
 {
   public:
-    MultithreadedBallsSceneTest();
+    MultithreadedBallsSceneTest(bool benchmarkMode, float benchmarkTime);
 
     void setup() override;
     void run() override;

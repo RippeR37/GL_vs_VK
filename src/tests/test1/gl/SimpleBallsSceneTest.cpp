@@ -5,9 +5,9 @@
 
 namespace tests {
 namespace test_gl {
-SimpleBallsSceneTest::SimpleBallsSceneTest()
+SimpleBallsSceneTest::SimpleBallsSceneTest(bool benchmarkMode, float benchmarkTime)
     : BaseBallsSceneTest()
-    , GLTest("SimpleBallsSceneTest")
+    , GLTest("SimpleBallsSceneTest", benchmarkMode, benchmarkTime)
 {
 }
 
@@ -43,6 +43,10 @@ void SimpleBallsSceneTest::run()
         program_.unbind();
 
         window_.update();
+
+        if (processFrameTime(window_.getFrameTime())) {
+            break; // Benchmarking is complete
+        }
     }
 }
 

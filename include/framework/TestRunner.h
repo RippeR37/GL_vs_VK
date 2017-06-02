@@ -1,7 +1,7 @@
 #pragma once
 
 #include <base/ArgumentParser.h>
-#include <framework/TestInterface.h>
+#include <framework/BenchmarkableTest.h>
 
 #include <memory>
 
@@ -14,9 +14,9 @@ class TestRunner
     int run();
 
   private:
-    int run_gl(int testNumber, bool multithreaded);
-    int run_vk(int testNumber, bool multithreaded);
-    int run_any(std::unique_ptr<TestInterface> test);
+    int run_gl(int testNumber, bool multithreaded, bool benchmarkMode, float benchmarkTime);
+    int run_vk(int testNumber, bool multithreaded, bool benchmarkMode, float benchmarkTime);
+    int run_any(std::unique_ptr<BenchmarkableTest> test);
 
     base::ArgumentParser arguments;
 };
