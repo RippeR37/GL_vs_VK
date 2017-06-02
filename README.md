@@ -112,11 +112,15 @@ cd ../bin/
 
 ## Runtime arguments
 
-`-t` - specifies test number
+| Name | Argument type | Description |
+| :--- | :---: | :---: |
+| `-t` | integer | Specifies test number. |
+| `-api` | string | Specifies used API. Valid options: `gl`, `vk`. |
+| `-m` | - | Optional. Asks for multithreaded version of test (might not be available). |
+| `-benchmark` | - | Optional. Enables benchmarking mode. |
+| `-time` | float | Optional. Changes default time of test benchmarking. |
 
-`-api` - specifies used api (`gl` or `vk`)
-
-`-m` - (optional) specifies to run multithreaded version (not all tests available!)
+In benchmarking mode, test will end automatically in some time (default: 15 seconds, but can be changed with `-time` argument), after which statistics will be presented on screen.
 
 
 ## Author
