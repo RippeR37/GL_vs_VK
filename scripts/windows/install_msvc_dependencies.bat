@@ -13,7 +13,7 @@
 @echo.
 @echo "Installing GLEW library..."
 @cd third_party/glew-win/
-@7z x glew-win-src.zip
+@expand -F:* glew-win-src.cab .
 @cd ../../
 @echo "Done!"
 
