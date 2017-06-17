@@ -51,7 +51,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../../include/;../../../third_party/glew-win/include/;../../../third_party/glfw/include/;../../../third_party/glm/;$(VULKAN_SDK)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../include/;../../../third_party/glew-win/include/;../../../third_party/glfw/include/;../../../third_party/glm/;../../../third_party/vulkan/src/;../../../third_party/vulkan-hpp/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>4714;4018;4098;4099;4201;4290;4611;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -73,7 +73,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../../include/;../../../third_party/glew-win/include/;../../../third_party/glfw/include/;../../../third_party/glm/;$(VULKAN_SDK)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../include/;../../../third_party/glew-win/include/;../../../third_party/glfw/include/;../../../third_party/glm/;../../../third_party/vulkan/src/;../../../third_party/vulkan-hpp/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>4714;4018;4098;4099;4201;4290;4611;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
