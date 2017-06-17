@@ -99,6 +99,24 @@
     <Filter Include="Source Files\tests\test3\gl">
       <UniqueIdentifier>{d6aace67-0fdb-4003-931a-dedfc04b2884}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\tests\test4">
+      <UniqueIdentifier>{8b88e87f-b828-4147-8a4e-86123485957d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\tests\test4">
+      <UniqueIdentifier>{f553ff8d-f3be-4d28-8889-8b69e9f9944e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\tests\test4\gl">
+      <UniqueIdentifier>{ba7e4027-462c-4716-b8dc-27ab13bd382a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\tests\test4\vk">
+      <UniqueIdentifier>{c314c058-29f2-46b0-8f45-319c68ed8bc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\tests\test4\gl">
+      <UniqueIdentifier>{360f7fd7-8685-40d2-bb49-e4b3553e280d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\tests\test4\vk">
+      <UniqueIdentifier>{b96c7a08-12c2-4f0c-8cef-f4b8563622b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\README.md" />
@@ -236,6 +254,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\framework\BenchmarkableTest.cpp">
       <Filter>Source Files\framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\tests\test4\gl\InitializationTest.cpp">
+      <Filter>Source Files\tests\test4\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\tests\test4\vk\InitializationTest.cpp">
+      <Filter>Source Files\tests\test4\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\tests\test4\BaseInitializationTest.cpp">
+      <Filter>Source Files\tests\test4</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -388,6 +415,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\framework\BenchmarkableTest.h">
       <Filter>Header Files\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\test4\InitializationTests.h">
+      <Filter>Header Files\tests\test4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\test4\gl\InitializationTest.h">
+      <Filter>Header Files\tests\test4\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\test4\vk\InitializationTest.h">
+      <Filter>Header Files\tests\test4\vk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tests\test4\BaseInitializationTest.h">
+      <Filter>Header Files\tests\test4</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

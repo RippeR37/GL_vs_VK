@@ -3,6 +3,7 @@
 #include <tests/test1/BallsSceneTests.h>
 #include <tests/test2/TerrainSceneTests.h>
 #include <tests/test3/ShadowMappingSceneTests.h>
+#include <tests/test4/InitializationTests.h>
 
 #include <iostream>
 #include <stdexcept>
@@ -19,7 +20,7 @@ TestRunner::TestRunner(base::ArgumentParser argumentParser)
 
 int TestRunner::run()
 {
-    const int TESTS = 3;
+    const int TESTS = 4;
 
     auto errorCallback = [&](const std::string& msg) -> int {
         std::cerr << "Invalid usage! " << msg << std::endl;
@@ -101,6 +102,12 @@ int TestRunner::run_gl(int testNumber, bool multithreaded, bool benchmarkMode, f
                 new tests::test_gl::ShadowMappingSceneTest(benchmarkMode, benchmarkTime));
         }
         break;
+    case 4:
+        if (multithreaded) {
+            // N/A
+        } else {
+            test = std::unique_ptr<BenchmarkableTest>(new tests::test_gl::InitializationTest());
+        }
     }
 
     if (test) {
@@ -146,6 +153,12 @@ int TestRunner::run_vk(int testNumber, bool multithreaded, bool benchmarkMode, f
                 new tests::test_vk::ShadowMappingSceneTest(benchmarkMode, benchmarkTime));
         }
         break;
+    case 4:
+        if (multithreaded) {
+            // N/A
+        } else {
+            test = std::unique_ptr<BenchmarkableTest>(new tests::test_vk::InitializationTest());
+        }
     }
 
     if (test) {

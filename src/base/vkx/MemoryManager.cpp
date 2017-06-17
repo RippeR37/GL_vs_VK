@@ -84,6 +84,25 @@ Buffer MemoryManager::copyToDeviceLocalMemory(const Buffer& sourceBuffer,
     return {buffer, memory, sourceBuffer.size, 0};
 }
 
+Buffer MemoryManager::copyToDeviceLocalMemoryAsync(const Buffer& sourceBuffer,
+                                                   vk::BufferUsageFlags usage,
+                                                   vk::CommandBuffer cmdBuffer,
+                                                   vk::Queue queue,
+                                                   vk::Semaphore semaphore) const
+{
+    vk::BufferUsageFlags deviceLocalUsage = usage | vk::BufferUsageFlagBits::eTransferDst;
+    vk::Buffer buffer = _device.createBuffer({{}, sourceBuffer.size, deviceLocalUsage, vk::SharingMode::eExclusive});
+    vk::DeviceMemory memory = allocateDeviceLocalMemory(_device.getBufferMemoryRequirements(buffer));
+    _device.bindBufferMemory(buffer, memory, 0);
+
+    cmdBuffer.begin({vk::CommandBufferUsageFlagBits::eOneTimeSubmit, nullptr});
+    cmdBuffer.copyBuffer(sourceBuffer.buffer, buffer, {vk::BufferCopy{sourceBuffer.offset, 0, sourceBuffer.size}});
+    cmdBuffer.end();
+    queue.submit(vk::SubmitInfo{0, nullptr, nullptr, 1, &cmdBuffer, 1, &semaphore}, {});
+
+    return {buffer, memory, sourceBuffer.size, 0};
+}
+
 void MemoryManager::destroyBuffer(Buffer& buffer) const
 {
     _device.freeMemory(buffer.memory);

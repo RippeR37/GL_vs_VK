@@ -44,6 +44,11 @@ class MemoryManager
                                    vk::BufferUsageFlags usage,
                                    vk::CommandBuffer cmdBuffer,
                                    vk::Queue queue) const;
+    Buffer copyToDeviceLocalMemoryAsync(const Buffer& buffer,
+                                        vk::BufferUsageFlags usage,
+                                        vk::CommandBuffer cmdBuffer,
+                                        vk::Queue queue,
+                                        vk::Semaphore semaphore) const;
 
     void destroyBuffer(Buffer& buffer) const;
     void destroyImage(Image& image) const;

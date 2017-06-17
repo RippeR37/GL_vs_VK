@@ -139,6 +139,9 @@
     <ClCompile Include="..\..\..\src\tests\test3\gl\ShadowMappingSceneTest.cpp" />
     <ClCompile Include="..\..\..\src\tests\test3\vk\MultithreadedShadowMappingSceneTest.cpp" />
     <ClCompile Include="..\..\..\src\tests\test3\vk\ShadowMappingSceneTest.cpp" />
+    <ClCompile Include="..\..\..\src\tests\test4\BaseInitializationTest.cpp" />
+    <ClCompile Include="..\..\..\src\tests\test4\gl\InitializationTest.cpp" />
+    <ClCompile Include="..\..\..\src\tests\test4\vk\InitializationTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\base\ArgumentParser.h" />
@@ -191,6 +194,10 @@
     <ClInclude Include="..\..\..\include\tests\test3\ShadowMappingSceneTests.h" />
     <ClInclude Include="..\..\..\include\tests\test3\vk\MultithreadedShadowMappingSceneTest.h" />
     <ClInclude Include="..\..\..\include\tests\test3\vk\ShadowMappingSceneTest.h" />
+    <ClInclude Include="..\..\..\include\tests\test4\BaseInitializationTest.h" />
+    <ClInclude Include="..\..\..\include\tests\test4\gl\InitializationTest.h" />
+    <ClInclude Include="..\..\..\include\tests\test4\InitializationTests.h" />
+    <ClInclude Include="..\..\..\include\tests\test4\vk\InitializationTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

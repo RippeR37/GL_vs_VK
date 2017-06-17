@@ -83,6 +83,23 @@ std::vector<uint8_t> File::readBinaryBytes(const std::string& path, bool throwEx
     return result;
 }
 
+bool File::writeBinaryBytes(const std::string& path, std::vector<uint8_t> data, bool throwException)
+{
+    std::ofstream file(path, std::ios::out | std::ios::binary);
+
+    if (file) {
+        file.write(reinterpret_cast<const char*>(data.data()), data.size() * sizeof(data.front()));
+    } else {
+        std::cerr << "base::File::writeBinaryBytes > Couldn't open file: " << path << std::endl;
+        if (throwException) {
+            throw std::runtime_error("Couldn't open file: '" + path + "'");
+        }
+        return false;
+    }
+
+    return true;
+}
+
 std::string File::getPath(const std::string& path)
 {
     return path.substr(0, path.find_last_of("/\\") + 1);

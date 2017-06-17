@@ -8,6 +8,7 @@
 *.ilk
 *.suo
 *.exp
+*.tmp
 *.VC.*db
 
 bin/GL_vs_VK*

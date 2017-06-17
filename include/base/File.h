@@ -14,6 +14,8 @@ class File
     static std::string readBinary(const std::string& path, bool throwException = false);
     static std::vector<uint8_t> readBinaryBytes(const std::string& path, bool throwException = false);
 
+    static bool writeBinaryBytes(const std::string& path, std::vector<uint8_t> data, bool throwException = false);
+
     static std::string getPath(const std::string& path);
     static std::string getFilename(const std::string& path);
     static std::string getFilenameExtensionless(const std::string& path);

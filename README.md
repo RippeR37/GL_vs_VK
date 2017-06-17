@@ -17,6 +17,7 @@ Tests used in this project are fairly simple and doesn't involve any advanced te
 | Test #1 | ✅ | ✅ | ✅ | ✅ |
 | Test #2 | ✅ | ❌ | ✅ | ✅ |
 | Test #3 | ✅ | ❌ | ✅ | ✅ |
+| Test #4 | ✅ | ❌ | ✅ | ❌ |
 
 Test #2 and #3 doesn't have multithreaded version with OpenGL API as they don't have easily scalable CPU-bound work that could benefit from dispatching to multiple threads.
 
@@ -38,9 +39,18 @@ In this test, a terrain is rendered (as wireframe) with active dynamic level-of-
 In this test we render a "checkboard" floor with differently-colored cubes and above that we render one high-res sphere and many cubes in different positions. We render it in two passes - depth pass from light PoV to acquire shadowmap and then real render pass which simply renderes scene shadowing necessary fragments.
 
 
+### Test #4 - initialization
+
+Test measures time from initialization start of OpenGL/Vulkan objects up to first draw (and present/swap buffer) call, synchronizes between CPU and GPU to make sure that everything is executed and measures elapsed time. This is non-practical test, but I wanted to know how both APIs behave. For Vulkan I've added support for pipeline cache.
+
+
 ## Results
 
-TO-DO
+This project was described and tested by **Michael Larabel** at [Phoronix.com](Phoronix.com).
+
+Link to article with results: http://www.phoronix.com/scan.php?page=article&item=gl-vs-vk.
+
+Results of my tests will be posted here at a later time.
 
 
 ## Building
@@ -61,12 +71,13 @@ TO-DO
 1. Clone or download this repository
 2. Initialize GIT submodules
 3. (Optional) Install OpenGL/Vulkan system dependencies (drivers etc.)
-4. Install project's third-party dependencies
+4. Install project's third-party dependencies (script available in `scripts/` directory)
+4.1. If you're using provided MSVC project, make sure that `third_party/glew-win/glew-win-src.zip` is extracted.
 5. Build
 6. Run some tests
 
 ```
-git clone https://github.com/RippeR37/GL_vs_VK.git`
+git clone https://github.com/RippeR37/GL_vs_VK.git
 cd GL_vs_VK
 git submodule update --init
 
@@ -93,7 +104,7 @@ GL_vs_VK.exe -t (1|2|3) -api (gl|vk) (-m)
 
 ```
 # Initialize repository
-git clone https://github.com/RippeR37/GL_vs_VK.git`
+git clone https://github.com/RippeR37/GL_vs_VK.git
 cd GL_vs_VK
 git submodule update --init
 
@@ -121,6 +132,7 @@ cd ../bin/
 | `-time` | float | Optional. Changes default time of test benchmarking. |
 
 In benchmarking mode, test will end automatically in some time (default: 15 seconds, but can be changed with `-time` argument), after which statistics will be presented on screen.
+Test 4 will always run in benchmark mode.
 
 
 ## Author
