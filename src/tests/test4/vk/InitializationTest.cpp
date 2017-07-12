@@ -26,8 +26,6 @@ void InitializationTest::setup()
 {
     VKTest::setup();
 
-    startMeasuring();
-
     createCommandBuffers();
     createSemaphores();
     createVbo();
@@ -53,7 +51,7 @@ void InitializationTest::run()
 
     // Synchronize CPU<->GPU and time it
     queues().queue().waitIdle();
-    processFrameTime(window().frameTime());
+    processFrameTime();
 }
 
 void InitializationTest::teardown()

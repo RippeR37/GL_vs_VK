@@ -14,9 +14,9 @@ class TestRunner
     int run();
 
   private:
-    int run_gl(int testNumber, bool multithreaded, bool benchmarkMode, float benchmarkTime);
-    int run_vk(int testNumber, bool multithreaded, bool benchmarkMode, float benchmarkTime);
-    int run_any(std::unique_ptr<BenchmarkableTest> test);
+    int run_gl(int testNumber, bool multithreaded, bool benchmarkMode, float benchmarkTime, double testStartTime);
+    int run_vk(int testNumber, bool multithreaded, bool benchmarkMode, float benchmarkTime, double testStartTime);
+    int run_any(std::unique_ptr<BenchmarkableTest> test, double testStartTime);
 
     base::ArgumentParser arguments;
 };

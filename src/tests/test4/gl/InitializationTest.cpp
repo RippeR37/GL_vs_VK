@@ -15,8 +15,6 @@ void InitializationTest::setup()
 {
     GLTest::setup();
 
-    startMeasuring();
-
     initApplication();
     initProgram();
     initVBO();
@@ -37,7 +35,7 @@ void InitializationTest::run()
 
     // Synchronize CPU<->GPU and time it
     glFinish();
-    processFrameTime(window_.getFrameTime());
+    processFrameTime();
 }
 
 void InitializationTest::teardown()

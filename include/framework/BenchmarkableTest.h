@@ -13,8 +13,12 @@ class BenchmarkableTest : public TestInterface
 
     virtual void printStatistics() const;
     void startMeasuring();
+    void startMeasuring(double startTime);
+
+    static double getCurrentTime();
 
   protected:
+    bool processFrameTime();
     bool processFrameTime(double frameTime);
 
     bool _benchmarkEnabled;
@@ -23,6 +27,7 @@ class BenchmarkableTest : public TestInterface
     double _minFrameTime;
     double _maxFrameTime;
     double _startTime;
+    double _lastMeasureTime;
     double _measuredTime;
     std::size_t _frameCount;
 };

@@ -16,6 +16,7 @@ BenchmarkableTest::BenchmarkableTest(bool benchmarkMode, float benchmarkTime)
     , _minFrameTime(std::numeric_limits<double>::max())
     , _maxFrameTime(0.0)
     , _startTime(0.0)
+    , _lastMeasureTime(0.0)
     , _measuredTime(0.0)
     , _frameCount(0u)
 {
@@ -49,11 +50,37 @@ void BenchmarkableTest::printStatistics() const
 
 void BenchmarkableTest::startMeasuring()
 {
+    startMeasuring(getCurrentTime());
+}
+
+void BenchmarkableTest::startMeasuring(double startTime)
+{
     if (!_benchmarkEnabled)
         return;
 
-    _startTime = glfwGetTime();
+    _startTime = startTime;
     _frameCount = 0u;
+    _minFrameTime = std::numeric_limits<double>::max();
+    _maxFrameTime = 0.0;
+    _lastMeasureTime = _startTime;
+}
+
+double BenchmarkableTest::getCurrentTime()
+{
+    return glfwGetTime();
+}
+
+bool BenchmarkableTest::processFrameTime()
+{
+    if (!_benchmarkEnabled)
+        return false;
+
+    auto now = glfwGetTime();
+    auto frameTime = now - _lastMeasureTime;
+    auto result = processFrameTime(frameTime);
+    _lastMeasureTime = now;
+
+    return result;
 }
 
 bool BenchmarkableTest::processFrameTime(double frameTime)
@@ -66,8 +93,11 @@ bool BenchmarkableTest::processFrameTime(double frameTime)
     _maxFrameTime = std::max(_maxFrameTime, frameTime);
     _measuredTime = glfwGetTime() - _startTime;
 
-    // Ignore 1s of measurements to remove longer first frames from statistics
-    if (!_firstSecondIgnored && _measuredTime >= 1.0) {
+    std::cerr << "Benchmark ENABLED!!!\n\n\n\n";
+    std::cerr << "Frame time: " << frameTime << "\n\n\n\n";
+
+    // Ignore 1s of measurements to remove longer first frames from statistics, but not on 1st frame
+    if (!_firstSecondIgnored && _measuredTime >= 1.0 && _frameCount != 1) {
         startMeasuring();
         _firstSecondIgnored = true;
     }

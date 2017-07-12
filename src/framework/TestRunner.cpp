@@ -24,10 +24,13 @@ int TestRunner::run()
 
     auto errorCallback = [&](const std::string& msg) -> int {
         std::cerr << "Invalid usage! " << msg << std::endl;
-        std::cerr << "Usage: `" << arguments.getPath() << " -t T -api API [-m]`" << std::endl;
-        std::cerr << "  -t T       - test number (in range [1, " << TESTS << "])" << std::endl;
-        std::cerr << "  -api API   - API (`gl` or `vk`)" << std::endl;
-        std::cerr << "  -m         - run multithreaded version (if exists)" << std::endl;
+        std::cerr << "Usage: `" << arguments.getPath() << " -t N -api API [-m] [-benchmark] [-time T]`" << std::endl;
+        std::cerr << "  -t N        - test number (in range [1, " << TESTS << "])" << std::endl;
+        std::cerr << "  -api API    - API (`gl` or `vk`)" << std::endl;
+        std::cerr << "  -m          - run multithreaded version (if exists)" << std::endl;
+        std::cerr << "  -benchmark  - run in benchmark mode" << std::endl;
+        std::cerr << "  -time T     - change benchmark duraton to T seconds" << std::endl;
+        std::cerr << "                default value is 15 seconds" << std::endl;
         return -1;
     };
 
@@ -63,14 +66,15 @@ int TestRunner::run()
         }
     }
 
+    auto testStartTime = BenchmarkableTest::getCurrentTime();
     if (api == "gl") {
-        return run_gl(testNum, multithreaded, benchmarkMode, benchmarkTime);
+        return run_gl(testNum, multithreaded, benchmarkMode, benchmarkTime, testStartTime);
     } else {
-        return run_vk(testNum, multithreaded, benchmarkMode, benchmarkTime);
+        return run_vk(testNum, multithreaded, benchmarkMode, benchmarkTime, testStartTime);
     }
 }
 
-int TestRunner::run_gl(int testNumber, bool multithreaded, bool benchmarkMode, float benchmarkTime)
+int TestRunner::run_gl(int testNumber, bool multithreaded, bool benchmarkMode, float benchmarkTime, double testStartTime)
 {
     std::unique_ptr<BenchmarkableTest> test;
 
@@ -111,7 +115,7 @@ int TestRunner::run_gl(int testNumber, bool multithreaded, bool benchmarkMode, f
     }
 
     if (test) {
-        return run_any(std::move(test));
+        return run_any(std::move(test), testStartTime);
     } else {
         std::cerr << "Unknown " << (multithreaded ? "multithreaded" : "") << " OpenGL test: " << testNumber
                   << std::endl;
@@ -119,7 +123,7 @@ int TestRunner::run_gl(int testNumber, bool multithreaded, bool benchmarkMode, f
     }
 }
 
-int TestRunner::run_vk(int testNumber, bool multithreaded, bool benchmarkMode, float benchmarkTime)
+int TestRunner::run_vk(int testNumber, bool multithreaded, bool benchmarkMode, float benchmarkTime, double testStartTime)
 {
     std::unique_ptr<BenchmarkableTest> test;
 
@@ -162,7 +166,7 @@ int TestRunner::run_vk(int testNumber, bool multithreaded, bool benchmarkMode, f
     }
 
     if (test) {
-        return run_any(std::move(test));
+        return run_any(std::move(test), testStartTime);
     } else {
         std::cerr << "Unknown " << (multithreaded ? "multithreaded" : "") << " Vulkan test: " << testNumber
                   << std::endl;
@@ -170,11 +174,11 @@ int TestRunner::run_vk(int testNumber, bool multithreaded, bool benchmarkMode, f
     }
 }
 
-int TestRunner::run_any(std::unique_ptr<BenchmarkableTest> test)
+int TestRunner::run_any(std::unique_ptr<BenchmarkableTest> test, double testStartTime)
 {
     try {
+        test->startMeasuring(testStartTime);
         test->setup();
-        test->startMeasuring();
         test->run();
         test->printStatistics();
         test->teardown();
