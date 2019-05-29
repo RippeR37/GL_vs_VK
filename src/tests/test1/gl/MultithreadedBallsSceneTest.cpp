@@ -91,7 +91,7 @@ void MultithreadedBallsSceneTest::initVBO()
 
 void MultithreadedBallsSceneTest::initVAO()
 {
-    vao_.setDrawCount(vertices().size());
+    vao_.setDrawCount(static_cast<GLsizei>(vertices().size()));
     vao_.setDrawTarget(base::gl::VertexArray::DrawTarget::Triangles);
 
     vao_.bind();

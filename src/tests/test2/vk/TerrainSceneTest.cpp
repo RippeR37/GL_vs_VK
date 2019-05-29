@@ -371,7 +371,7 @@ void TerrainSceneTest::prepareCommandBuffer(std::size_t frameIndex) const
             {
                 auto indexSize = sizeof(terrain().indices().front());
                 auto renderChunk = [&cmdBuffer, indexSize](std::size_t count, std::ptrdiff_t offset) {
-                    cmdBuffer.drawIndexed(count, 1, offset / indexSize, 0, 0);
+                    cmdBuffer.drawIndexed(static_cast<uint32_t>(count), 1, static_cast<uint32_t>(offset / indexSize), 0, 0);
                 };
                 terrain().executeLoD(currentPosition(), renderChunk);
             }

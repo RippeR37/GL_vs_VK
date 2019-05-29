@@ -36,7 +36,7 @@ void TerrainSceneTest::run()
         _program["MVP"] = currentMVP();
         {
             auto renderChunk = [](std::size_t count, std::ptrdiff_t offset) {
-                glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, (const GLvoid*)offset);
+                glDrawElements(GL_TRIANGLES, static_cast<uint32_t>(count), GL_UNSIGNED_INT, (const GLvoid*)offset);
             };
             terrain().executeLoD(currentPosition(), renderChunk);
         }
