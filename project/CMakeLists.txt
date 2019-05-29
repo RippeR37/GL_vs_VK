@@ -32,6 +32,11 @@ find_package(OpenGL REQUIRED)
 find_package(Vulkan REQUIRED)
 find_package(GLM REQUIRED)
 find_package(GLEW)
+if (WIN32)
+    find_package(GLFW3)
+else()
+    find_package(GLFW)
+endif()
 
 
 ###
@@ -39,8 +44,8 @@ find_package(GLEW)
 ###
 
 ### GLFW 3.2
-if(NOT GLFW_FOUND)
-    # MESSAGE("GLFW not found, building from third_party...")
+if(NOT (GLFW3_FOUND OR GLFW_FOUND))
+    MESSAGE("GLFW not found, building from third_party...")
 
     set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
     set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
@@ -49,7 +54,8 @@ if(NOT GLFW_FOUND)
     set(GLFW_LIBRARIES glfw)
     set(GLFW_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/third_party/glfw/include")
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../third_party/glfw ${CMAKE_CURRENT_BINARY_DIR}/../third_party/glfw)
-
+else()
+    set(GLFW_LIBRARIES glfw)
 endif()
 
 ### GLEW
