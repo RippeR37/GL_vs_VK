@@ -1,3 +1,4 @@
+#include <limits>
 #include <base/vkx/Window.h>
 
 #include <base/vkx/Application.h>
