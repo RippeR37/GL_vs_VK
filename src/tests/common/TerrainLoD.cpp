@@ -6,7 +6,7 @@
 namespace {
 uint32_t indexOf(const tests::common::Heightmap& heightmap, std::size_t x, std::size_t y)
 {
-    return heightmap.getSize().x * y + x;
+    return static_cast<uint32_t>(heightmap.getSize().x * y + x);
 }
 
 std::size_t pushQuadIndices(const tests::common::Heightmap& heightmap,

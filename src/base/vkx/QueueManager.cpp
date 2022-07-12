@@ -22,7 +22,7 @@ std::vector<vk::DeviceQueueCreateInfo> QueueManager::createInfos(const vk::Insta
         }
 
         if (queueFamilyProperties[queueFamilyIndex].queueFlags & vk::QueueFlagBits::eGraphics) {
-            queueCreateInfos.push_back({{}, queueFamilyIndex, priorities.size(), priorities.data()});
+            queueCreateInfos.push_back({{}, queueFamilyIndex, static_cast<uint32_t>(priorities.size()), priorities.data()});
         }
     }
 

@@ -40,13 +40,13 @@ std::string& String::trim(std::string& string)
 std::string& String::ltrim(std::string& string)
 {
     string.erase(string.begin(),
-                 std::find_if(string.begin(), string.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
+                 std::find_if(string.begin(), string.end(), std::not1(std::function<int(int)>(std::isspace))));
     return string;
 }
 
 std::string& String::rtrim(std::string& string)
 {
-    string.erase(std::find_if(string.rbegin(), string.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(),
+    string.erase(std::find_if(string.rbegin(), string.rend(), std::not1(std::function<int(int)>(std::isspace))).base(),
                  string.end());
     return string;
 }
@@ -59,7 +59,7 @@ bool String::startsWith(const std::string& string, const std::string& prefix)
         result = false;
 
     } else {
-        for (unsigned int i = 0; i < prefix.size(); ++i) {
+        for (size_t i = 0; i < prefix.size(); ++i) {
             if (string[i] != prefix[i]) {
                 result = false;
                 break;
@@ -78,9 +78,9 @@ bool String::endsWith(const std::string& string, const std::string& sufix)
         result = false;
 
     } else {
-        unsigned int offset = string.size() - sufix.size();
+        size_t offset = string.size() - sufix.size();
 
-        for (unsigned int i = 0; i < sufix.size(); ++i) {
+        for (size_t i = 0; i < sufix.size(); ++i) {
             if (string[i + offset] != sufix[i]) {
                 result = false;
                 break;

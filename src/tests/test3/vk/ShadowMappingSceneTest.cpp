@@ -714,7 +714,7 @@ void ShadowMappingSceneTest::prepareCommandBuffer(std::size_t frameIndex) const
                 cmdBuffer.pushConstants(pass.pipelineLayout, vk::ShaderStageFlagBits::eVertex, 0, sizeof(MVP), &MVP);
 
                 cmdBuffer.bindVertexBuffers(0, {{renderObject.vbo.buffer}}, {{0}});
-                cmdBuffer.draw(renderObject.drawCount, 1, 0, 0);
+                cmdBuffer.draw(static_cast<uint32_t>(renderObject.drawCount), 1, 0, 0);
             }
 
             cmdBuffer.endRenderPass();
@@ -759,7 +759,7 @@ void ShadowMappingSceneTest::prepareCommandBuffer(std::size_t frameIndex) const
                                         &matrices);
 
                 cmdBuffer.bindVertexBuffers(0, {{renderObject.vbo.buffer}}, {{0}});
-                cmdBuffer.draw(renderObject.drawCount, 1, 0, 0);
+                cmdBuffer.draw(static_cast<uint32_t>(renderObject.drawCount), 1, 0, 0);
             }
 
             cmdBuffer.endRenderPass();

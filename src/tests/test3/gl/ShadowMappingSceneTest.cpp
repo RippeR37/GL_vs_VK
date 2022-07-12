@@ -125,7 +125,7 @@ void ShadowMappingSceneTest::initVBO(const common::RenderObject& renderObject, G
 void ShadowMappingSceneTest::initVAO(const common::RenderObject& renderObject, GLRenderObject& glRenderObject)
 {
     glRenderObject.vao.setDrawTarget(base::gl::VertexArray::DrawTarget::Triangles);
-    glRenderObject.vao.setDrawCount(renderObject.vertices.size());
+    glRenderObject.vao.setDrawCount(static_cast<GLsizei>(renderObject.vertices.size()));
 
     glRenderObject.vao.bind();
     glRenderObject.vao.attachVBO(&glRenderObject.vbo);
